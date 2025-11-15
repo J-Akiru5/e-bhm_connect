@@ -25,6 +25,32 @@
             return false; // This is redundant but safe
         }
     </script>
+    <script>
+        // --- Live Clock Function ---
+        function updateLiveClock() {
+            const timeElement = document.getElementById('live-clock-time');
+            const dateElement = document.getElementById('live-clock-date');
+
+            if (timeElement && dateElement) {
+                const now = new Date();
+
+                // Format time: 11:17:30 PM
+                const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                timeElement.innerText = now.toLocaleTimeString('en-US', timeOptions);
+
+                // Format date: Saturday, November 15, 2025
+                const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                dateElement.innerText = now.toLocaleDateString('en-US', dateOptions);
+            }
+        }
+
+        // Run the function immediately on page load
+        updateLiveClock();
+
+        // Run the function every second (1000 milliseconds)
+        setInterval(updateLiveClock, 1000);
+        // --- End Live Clock ---
+    </script>
     <script src="<?php echo BASE_URL; ?>assets/js/main.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/patient_edit.js"></script>
     </body>

@@ -71,6 +71,7 @@ $allowedPages = [
     'admin-program-edit' => ['file' => $basePath . 'admin/program_edit.php', 'secure' => true],
     'admin-reports' => ['file' => $basePath . 'admin/reports.php', 'secure' => true],
     'admin-bhw-users' => ['file' => $basePath . 'admin/bhw_users.php', 'secure' => true],
+    'admin-profile' => ['file' => $basePath . 'admin/profile.php', 'secure' => true],
 
     // Patient Portal
     'portal-dashboard' => ['file' => $basePath . 'portal/portal_dashboard.php', 'secure' => 'patient'], // Example for patient auth
