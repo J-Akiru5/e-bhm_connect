@@ -1,0 +1,6 @@
+# Configuration files with sensitive data
+config/database.php
+
+# Vendor folders (if we ever add any)
+/vendor/
+/lib/

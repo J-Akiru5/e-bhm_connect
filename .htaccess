@@ -1,0 +1,15 @@
+# Existing .htaccess was detected; keeping existing file if present.
+# If you want a simple rewrite to index.php, uncomment below:
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+	# Prevent looping
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+
+	# Rewrite all other requests to index.php
+	RewriteRule ^(.*)$ index.php?page=$1 [L,QSA]
+</IfModule>
+
+# Example: /home -> index.php?page=home
