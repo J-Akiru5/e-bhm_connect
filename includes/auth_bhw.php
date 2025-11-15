@@ -1,7 +1,10 @@
 <?php
-// Simple BHW auth placeholder
+// Security guard for BHW admin pages
 session_start();
-if (empty($_SESSION['bhw_logged_in'])) {
-    header('Location: /pages/login_bhw.php');
-    exit;
+
+// If bhw_id is not present, redirect to login with a flash message
+if (empty($_SESSION['bhw_id'])) {
+    $_SESSION['login_error'] = 'You must be logged in to access this page.';
+    header('Location: ../login-bhw');
+    exit();
 }

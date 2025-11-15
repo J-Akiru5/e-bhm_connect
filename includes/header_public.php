@@ -17,9 +17,12 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
         <div class="container">
-            <a class="navbar-brand fs-4 fw-bold" href="home">E-BHM Connect</a>
+            <a class="navbar-brand fs-4 fw-bold d-flex align-items-center" href="/e-bmw_connect/home">
+                <img src="assets/images/e-logo.png" alt="Logo" width="40" height="40" class="me-2 rounded" />
+                E-BHM Connect
+            </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#publicNavbar" aria-controls="publicNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -28,19 +31,19 @@
             <div class="collapse navbar-collapse" id="publicNavbar">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/e-bmw_connect/home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="announcements">Announcements</a>
+                        <a class="nav-link" href="/e-bmw_connect/announcements">Announcements</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact">Contact Us</a>
+                        <a class="nav-link" href="/e-bmw_connect/contact">Contact Us</a>
                     </li>
                 </ul>
                 
                 <div class="d-flex">
-                    <a href="login-patient" class="btn btn-light me-2">Patient Portal</a>
-                    <a href="login-bhw" class="btn btn-primary-emphasis">BHW Login</a>
+                    <a href="/e-bmw_connect/login-patient" class="btn btn-light me-2">Patient Portal</a>
+                    <a href="/e-bmw_connect/login-bhw" class="btn btn-primary-emphasis">BHW Login</a>
                 </div>
             </div>
         </div>
