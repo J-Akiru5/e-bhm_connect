@@ -140,6 +140,32 @@ try {
             <div class="card">
                 <div class="card-header">Vitals History</div>
                 <div class="card-body">
+                    <!-- Add Vital Sign Form -->
+                    <form method="post" action="<?php echo BASE_URL; ?>?action=save-vital" class="mb-3">
+                        <input type="hidden" name="patient_id" value="<?php echo $patient_id; ?>">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <label class="form-label">Blood Pressure</label>
+                                <input type="text" name="blood_pressure" class="form-control" placeholder="e.g., 120/80">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Heart Rate</label>
+                                <input type="number" name="heart_rate" class="form-control" min="0">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Temperature</label>
+                                <input type="number" name="temperature" class="form-control" step="0.1">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Notes</label>
+                                <input type="text" name="notes" class="form-control" placeholder="Optional notes">
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <button type="submit" class="btn btn-success btn-sm">Save Vital</button>
+                        </div>
+                    </form>
+
                     <?php if (empty($vitals)): ?>
                         <div class="alert alert-info">No vitals recorded.</div>
                     <?php else: ?>
@@ -151,6 +177,7 @@ try {
                                         <th>Blood Pressure</th>
                                         <th>Heart Rate</th>
                                         <th>Temperature</th>
+                                        <th>Notes</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -160,6 +187,7 @@ try {
                                             <td><?php echo htmlspecialchars($v['blood_pressure'] ?? ''); ?></td>
                                             <td><?php echo htmlspecialchars($v['heart_rate'] ?? ''); ?></td>
                                             <td><?php echo htmlspecialchars($v['temperature'] ?? ''); ?></td>
+                                            <td><?php echo htmlspecialchars($v['notes'] ?? ''); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -176,6 +204,28 @@ try {
             <div class="card">
                 <div class="card-header">Health Visit History</div>
                 <div class="card-body">
+                    <!-- Add Health Visit Form -->
+                    <form method="post" action="<?php echo BASE_URL; ?>?action=save-visit" class="mb-3">
+                        <input type="hidden" name="patient_id" value="<?php echo $patient_id; ?>">
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <label class="form-label">Visit Date</label>
+                                <input type="date" name="visit_date" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Visit Type</label>
+                                <input type="text" name="visit_type" class="form-control" placeholder="e.g., Home visit">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Remarks</label>
+                                <input type="text" name="remarks" class="form-control" placeholder="Optional remarks">
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <button type="submit" class="btn btn-success btn-sm">Save Visit</button>
+                        </div>
+                    </form>
+
                     <?php if (empty($visits)): ?>
                         <div class="alert alert-info">No visits recorded.</div>
                     <?php else: ?>

@@ -23,6 +23,9 @@ if (isset($_GET['action'])) {
         'save-inventory-item' => $actionPath . 'inventory_save.php',
         'delete-inventory-item' => $actionPath . 'inventory_delete.php',
         'update-inventory-item' => $actionPath . 'inventory_update.php'
+        ,
+        'save-vital' => $actionPath . 'vital_save.php',
+        'save-visit' => $actionPath . 'visit_save.php'
         // Add other actions here as we create them
     ];
 
