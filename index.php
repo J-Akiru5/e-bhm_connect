@@ -73,7 +73,7 @@ if (array_key_exists($page, $allowedPages)) {
     if ($pageData['secure'] === true && !isset($_SESSION['bhw_id'])) {
         // Page is for BHWs, but user is not logged in as a BHW
         $_SESSION['login_error'] = 'You must be logged in to access this page.';
-        header('Location: login-bhw');
+        header('Location: ' . BASE_URL . 'login-bhw');
         exit();
     }
     

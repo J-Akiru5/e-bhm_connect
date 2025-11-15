@@ -106,7 +106,12 @@ try {
         $pdo->rollBack();
     }
     error_log('Patient save error: ' . $e->getMessage());
-    $_SESSION['form_error'] = 'An error occurred.';
+    // Provide a more helpful error message in development environment
+    if (defined('APP_ENV') && APP_ENV === 'development') {
+        $_SESSION['form_error'] = 'An error occurred: ' . $e->getMessage();
+    } else {
+        $_SESSION['form_error'] = 'An error occurred.';
+    }
 }
 
 header('Location: ' . BASE_URL . 'admin-patients');
