@@ -58,6 +58,11 @@ if (isset($_SESSION['form_error'])) {
 						<td>
 							<a href="/e-bmw_connect/admin-patient-view?id=<?php echo urlencode($patient['patient_id'] ?? ''); ?>" class="btn btn-primary btn-sm">View</a>
 							<a href="/e-bmw_connect/admin-patient-form?id=<?php echo urlencode($patient['patient_id'] ?? ''); ?>" class="btn btn-secondary btn-sm">Edit</a>
+
+							<form action="?action=delete-patient" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
+								<input type="hidden" name="patient_id" value="<?php echo htmlspecialchars($patient['patient_id'] ?? ''); ?>">
+								<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+							</form>
 						</td>
 					</tr>
 				<?php endforeach; ?>

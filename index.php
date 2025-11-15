@@ -18,7 +18,8 @@ if (isset($_GET['action'])) {
         'login-bhw' => $actionPath . 'login_bhw_action.php',
         'register-bhw' => $actionPath . 'register_bhw_action.php',
         'logout' => $actionPath . 'logout.php',
-        'save-patient' => $actionPath . 'patient_save.php'
+        'save-patient' => $actionPath . 'patient_save.php',
+        'delete-patient' => $actionPath . 'patient_delete.php'
         // Add other actions here as we create them
     ];
 
