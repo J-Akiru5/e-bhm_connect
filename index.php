@@ -25,6 +25,9 @@ $allowedPages = [
 	'login-bhw' => $basePath . 'login_bhw.php',
 	'login-patient' => $basePath . 'login_patient.php',
 
+	// Registration Pages
+	'register-bhw' => $basePath . 'register_bhw.php',
+
 	// BHW Admin Portal
 	'admin-dashboard' => $basePath . 'admin/dashboard.php',
 	'admin-patients' => $basePath . 'admin/patients.php',

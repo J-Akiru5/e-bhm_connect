@@ -20,7 +20,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <body class="d-flex">
 
     <aside class="sidebar vh-100 bg-dark text-white p-3">
-        <a href="/e-bmw_connect/admin-dashboard" class="text-decoration-none text-white d-block mb-3 fs-4 fw-bold">Admin</a>
+        <a href="/e-bmw_connect/admin-dashboard" class="text-decoration-none text-white d-block mb-3 fs-4 fw-bold">Admin Portal</a>
         <ul class="nav nav-pills flex-column">
             <li class="nav-item"><a class="nav-link text-white" href="/e-bmw_connect/admin-dashboard">Dashboard</a></li>
             <li class="nav-item"><a class="nav-link text-white" href="/e-bmw_connect/admin-patients">Patients</a></li>
@@ -52,11 +52,5 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
-<header>
-    <h1>Admin Portal</h1>
-    <nav>
-        <a href="/pages/admin/dashboard.php">Dashboard</a>
-        <a href="/pages/admin/patients.php">Patients</a>
-    </nav>
 </header>
 <main>

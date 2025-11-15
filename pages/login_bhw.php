@@ -13,6 +13,13 @@ if (isset($_SESSION['login_error'])) {
     echo "<script>window.addEventListener('load', function(){ if (typeof Swal !== 'undefined') { Swal.fire({icon: 'error', title: 'Login failed', text: $msg}); } else { console.error('SweetAlert2 not loaded'); } });</script>";
     unset($_SESSION['login_error']);
 }
+
+// If registration just succeeded, show a success message
+if (isset($_SESSION['register_success'])) {
+    $smsg = json_encode($_SESSION['register_success']);
+    echo "<script>window.addEventListener('load', function(){ if (typeof Swal !== 'undefined') { Swal.fire({icon: 'success', title: 'Registered', text: $smsg}); } else { console.log('Registration: ' + $smsg); } });</script>";
+    unset($_SESSION['register_success']);
+}
 ?>
 
 <div class="vh-100 d-flex align-items-center justify-content-center">
@@ -37,6 +44,10 @@ if (isset($_SESSION['login_error'])) {
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
             </form>
+        </div>
+        <div class="card-footer text-center">
+            Don't have an account? <a href="/e-bmw_connect/register-bhw">Register here</a>
+        </div>
         </div>
     </div>
 </div>
