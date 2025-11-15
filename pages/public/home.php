@@ -8,7 +8,7 @@ include_once __DIR__ . '/../../includes/header_public.php';
   <div class="container-fluid py-5 text-center">
     <h1 class="display-5 fw-bold text-primary">Welcome to E-BHM Connect</h1>
     <p class="fs-4 text-muted mt-3">Digitizing health services for efficiency, accuracy, and accessibility in Barangay Bacong.</p>
-    <a href="/e-bmw_connect/login-patient" class="btn btn-success btn-lg mt-4">
+    <a href="<?php echo BASE_URL; ?>login-patient" class="btn btn-success btn-lg mt-4">
       Access Your Patient Portal
     </a>
   </div>

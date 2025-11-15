@@ -5,7 +5,7 @@
 // Application settings
 define('APP_NAME', 'E-BHM-CONNECT');
 define('APP_ENV', 'development');
-define('BASE_URL', 'http://localhost/e-bmw_connect/');
+define('BASE_URL', 'http://localhost/e-bhm_connect/');
 
 // Include database connection (creates $pdo)
 require_once __DIR__ . '/database.php';

@@ -29,7 +29,7 @@ if (isset($_SESSION['form_error'])) {
 
 <div class="d-flex justify-content-between align-items-center mb-3">
 	<h1>Patient Records</h1>
-	<a href="/e-bmw_connect/admin-patient-form" class="btn btn-success mb-3">Add New Patient</a>
+	<a href="<?php echo BASE_URL; ?>admin-patient-form" class="btn btn-success mb-3">Add New Patient</a>
 </div>
 
 <?php if (empty($patients)): ?>
@@ -56,8 +56,8 @@ if (isset($_SESSION['form_error'])) {
 						<td><?php echo htmlspecialchars($patient['sex'] ?? ''); ?></td>
 						<td><?php echo htmlspecialchars($patient['contact'] ?? ''); ?></td>
 						<td>
-							<a href="/e-bmw_connect/admin-patient-view?id=<?php echo urlencode($patient['patient_id'] ?? ''); ?>" class="btn btn-primary btn-sm">View</a>
-							<a href="/e-bmw_connect/admin-patient-form?id=<?php echo urlencode($patient['patient_id'] ?? ''); ?>" class="btn btn-secondary btn-sm">Edit</a>
+							<a href="<?php echo BASE_URL; ?>admin-patient-view?id=<?php echo urlencode($patient['patient_id'] ?? ''); ?>" class="btn btn-primary btn-sm">View</a>
+							<a href="<?php echo BASE_URL; ?>admin-patient-form?id=<?php echo urlencode($patient['patient_id'] ?? ''); ?>" class="btn btn-secondary btn-sm">Edit</a>
 
 							<form action="?action=delete-patient" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
 								<input type="hidden" name="patient_id" value="<?php echo htmlspecialchars($patient['patient_id'] ?? ''); ?>">

@@ -46,7 +46,7 @@ if (isset($_SESSION['register_success'])) {
             </form>
         </div>
         <div class="card-footer text-center">
-            Don't have an account? <a href="/e-bmw_connect/register-bhw">Register here</a>
+            Don't have an account? <a href="<?php echo BASE_URL; ?>register-bhw">Register here</a>
         </div>
         </div>
     </div>

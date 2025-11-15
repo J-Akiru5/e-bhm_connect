@@ -25,12 +25,7 @@
             return false; // This is redundant but safe
         }
     </script>
-</body>
-</html>
-</main>
-<footer>
-    <p>Admin area</p>
-</footer>
-<script src="/assets/js/main.js"></script>
-</body>
-</html>
+    <script src="<?php echo BASE_URL; ?>assets/js/main.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/patient_edit.js"></script>
+    </body>
+    </html>

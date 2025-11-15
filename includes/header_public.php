@@ -19,7 +19,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
         <div class="container">
-            <a class="navbar-brand fs-4 fw-bold d-flex align-items-center" href="/e-bmw_connect/home">
+            <a class="navbar-brand fs-4 fw-bold d-flex align-items-center" href="<?php echo BASE_URL; ?>home">
                 <img src="assets/images/e-logo.png" alt="Logo" width="40" height="40" class="me-2 rounded" />
                 E-BHM Connect
             </a>
@@ -31,19 +31,19 @@
             <div class="collapse navbar-collapse" id="publicNavbar">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/e-bmw_connect/home">Home</a>
+                        <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/e-bmw_connect/announcements">Announcements</a>
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>announcements">Announcements</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/e-bmw_connect/contact">Contact Us</a>
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>contact">Contact Us</a>
                     </li>
                 </ul>
                 
                 <div class="d-flex">
-                    <a href="/e-bmw_connect/login-patient" class="btn btn-light me-2">Patient Portal</a>
-                    <a href="/e-bmw_connect/login-bhw" class="btn btn-primary-emphasis">BHW Login</a>
+                    <a href="<?php echo BASE_URL; ?>login-patient" class="btn btn-light me-2">Patient Portal</a>
+                    <a href="<?php echo BASE_URL; ?>login-bhw" class="btn btn-primary-emphasis">BHW Login</a>
                 </div>
             </div>
         </div>

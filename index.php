@@ -19,7 +19,10 @@ if (isset($_GET['action'])) {
         'register-bhw' => $actionPath . 'register_bhw_action.php',
         'logout' => $actionPath . 'logout.php',
         'save-patient' => $actionPath . 'patient_save.php',
-        'delete-patient' => $actionPath . 'patient_delete.php'
+        'delete-patient' => $actionPath . 'patient_delete.php',
+        'save-inventory-item' => $actionPath . 'inventory_save.php',
+        'delete-inventory-item' => $actionPath . 'inventory_delete.php',
+        'update-inventory-item' => $actionPath . 'inventory_update.php'
         // Add other actions here as we create them
     ];
 
@@ -54,6 +57,7 @@ $allowedPages = [
     'admin-patient-view' => ['file' => $basePath . 'admin/patient_view.php', 'secure' => true],
     'admin-patient-form' => ['file' => $basePath . 'admin/patient_form.php', 'secure' => true],
     'admin-inventory' => ['file' => $basePath . 'admin/inventory.php', 'secure' => true],
+    'admin-inventory-edit' => ['file' => $basePath . 'admin/inventory_edit.php', 'secure' => true],
     'admin-reports' => ['file' => $basePath . 'admin/reports.php', 'secure' => true],
     'admin-bhw-users' => ['file' => $basePath . 'admin/bhw_users.php', 'secure' => true],
 

@@ -53,7 +53,7 @@ if (isset($_SESSION['register_error'])) {
             </form>
         </div>
         <div class="card-footer text-center">
-            Already have an account? <a href="/e-bmw_connect/login-bhw">Login here</a>
+            Already have an account? <a href="<?php echo BASE_URL; ?>login-bhw">Login here</a>
         </div>
     </div>
 </div>

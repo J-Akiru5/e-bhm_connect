@@ -20,12 +20,17 @@ if (session_status() === PHP_SESSION_NONE) {
 <body class="d-flex">
 
     <aside class="sidebar vh-100 bg-dark text-white p-3">
-        <a href="/e-bmw_connect/admin-dashboard" class="text-decoration-none text-white d-block mb-3 fs-4 fw-bold">Admin Portal</a>
+        <a href="<?php echo BASE_URL; ?>admin-dashboard" class="text-decoration-none text-white d-block mb-3 fs-4 fw-bold">Admin Portal</a>
         <ul class="nav nav-pills flex-column">
-            <li class="nav-item"><a class="nav-link text-white" href="/e-bmw_connect/admin-dashboard">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="/e-bmw_connect/admin-patients">Patients</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="/e-bmw_connect/admin-inventory">Inventory</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="/e-bmw_connect/admin-reports">Reports</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-dashboard">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-patients">Patients</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-inventory">Inventory</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-reports">Reports</a></li>
+            <li class="nav-item">
+    <a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-bhw-users">
+        BHW Management
+    </a>
+</li>
         </ul>
     </aside>
 
@@ -34,7 +39,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="container-fluid">
                 <span class="navbar-text">Welcome, <?php echo isset($_SESSION['bhw_full_name']) ? htmlspecialchars($_SESSION['bhw_full_name']) : 'BHW'; ?></span>
                 <div>
-                    <a class="btn btn-outline-secondary btn-sm" href="../actions/logout.php">Logout</a>
+                    <a class="btn btn-outline-secondary btn-sm" href="<?php echo BASE_URL; ?>?action=logout">Logout</a>
                 </div>
             </div>
         </nav>
@@ -43,7 +48,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <?php
 // Admin header + nav (placeholder)
 ?>
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -53,4 +58,4 @@ if (session_status() === PHP_SESSION_NONE) {
 </head>
 <body>
 </header>
-<main>
+<main> -->

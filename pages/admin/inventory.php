@@ -81,9 +81,9 @@ try {
                                             <td><?php echo htmlspecialchars($item['unit'] ?? ''); ?></td>
                                             <td><?php echo htmlspecialchars($item['last_restock'] ?? ''); ?></td>
                                             <td>
-                                                <a href="/e-bmw_connect/admin-inventory-edit?id=<?php echo urlencode($item['item_id'] ?? ''); ?>" class="btn btn-secondary btn-sm">Edit</a>
+                                                <a href="<?php echo BASE_URL; ?>admin-inventory-edit?id=<?php echo $item['item_id']; ?>" class="btn btn-secondary btn-sm">Edit</a>
 
-                                                <form action="?action=delete-inventory-item" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
+                                                <form action="<?php echo BASE_URL; ?>?action=delete-inventory-item" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
                                                     <input type="hidden" name="item_id" value="<?php echo htmlspecialchars($item['item_id'] ?? ''); ?>">
                                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                                 </form>

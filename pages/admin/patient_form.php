@@ -60,7 +60,7 @@ if (isset($_GET['id'])) {
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1><?php echo htmlspecialchars($form_title); ?></h1>
-        <a href="/e-bmw_connect/admin-patients" class="btn btn-secondary">Back to Patients</a>
+        <a href="<?php echo BASE_URL; ?>admin-patients" class="btn btn-secondary">Back to Patients</a>
     </div>
 
     <form method="post" action="?action=save-patient">
@@ -102,7 +102,7 @@ if (isset($_GET['id'])) {
             <div class="card-header">Family Composition</div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label class="form-label">Family Composition</label>
+                    <label class="form-label">Family Members</label>
                     <textarea name="family_composition_text" class="form-control" rows="3"><?php echo htmlspecialchars($family_composition_text); ?></textarea>
                 </div>
             </div>
