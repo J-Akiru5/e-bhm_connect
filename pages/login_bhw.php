@@ -29,7 +29,7 @@ if (isset($_SESSION['register_success'])) {
 
             
 
-            <form method="post" action="/e-bmw_connect/actions/login_bhw_action.php">
+            <form method="post" action="?action=login-bhw">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
                     <input type="text" class="form-control" id="username" name="username" required autofocus>

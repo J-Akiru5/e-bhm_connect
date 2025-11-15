@@ -1,6 +1,6 @@
 <?php
 // Protected admin dashboard
-require_once __DIR__ . '/../../includes/auth_bhw.php';
+// Authentication enforced by the central router (index.php)
 include_once __DIR__ . '/../../includes/header_admin.php';
 ?>
 

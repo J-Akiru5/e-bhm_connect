@@ -2,11 +2,10 @@
 // actions/patient_save.php
 // Handle insert/update for patient and patient_health_records
 
-require_once __DIR__ . '/../includes/auth_bhw.php'; // starts session and enforces auth
-require_once __DIR__ . '/../config/database.php';
+// Auth and DB are bootstrapped by the central router (index.php)
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../admin-patients');
+    header('Location: ' . BASE_URL . 'admin-patients');
     exit();
 }
 
@@ -110,6 +109,6 @@ try {
     $_SESSION['form_error'] = 'An error occurred.';
 }
 
-header('Location: ../admin-patients');
+header('Location: ' . BASE_URL . 'admin-patients');
 exit();
 

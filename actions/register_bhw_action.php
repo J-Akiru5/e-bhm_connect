@@ -1,14 +1,12 @@
 <?php
 // actions/register_bhw_action.php
 // Handle BHW registration securely
-session_start();
+// Session and DB are initialized by the central router (index.php)
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../register-bhw');
+    header('Location: ' . BASE_URL . 'register-bhw');
     exit();
 }
-
-require_once __DIR__ . '/../config/database.php';
 
 $full_name = isset($_POST['full_name']) ? trim($_POST['full_name']) : '';
 $username = isset($_POST['username']) ? trim($_POST['username']) : '';
@@ -19,13 +17,13 @@ $bhw_unique_id = isset($_POST['bhw_unique_id']) ? trim($_POST['bhw_unique_id']) 
 // Basic validation
 if ($full_name === '' || $username === '' || $password === '' || $password_confirm === '' || $bhw_unique_id === '') {
     $_SESSION['register_error'] = 'All fields are required.';
-    header('Location: ../register-bhw');
+    header('Location: ' . BASE_URL . 'register-bhw');
     exit();
 }
 
 if ($password !== $password_confirm) {
     $_SESSION['register_error'] = 'Passwords do not match.';
-    header('Location: ../register-bhw');
+    header('Location: ' . BASE_URL . 'register-bhw');
     exit();
 }
 
@@ -37,7 +35,7 @@ try {
 
     if ($existing) {
         $_SESSION['register_error'] = 'Username or BHW ID already taken.';
-        header('Location: ../register-bhw');
+        header('Location: ' . BASE_URL . 'register-bhw');
         exit();
     }
 
@@ -54,12 +52,12 @@ try {
     ]);
 
     $_SESSION['register_success'] = 'Registration successful! You can now log in.';
-    header('Location: ../login-bhw');
+    header('Location: ' . BASE_URL . 'login-bhw');
     exit();
 
 } catch (Throwable $e) {
     error_log('Registration error: ' . $e->getMessage());
     $_SESSION['register_error'] = 'An unexpected error occurred. Please try again later.';
-    header('Location: ../register-bhw');
+    header('Location: ' . BASE_URL . 'register-bhw');
     exit();
 }

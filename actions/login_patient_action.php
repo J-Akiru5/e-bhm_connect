@@ -1,7 +1,6 @@
 <?php
 // Handle patient login (placeholder)
-session_start();
-// TODO: implement real authentication
+// Session is initialized by router; TODO: implement real authentication
 $_SESSION['patient_logged_in'] = true;
-header('Location: /pages/portal/portal_dashboard.php');
+header('Location: ' . BASE_URL . 'portal-dashboard');
 exit;

@@ -1,13 +1,12 @@
 <?php
 // Logout script
-session_start();
-
+// Session is managed by the router; clear session data and redirect
 // Unset all session variables
 $_SESSION = array();
 
 // Destroy the session
 session_destroy();
 
-// Redirect to public home (relative as requested)
-header('Location: ../home');
+// Redirect to public home
+header('Location: ' . BASE_URL . 'home');
 exit();

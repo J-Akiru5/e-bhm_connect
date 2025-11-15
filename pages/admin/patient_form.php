@@ -1,6 +1,6 @@
 <?php
 // Smart form for adding/editing patients
-require_once __DIR__ . '/../../includes/auth_bhw.php';
+// Authentication is enforced by the central router (index.php)
 include_once __DIR__ . '/../../includes/header_admin.php';
 require_once __DIR__ . '/../../config/database.php';
 
@@ -63,7 +63,7 @@ if (isset($_GET['id'])) {
         <a href="/e-bmw_connect/admin-patients" class="btn btn-secondary">Back to Patients</a>
     </div>
 
-    <form method="post" action="/e-bmw_connect/actions/patient_save.php">
+    <form method="post" action="?action=save-patient">
         <input type="hidden" name="patient_id" value="<?php echo htmlspecialchars($patient_id); ?>">
 
         <div class="card mb-3">

@@ -1,22 +1,20 @@
 <?php
 // actions/login_bhw_action.php
 // Handle BHW login logic securely using PDO prepared statements.
-session_start();
+// Session and DB are initialized by the central router (index.php)
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-	header('Location: ../login-bhw');
+	header('Location: ' . BASE_URL . 'login-bhw');
 	exit();
 }
-
-require_once __DIR__ . '/../config/database.php';
 
 $username = isset($_POST['username']) ? trim($_POST['username']) : '';
 $password = isset($_POST['password']) ? $_POST['password'] : '';
 
 if ($username === '' || $password === '') {
 	$_SESSION['login_error'] = 'Please provide username and password.';
-	header('Location: ../login-bhw');
+	header('Location: ' . BASE_URL . 'login-bhw');
 	exit();
 }
 
@@ -27,7 +25,7 @@ try {
 } catch (Throwable $e) {
 	error_log('Login query error: ' . $e->getMessage());
 	$_SESSION['login_error'] = 'An unexpected error occurred. Please try again later.';
-	header('Location: ../login-bhw');
+	header('Location: ' . BASE_URL . 'login-bhw');
 	exit();
 }
 
@@ -39,11 +37,11 @@ if ($user && isset($user['password_hash']) && password_verify($password, $user['
 	// Optionally mark as logged in flag
 	$_SESSION['bhw_logged_in'] = true;
 
-	header('Location: ../admin-dashboard');
+	header('Location: ' . BASE_URL . 'admin-dashboard');
 	exit();
 } else {
 	// Failed login
 	$_SESSION['login_error'] = 'Invalid username or password.';
-	header('Location: ../login-bhw');
+	header('Location: ' . BASE_URL . 'login-bhw');
 	exit();
 }

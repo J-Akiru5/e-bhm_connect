@@ -1,62 +1,92 @@
 <?php
-// Start the session on every page
+// Start the session ONCE for all requests
 session_start();
 
-// Include the database connection (this creates $pdo)
-require_once __DIR__ . '/config/database.php';
+// Include the Global Config (BASE_URL)
+require_once 'config/config.php';
 
-// --- Main Router ---
+// Include the database connection ONCE for all requests
+require_once 'config/database.php';
 
-// Get the requested page from the URL.
-// Use 'home' as the default page if 'page' is not set or empty.
+// --- Check for an "action" request (e.g., form submission) ---
+if (isset($_GET['action'])) {
+    $action = $_GET['action'];
+    $actionPath = __DIR__ . '/actions/';
+
+    // Whitelist of allowed action files
+    $allowedActions = [
+        'login-bhw' => $actionPath . 'login_bhw_action.php',
+        'register-bhw' => $actionPath . 'register_bhw_action.php',
+        'logout' => $actionPath . 'logout.php',
+        'save-patient' => $actionPath . 'patient_save.php'
+        // Add other actions here as we create them
+    ];
+
+    if (array_key_exists($action, $allowedActions) && file_exists($allowedActions[$action])) {
+        require $allowedActions[$action]; // All actions run here
+    } else {
+        // Handle unknown action
+        die('Invalid action request.');
+    }
+    exit(); // Stop script after action is performed
+}
+
+// --- Regular "page" request (if no action) ---
 $page = isset($_GET['page']) && $_GET['page'] !== '' ? $_GET['page'] : 'home';
-
-// Define the base path for our page files
 $basePath = __DIR__ . '/pages/';
 
 // Whitelist of all allowed pages and their file paths
+// **NEW: We've added a 'secure' => true flag for admin pages**
 $allowedPages = [
-	// Public Pages
-	'home' => $basePath . 'public/home.php',
-	'contact' => $basePath . 'public/contact.php',
-	'announcements' => $basePath . 'public/announcements.php',
+    // Public Pages
+    'home' => ['file' => $basePath . 'public/home.php', 'secure' => false],
+    'contact' => ['file' => $basePath . 'public/contact.php', 'secure' => false],
+    'announcements' => ['file' => $basePath . 'public/announcements.php', 'secure' => false],
 
-	// Login Pages
-	'login-bhw' => $basePath . 'login_bhw.php',
-	'login-patient' => $basePath . 'login_patient.php',
+    // Login/Register
+    'login-bhw' => ['file' => $basePath . 'login_bhw.php', 'secure' => false],
+    'register-bhw' => ['file' => $basePath . 'register_bhw.php', 'secure' => false],
 
-	// Registration Pages
-	'register-bhw' => $basePath . 'register_bhw.php',
+    // BHW Admin Portal
+    'admin-dashboard' => ['file' => $basePath . 'admin/dashboard.php', 'secure' => true],
+    'admin-patients' => ['file' => $basePath . 'admin/patients.php', 'secure' => true],
+    'admin-patient-view' => ['file' => $basePath . 'admin/patient_view.php', 'secure' => true],
+    'admin-patient-form' => ['file' => $basePath . 'admin/patient_form.php', 'secure' => true],
+    'admin-inventory' => ['file' => $basePath . 'admin/inventory.php', 'secure' => true],
+    'admin-reports' => ['file' => $basePath . 'admin/reports.php', 'secure' => true],
+    'admin-bhw-users' => ['file' => $basePath . 'admin/bhw_users.php', 'secure' => true],
 
-	// BHW Admin Portal
-	'admin-dashboard' => $basePath . 'admin/dashboard.php',
-	'admin-patients' => $basePath . 'admin/patients.php',
-	'admin-patient-view' => $basePath . 'admin/patient_view.php',
-	'admin-patient-form' => $basePath . 'admin/patient_form.php',
-	'admin-inventory' => $basePath . 'admin/inventory.php',
-	'admin-reports' => $basePath . 'admin/reports.php',
-	'admin-bhw-users' => $basePath . 'admin/bhw_users.php',
+    // Patient Portal
+    'portal-dashboard' => ['file' => $basePath . 'portal/portal_dashboard.php', 'secure' => 'patient'], // Example for patient auth
+    'portal-chatbot' => ['file' => $basePath . 'portal/portal_chatbot.php', 'secure' => 'patient'],
 
-	// Patient Portal
-	'portal-dashboard' => $basePath . 'portal/portal_dashboard.php',
-	'portal-chatbot' => $basePath . 'portal/portal_chatbot.php',
-
-	// Action/Error
-	'404' => $basePath . 'public/404.php' // A page to show if 'page' is not found
+    // Error
+    '404' => ['file' => $basePath . 'public/404.php', 'secure' => false]
 ];
 
-// Check if the requested page is in our whitelist
+// --- Router Security Logic ---
 if (array_key_exists($page, $allowedPages)) {
-	// Check if the file actually exists before including it
-	if (file_exists($allowedPages[$page])) {
-		include $allowedPages[$page];
-	} else {
-		// File not found, even though it's in the whitelist (developer error)
-		error_log("Missing page file: " . $allowedPages[$page]);
-		include $allowedPages['404'];
-	}
-} else {
-	// Page not in whitelist, show 404
-	include $allowedPages['404'];
-}
+    
+    $pageData = $allowedPages[$page];
+    
+    // **This is our new "React Hook" style guard**
+    if ($pageData['secure'] === true && !isset($_SESSION['bhw_id'])) {
+        // Page is for BHWs, but user is not logged in as a BHW
+        $_SESSION['login_error'] = 'You must be logged in to access this page.';
+        header('Location: login-bhw');
+        exit();
+    }
+    
+    // (We can add a check for 'patient' security here later)
 
+    // If security checks pass, load the page
+    if (file_exists($pageData['file'])) {
+        include $pageData['file'];
+    } else {
+        include $allowedPages['404']['file'];
+    }
+
+} else {
+    // Page not in whitelist, show 404
+    include $allowedPages['404']['file'];
+}
