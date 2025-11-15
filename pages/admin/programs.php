@@ -5,7 +5,20 @@ require_once __DIR__ . '/../../config/database.php';
 
 $programs = [];
 try {
-    $stmt = $pdo->query('SELECT * FROM health_programs ORDER BY start_date DESC');
+    // Base SQL for programs
+    $sql = 'SELECT * FROM health_programs';
+    $params = [];
+
+    if (!empty($_GET['search'])) {
+        $search_term = '%' . $_GET['search'] . '%';
+        $sql .= ' WHERE program_name LIKE ?';
+        $params[] = $search_term;
+    }
+
+    $sql .= ' ORDER BY start_date DESC';
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
     $programs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $e) {
     error_log('Programs fetch error: ' . $e->getMessage());
@@ -13,6 +26,19 @@ try {
 ?>
 
 <div class="container">
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Search & Filter</h5>
+            <form method="GET" action="">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search" placeholder="Search by program name..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                    <a href="<?php echo BASE_URL; ?>admin-programs" class="btn btn-outline-secondary">Clear</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Health Program Monitoring</h1>
     </div>

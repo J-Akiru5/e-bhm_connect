@@ -8,8 +8,25 @@ require_once __DIR__ . '/../../config/database.php';
 
 $patients = [];
 try {
-	$stmt = $pdo->query('SELECT * FROM patients ORDER BY full_name ASC');
+	// Base SQL query
+	$sql = "SELECT * FROM patients";
+	$params = [];
+
+	// If a search term is provided, add WHERE clause
+	if (!empty($_GET['search'])) {
+		$search_term = '%' . $_GET['search'] . '%';
+		$sql .= " WHERE full_name LIKE ?";
+		$params[] = $search_term;
+	}
+
+	// Add ordering
+	$sql .= " ORDER BY full_name ASC";
+
+	// Prepare and execute
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute($params);
 	$patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (Throwable $e) {
 	error_log('Patients query error: ' . $e->getMessage());
 }
@@ -26,6 +43,19 @@ if (isset($_SESSION['form_error'])) {
 	unset($_SESSION['form_error']);
 }
 ?>
+
+<div class="card mb-3">
+	<div class="card-body">
+		<h5 class="card-title">Search Patient</h5>
+		<form method="GET" action="">
+			<div class="input-group">
+				<input type="text" class="form-control" name="search" placeholder="Search by patient name..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
+				<button class="btn btn-primary" type="submit">Search</button>
+				<a href="<?php echo BASE_URL; ?>admin-patients" class="btn btn-outline-secondary">Clear</a>
+			</div>
+		</form>
+	</div>
+</div>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
 	<h1>Patient Records</h1>

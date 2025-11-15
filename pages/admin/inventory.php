@@ -5,7 +5,20 @@ include_once __DIR__ . '/../../includes/header_admin.php';
 
 $inventory_items = [];
 try {
-    $stmt = $pdo->query('SELECT * FROM medication_inventory ORDER BY item_name ASC');
+    // Base SQL query
+    $sql = "SELECT * FROM medication_inventory";
+    $params = [];
+
+    if (!empty($_GET['search'])) {
+        $search_term = '%' . $_GET['search'] . '%';
+        $sql .= " WHERE item_name LIKE ?";
+        $params[] = $search_term;
+    }
+
+    $sql .= " ORDER BY item_name ASC";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
     $inventory_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $e) {
     error_log('Inventory fetch error: ' . $e->getMessage());
@@ -13,6 +26,19 @@ try {
 ?>
 
 <div class="container">
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Search & Filter</h5>
+            <form method="GET" action="">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search" placeholder="Search by item name..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                    <a href="<?php echo BASE_URL; ?>admin-inventory" class="btn btn-outline-secondary">Clear</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Medication & Supply Inventory</h1>
     </div>

@@ -29,7 +29,9 @@ if (isset($_GET['action'])) {
         ,
         'save-program' => $actionPath . 'program_save.php',
         'update-program' => $actionPath . 'program_update.php',
-        'delete-program' => $actionPath . 'program_delete.php'
+        'delete-program' => $actionPath . 'program_delete.php',
+        // Report actions
+        'report-patient-list' => $actionPath . 'report_patient_list.php'
         // Add other actions here as we create them
     ];
 
