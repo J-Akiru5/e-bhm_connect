@@ -30,14 +30,13 @@ try {
 
     if (empty($patient_id)) {
         // INSERT patient
-        $insertPatient = $pdo->prepare('INSERT INTO patients (full_name, address, birthdate, sex, contact, family_composition_text) VALUES (:full_name, :address, :birthdate, :sex, :contact, :family_composition_text)');
+        $insertPatient = $pdo->prepare('INSERT INTO patients (full_name, address, birthdate, sex, contact) VALUES (:full_name, :address, :birthdate, :sex, :contact)');
         $insertPatient->execute([
             ':full_name' => $full_name,
             ':address' => $address,
             ':birthdate' => $birthdate,
             ':sex' => $sex,
-            ':contact' => $contact,
-            ':family_composition_text' => $family_composition_text
+            ':contact' => $contact
         ]);
 
         $newId = $pdo->lastInsertId();
@@ -57,14 +56,13 @@ try {
         $_SESSION['form_success'] = 'Patient added successfully!';
     } else {
         // UPDATE existing
-        $updatePatient = $pdo->prepare('UPDATE patients SET full_name = :full_name, address = :address, birthdate = :birthdate, sex = :sex, contact = :contact, family_composition_text = :family_composition_text WHERE patient_id = :patient_id');
+        $updatePatient = $pdo->prepare('UPDATE patients SET full_name = :full_name, address = :address, birthdate = :birthdate, sex = :sex, contact = :contact WHERE patient_id = :patient_id');
         $updatePatient->execute([
             ':full_name' => $full_name,
             ':address' => $address,
             ':birthdate' => $birthdate,
             ':sex' => $sex,
             ':contact' => $contact,
-            ':family_composition_text' => $family_composition_text,
             ':patient_id' => $patient_id
         ]);
 
