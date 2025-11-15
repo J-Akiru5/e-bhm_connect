@@ -26,6 +26,10 @@ if (isset($_GET['action'])) {
         ,
         'save-vital' => $actionPath . 'vital_save.php',
         'save-visit' => $actionPath . 'visit_save.php'
+        ,
+        'save-program' => $actionPath . 'program_save.php',
+        'update-program' => $actionPath . 'program_update.php',
+        'delete-program' => $actionPath . 'program_delete.php'
         // Add other actions here as we create them
     ];
 
@@ -61,6 +65,8 @@ $allowedPages = [
     'admin-patient-form' => ['file' => $basePath . 'admin/patient_form.php', 'secure' => true],
     'admin-inventory' => ['file' => $basePath . 'admin/inventory.php', 'secure' => true],
     'admin-inventory-edit' => ['file' => $basePath . 'admin/inventory_edit.php', 'secure' => true],
+    'admin-programs' => ['file' => $basePath . 'admin/programs.php', 'secure' => true],
+    'admin-program-edit' => ['file' => $basePath . 'admin/program_edit.php', 'secure' => true],
     'admin-reports' => ['file' => $basePath . 'admin/reports.php', 'secure' => true],
     'admin-bhw-users' => ['file' => $basePath . 'admin/bhw_users.php', 'secure' => true],
 

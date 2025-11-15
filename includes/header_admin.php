@@ -26,11 +26,10 @@ if (session_status() === PHP_SESSION_NONE) {
             <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-patients">Patients</a></li>
             <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-inventory">Inventory</a></li>
             <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-reports">Reports</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-programs">Programs</a></li>
             <li class="nav-item">
-    <a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-bhw-users">
-        BHW Management
-    </a>
-</li>
+                <a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-bhw-users">BHW Management</a>
+            </li>
         </ul>
     </aside>
 
