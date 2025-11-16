@@ -55,7 +55,10 @@ try {
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1><?php echo htmlspecialchars($patient['full_name'] ?? 'Patient'); ?></h1>
-        <a href="<?php echo BASE_URL; ?>admin-patient-form?id=<?php echo $patient_id; ?>" class="btn btn-primary btn-sm">Edit Patient</a>
+        <div class="d-flex gap-2">
+            <a href="<?php echo BASE_URL; ?>admin-patient-form?id=<?php echo $patient_id; ?>" class="btn btn-primary btn-sm">Edit Patient</a>
+            <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">Print Records</button>
+        </div>
     </div>
 
     <div class="row g-4">

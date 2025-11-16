@@ -35,6 +35,8 @@ if ($patient_id) {
 
 <h1 class="mb-4">Welcome, <?php echo htmlspecialchars($_SESSION['patient_full_name'] ?? ''); ?>!</h1>
 
+<button class="btn btn-primary mb-3" onclick="window.print()">Print My Records</button>
+
 <div class="row g-4">
     <div class="col-lg-6">
 
