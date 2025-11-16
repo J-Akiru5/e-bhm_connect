@@ -64,7 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function addMessageToUI(text, type) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('chat-message', type);
-        messageDiv.textContent = text;
+
+        if (type === 'bot') {
+            // Use marked.js to parse Markdown from the bot
+            messageDiv.innerHTML = marked.parse(text);
+        } else {
+            // Use textContent for user/loading messages for security
+            messageDiv.textContent = text;
+        }
+
         chatMessages.appendChild(messageDiv);
         // Scroll to bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;

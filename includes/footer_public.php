@@ -65,6 +65,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/chatbot.css">
     <script src="<?php echo BASE_URL; ?>assets/js/chatbot.js"></script>
 
