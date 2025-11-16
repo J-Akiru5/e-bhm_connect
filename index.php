@@ -38,6 +38,8 @@ if (isset($_GET['action'])) {
         'chatbot-api' => $actionPath . 'chatbot_api.php',
         // Report actions
         'report-patient-list' => $actionPath . 'report_patient_list.php'
+        ,
+        'report-bhw-record' => $actionPath . 'report_bhw_record.php'
         // Add other actions here as we create them
     ];
     // Patient portal actions

@@ -70,6 +70,8 @@ try {
                                     <td>
                                         <a href="<?php echo BASE_URL; ?>admin-bhw-edit?id=<?php echo $bhw['bhw_id']; ?>" class="btn btn-secondary btn-sm">Edit</a>
 
+                                        <a href="<?php echo BASE_URL; ?>?action=report-bhw-record&id=<?php echo $bhw['bhw_id']; ?>" class="btn btn-info btn-sm" target="_blank">PDF</a>
+
                                         <form action="<?php echo BASE_URL; ?>?action=delete-bhw" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
                                             <input type="hidden" name="bhw_id" value="<?php echo htmlspecialchars($bhw['bhw_id'] ?? ''); ?>">
                                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
