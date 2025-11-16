@@ -72,8 +72,22 @@
     </script>
 
     <div id="chat-bubble">💬</div>
+
     <div id="chat-window">
+        <div id="chat-header">
+            E-BHM Connect ("Gabby")
+            <span id="chat-close">X</span>
         </div>
+        <div id="chat-messages">
+            <div class="chat-message bot">
+                Hi! I'm Gabby. How can I help you today?
+            </div>
+        </div>
+        <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Ask a question...">
+            <button id="chat-send-btn">→</button>
+        </div>
+    </div>
 
 </body>
 </html>
