@@ -37,11 +37,11 @@ if (isset($_GET['action'])) {
         // Chatbot API
         'chatbot-api' => $actionPath . 'chatbot_api.php',
         // Report actions
-        'report-patient-list' => $actionPath . 'report_patient_list.php'
-        ,
+        'report-patient-list' => $actionPath . 'report_patient_list.php',
+        'report-inventory-stock' => $actionPath . 'report_inventory.php',
+        'report-chronic-disease' => $actionPath . 'report_chronic.php',
+        'report-my-record' => $actionPath . 'report_my_record.php',
         'report-bhw-record' => $actionPath . 'report_bhw_record.php'
-        ,
-        'report-patient-record' => $actionPath . 'report_patient_record.php'
         // Add other actions here as we create them
     ];
     // Patient portal actions

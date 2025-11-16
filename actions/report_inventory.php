@@ -1,8 +1,8 @@
 <?php
 // (index.php includes config/config.php)
 // **FIX: We must manually include the database connection here**
-require_once '../config/database.php';
-require_once '../lib/fpdf/fpdf.php';
+require_once __DIR__ . '/../lib/fpdf/fpdf.php';
+require_once __DIR__ . '/../config/database.php';
 
 class PDF extends FPDF {
     // Page header
