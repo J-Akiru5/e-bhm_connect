@@ -1,5 +1,14 @@
 # Configuration files with sensitive data
 config/database.php
+config/config.php
+
+# Common env/key files
+.env
+.env.local
+config/*.local.php
+config/*.secret.php
+*.key
+secrets/
 
 # Vendor folders (if we ever add any)
 /vendor/
