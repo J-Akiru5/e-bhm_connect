@@ -12,12 +12,18 @@
     <style>
         body {
             background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex-grow: 1; /* Makes the main content grow to fill space */
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand fs-4 fw-bold d-flex align-items-center" href="<?php echo BASE_URL; ?>home">
                 <img src="assets/images/e-logo.png" alt="Logo" width="40" height="40" class="me-2 rounded" />

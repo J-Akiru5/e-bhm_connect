@@ -11,10 +11,20 @@
     <title>Patient Portal - E-BHM Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <style> body { background-color: #f8f9fa; } </style>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand fs-4 fw-bold" href="<?php echo BASE_URL; ?>portal-dashboard">Patient Portal</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#portalNavbar">
