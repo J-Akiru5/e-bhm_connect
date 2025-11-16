@@ -20,7 +20,7 @@ if (isset($_SESSION['register_error'])) {
         <div class="card-body p-4">
             <h3 class="card-title mb-3 text-center">BHW Registration</h3>
 
-            <form method="post" action="/e-bmw_connect/actions/register_bhw_action.php">
+            <form action="<?php echo BASE_URL; ?>?action=register-bhw" method="POST">
                 <div class="mb-3">
                     <label for="full_name" class="form-label">Full Name</label>
                     <input type="text" class="form-control" id="full_name" name="full_name" required>
