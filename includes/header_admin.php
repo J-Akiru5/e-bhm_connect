@@ -25,13 +25,14 @@ if (session_status() === PHP_SESSION_NONE) {
         <a href="<?php echo BASE_URL; ?>admin-dashboard" class="text-decoration-none text-white d-block mb-3 fs-4 fw-bold">Admin Portal</a>
 
         <ul class="nav nav-pills flex-column">
-            <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-dashboard">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-patients">Patients</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-inventory">Inventory</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-reports">Reports</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-programs">Programs</a></li>
+            <li class="nav-item"><a class="nav-link text-white <?php echo (isset($page) && $page === 'admin-dashboard') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-dashboard">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-white <?php echo (isset($page) && $page === 'admin-patients') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-patients">Patients</a></li>
+            <li class="nav-item"><a class="nav-link text-white <?php echo (isset($page) && $page === 'admin-inventory') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-inventory">Inventory</a></li>
+            <li class="nav-item"><a class="nav-link text-white <?php echo (isset($page) && $page === 'admin-announcements') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-announcements">Announcements</a></li>
+            <li class="nav-item"><a class="nav-link text-white <?php echo (isset($page) && $page === 'admin-reports') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-reports">Reports</a></li>
+            <li class="nav-item"><a class="nav-link text-white <?php echo (isset($page) && $page === 'admin-programs') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-programs">Programs</a></li>
             <li class="nav-item">
-                <a class="nav-link text-white" href="<?php echo BASE_URL; ?>admin-bhw-users">BHW Management</a>
+                <a class="nav-link text-white <?php echo (isset($page) && $page === 'admin-bhw-users') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-bhw-users">BHW Management</a>
             </li>
         </ul>
 
@@ -43,7 +44,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
         <div class="mt-auto p-2">
             <hr class="text-white">
-            <a href="<?php echo BASE_URL; ?>admin-profile" class="d-flex align-items-center text-white text-decoration-none p-2 rounded hover-bg-secondary">
+            <a href="<?php echo BASE_URL; ?>admin-profile" class="d-flex align-items-center text-white text-decoration-none p-2 rounded hover-bg-secondary <?php echo (isset($page) && $page === 'admin-profile') ? 'active' : ''; ?>">
                 <img src="https://via.placeholder.com/40" alt="Profile" width="40" height="40" class="rounded-circle me-2">
                 <strong><?php echo htmlspecialchars($_SESSION['bhw_full_name'] ?? 'Profile'); ?></strong>
             </a>

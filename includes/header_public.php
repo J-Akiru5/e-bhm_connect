@@ -30,18 +30,18 @@
             
             <div class="collapse navbar-collapse" id="publicNavbar">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>home">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo BASE_URL; ?>announcements">Announcements</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo BASE_URL; ?>mission-vision">Our Mission &amp; Vision</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo BASE_URL; ?>contact">Contact Us</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo (isset($page) && $page === 'home') ? 'active' : ''; ?>" aria-current="page" href="<?php echo BASE_URL; ?>home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo (isset($page) && $page === 'announcements') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>announcements">Announcements</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo (isset($page) && $page === 'mission-vision') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>mission-vision">Our Mission &amp; Vision</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo (isset($page) && $page === 'contact') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>contact">Contact Us</a>
+                        </li>
                 </ul>
                 
                 <div class="d-flex">

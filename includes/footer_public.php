@@ -3,7 +3,7 @@
             <div class="row">
 
                 <div class="col-md-4 mb-4">
-                    <h5 class="text-uppercase fw-bold text-success-emphasis">Barangay Information</h5>
+                    <h5 class="text-uppercase fw-bold text-active-emphasis">Barangay Information</h5>
                     <hr class="mb-3 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #5cb85c; height: 2px" />
                     <p class="mb-1">
                         <strong>Barangay Name:</strong> Bacong
@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <h5 class="text-uppercase fw-bold text-success-emphasis">Health Center</h5>
+                    <h5 class="text-uppercase fw-bold text-active-emphasis">Health Center</h5>
                     <hr class="mb-3 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #5cb85c; height: 2px" />
                     <p class="mb-1">
                         <strong>Name:</strong> Bacong Barangay Health Center
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="col-md-4 mb-4">
-                    <h5 class="text-uppercase fw-bold text-success-emphasis">Contact Us</h5>
+                    <h5 class="text-uppercase fw-bold text-active-emphasis">Contact Us</h5>
                     <hr class="mb-3 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #5cb85c; height: 2px" />
                     <p class="mb-1">
                         <strong>Barangay Hall:</strong> (033) 987-6543

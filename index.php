@@ -30,6 +30,10 @@ if (isset($_GET['action'])) {
         'save-program' => $actionPath . 'program_save.php',
         'update-program' => $actionPath . 'program_update.php',
         'delete-program' => $actionPath . 'program_delete.php',
+        // Announcements actions
+        'save-announcement' => $actionPath . 'announcement_save.php',
+        'update-announcement' => $actionPath . 'announcement_update.php',
+        'delete-announcement' => $actionPath . 'announcement_delete.php',
         // Report actions
         'report-patient-list' => $actionPath . 'report_patient_list.php'
         // Add other actions here as we create them
@@ -70,6 +74,8 @@ $allowedPages = [
     'admin-inventory-edit' => ['file' => $basePath . 'admin/inventory_edit.php', 'secure' => true],
     'admin-programs' => ['file' => $basePath . 'admin/programs.php', 'secure' => true],
     'admin-program-edit' => ['file' => $basePath . 'admin/program_edit.php', 'secure' => true],
+    'admin-announcements' => ['file' => $basePath . 'admin/announcements.php', 'secure' => true],
+    'admin-announcement-edit' => ['file' => $basePath . 'admin/announcement_edit.php', 'secure' => true],
     'admin-reports' => ['file' => $basePath . 'admin/reports.php', 'secure' => true],
     'admin-bhw-users' => ['file' => $basePath . 'admin/bhw_users.php', 'secure' => true],
     'admin-profile' => ['file' => $basePath . 'admin/profile.php', 'secure' => true],
