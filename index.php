@@ -40,6 +40,9 @@ if (isset($_GET['action'])) {
         'report-patient-list' => $actionPath . 'report_patient_list.php'
         // Add other actions here as we create them
     ];
+    // Patient portal actions
+    $allowedActions['register-patient'] = $actionPath . 'register_patient_action.php';
+    $allowedActions['login-patient'] = $actionPath . 'login_patient_action.php';
 
     if (array_key_exists($action, $allowedActions) && file_exists($allowedActions[$action])) {
         require $allowedActions[$action]; // All actions run here
@@ -66,6 +69,9 @@ $allowedPages = [
     // Login/Register
     'login-bhw' => ['file' => $basePath . 'login_bhw.php', 'secure' => false],
     'register-bhw' => ['file' => $basePath . 'register_bhw.php', 'secure' => false],
+    // Patient portal public pages
+    'register-patient' => ['file' => $basePath . 'register_patient.php', 'secure' => false],
+    'login-patient' => ['file' => $basePath . 'login_patient.php', 'secure' => false],
 
     // BHW Admin Portal
     'admin-dashboard' => ['file' => $basePath . 'admin/dashboard.php', 'secure' => true],
