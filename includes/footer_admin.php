@@ -6,6 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/chatbot.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/resizable.js"></script>
 
     <script>
     function updateLiveClock() {
@@ -75,6 +76,7 @@
     <div id="chat-bubble">💬</div>
 
     <div id="chat-window">
+        <div id="chat-resize-handle"></div>
         <div id="chat-header">
             E-BHM Connect ("Gabby")
             <span id="chat-close">X</span>

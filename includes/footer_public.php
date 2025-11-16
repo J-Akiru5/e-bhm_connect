@@ -69,10 +69,12 @@
 
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/chatbot.css">
     <script src="<?php echo BASE_URL; ?>assets/js/chatbot.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/resizable.js"></script>
 
     <div id="chat-bubble">💬</div>
 
     <div id="chat-window">
+        <div id="chat-resize-handle"></div>
         <div id="chat-header">
             E-BHM Connect ("Gabby")
             <span id="chat-close">X</span>

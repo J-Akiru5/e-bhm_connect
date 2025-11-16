@@ -97,3 +97,22 @@
     padding: 0 20px;
     cursor: pointer;
 }
+
+/* Resize handle for the chat window (small grabber in the corner) */
+#chat-resize-handle {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 15px;
+    height: 15px;
+    cursor: nwse-resize; /* The diagonal resize cursor */
+    z-index: 1002;
+    /* Optional: Add a small visual grabber icon */
+    background: repeating-linear-gradient(
+        -45deg,
+        rgba(255,255,255,0.5),
+        rgba(255,255,255,0.5) 1px,
+        transparent 2px,
+        transparent 4px
+    );
+}
