@@ -37,6 +37,9 @@
                         <a class="nav-link" href="<?php echo BASE_URL; ?>announcements">Announcements</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>mission-vision">Our Mission &amp; Vision</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="<?php echo BASE_URL; ?>contact">Contact Us</a>
                     </li>
                 </ul>

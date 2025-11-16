@@ -54,6 +54,7 @@ $allowedPages = [
     // Public Pages
     'home' => ['file' => $basePath . 'public/home.php', 'secure' => false],
     'contact' => ['file' => $basePath . 'public/contact.php', 'secure' => false],
+    'mission-vision' => ['file' => $basePath . 'public/mission_vision.php', 'secure' => false],
     'announcements' => ['file' => $basePath . 'public/announcements.php', 'secure' => false],
 
     // Login/Register
