@@ -44,7 +44,7 @@
                     </p>
                     <p class="mt-2">
                         <a href="https://www.facebook.com/barangay.bacong.2025" target="_blank" class="text-white me-2">Facebook</a> |
-                        <a href="#" class="text-white ms-2">Google Maps</a>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Barangay+Bacong+Dumangas+Iloilo" target="_blank" class="text-white ms-2">Google Maps</a>
                     </p>
                 </div>
 

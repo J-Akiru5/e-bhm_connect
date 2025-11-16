@@ -47,7 +47,7 @@ include_once __DIR__ . '/../../includes/header_public.php';
                     </p>
                     <p class="card-text mt-3">
                         <a href="https://www.facebook.com/barangay.bacong.2025" target="_blank" class="btn btn-primary">Facebook</a>
-                        <a href="#" class="btn btn-success">Google Maps</a>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Barangay+Bacong+Dumangas+Iloilo" target="_blank" class="btn btn-success">Google Maps</a>
                     </p>
                 </div>
             </div>
