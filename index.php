@@ -43,6 +43,8 @@ if (isset($_GET['action'])) {
     // Patient portal actions
     $allowedActions['register-patient'] = $actionPath . 'register_patient_action.php';
     $allowedActions['login-patient'] = $actionPath . 'login_patient_action.php';
+    $allowedActions['logout-patient'] = $actionPath . 'logout_patient.php';
+    $allowedActions['chatbot-portal-api'] = $actionPath . 'chatbot_portal_api.php';
 
     if (array_key_exists($action, $allowedActions) && file_exists($allowedActions[$action])) {
         require $allowedActions[$action]; // All actions run here
@@ -109,7 +111,13 @@ if (array_key_exists($page, $allowedPages)) {
         exit();
     }
     
-    // (We can add a check for 'patient' security here later)
+    // **This is our new 'Patient' guard**
+    if ($pageData['secure'] === 'patient' && !isset($_SESSION['patient_id'])) {
+        // Page is for Patients, but user is not logged in as a Patient
+        $_SESSION['login_error'] = 'You must be logged in to access this page.';
+        header('Location: ' . BASE_URL . 'login-patient');
+        exit();
+    }
 
     // If security checks pass, load the page
     if (file_exists($pageData['file'])) {
