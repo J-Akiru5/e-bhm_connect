@@ -18,7 +18,7 @@
 </head>
 <body class="bg-light">
 
-    <div id="admin-sidebar" class="d-flex flex-column p-3 text-white bg-dark">
+    <div id="admin-sidebar" class="d-flex flex-column p-3 text-white bg-success">
         <a href="<?php echo BASE_URL; ?>admin-dashboard" class="d-flex align-items-center mb-3 text-white text-decoration-none">
             <span class="fs-4">Admin Portal</span>
         </a>
@@ -66,6 +66,8 @@
     <div id="main-content-wrapper">
 
         <nav id="admin-top-nav" class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <!-- Sidebar toggle for small screens -->
+            <button id="sidebarToggle" class="btn btn-outline-secondary d-lg-none me-2" aria-label="Toggle sidebar">☰</button>
             <div class="container-fluid">
                 <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
                     <li class="nav-item">
@@ -75,6 +77,7 @@
                         <a class="nav-link" href="<?php echo BASE_URL; ?>?action=logout">Logout</a>
                     </li>
                 </div>
+                <div id="sidebar-backdrop"></div>
             </div>
         </nav>
 

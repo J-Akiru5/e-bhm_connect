@@ -49,3 +49,42 @@ body {
     border-top: 1px solid #dee2e6;
     flex-shrink: 0;
 }
+
+/* Responsive: convert sidebar to offcanvas on small screens */
+@media (max-width: 991.98px) {
+    #admin-sidebar {
+        /* hide off-canvas by default */
+        transform: translateX(-280px);
+        transition: transform 0.25s ease-in-out;
+        will-change: transform;
+        z-index: 1100; /* above backdrop */
+    }
+
+    body.sidebar-open #admin-sidebar {
+        transform: translateX(0);
+    }
+
+    #sidebar-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.45);
+        display: none;
+        z-index: 1000;
+    }
+
+    body.sidebar-open #sidebar-backdrop {
+        display: block;
+    }
+
+    /* Make main content occupy full width when sidebar is hidden */
+    #main-content-wrapper {
+        left: 0; /* ignore sidebar width when closed */
+    }
+}
+
+/* Ensure admin elements stacking order */
+#admin-sidebar { z-index: 1100; }
+#admin-top-nav { z-index: 1050; }

@@ -42,6 +42,35 @@
     }
     </script>
 
+    <script>
+    // Sidebar toggle/offcanvas handling for small screens
+    (function(){
+        const toggle = document.getElementById('sidebarToggle');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        const body = document.body;
+
+        function openSidebar(){
+            body.classList.add('sidebar-open');
+        }
+        function closeSidebar(){
+            body.classList.remove('sidebar-open');
+        }
+
+        if(toggle){
+            toggle.addEventListener('click', function(e){
+                if(body.classList.contains('sidebar-open')){ closeSidebar(); } else { openSidebar(); }
+            });
+        }
+
+        if(backdrop){
+            backdrop.addEventListener('click', function(){ closeSidebar(); });
+        }
+
+        // Close on ESC
+        document.addEventListener('keydown', function(ev){ if(ev.key === 'Escape'){ closeSidebar(); } });
+    })();
+    </script>
+
     <div id="chat-bubble">💬</div>
     <div id="chat-window">
         </div>
