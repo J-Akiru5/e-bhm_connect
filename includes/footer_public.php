@@ -43,7 +43,7 @@
                         <strong>Email:</strong> barangaybacong@gmail.com
                     </p>
                     <p class="mt-2">
-                        <a href="#" class="text-white me-2">Facebook</a> |
+                        <a href="https://www.facebook.com/barangay.bacong.2025" target="_blank" class="text-white me-2">Facebook</a> |
                         <a href="#" class="text-white ms-2">Google Maps</a>
                     </p>
                 </div>

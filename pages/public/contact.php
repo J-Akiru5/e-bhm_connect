@@ -46,7 +46,7 @@ include_once __DIR__ . '/../../includes/header_public.php';
                         [cite_start]<strong>Email:</strong> barangaybacong@gmail.com [cite: 92]
                     </p>
                     <p class="card-text mt-3">
-                        <a href="#" class="btn btn-primary">Facebook</a>
+                        <a href="https://www.facebook.com/barangay.bacong.2025" target="_blank" class="btn btn-primary">Facebook</a>
                         <a href="#" class="btn btn-success">Google Maps</a>
                     </p>
                 </div>
