@@ -45,6 +45,13 @@ if (isset($_GET['action'])) {
     $allowedActions['login-patient'] = $actionPath . 'login_patient_action.php';
     $allowedActions['logout-patient'] = $actionPath . 'logout_patient.php';
     $allowedActions['chatbot-portal-api'] = $actionPath . 'chatbot_portal_api.php';
+    // Admin profile actions
+    $allowedActions['update-profile'] = $actionPath . 'update_profile.php';
+    $allowedActions['change-password'] = $actionPath . 'change_password.php';
+    // BHW management actions
+    $allowedActions['update-bhw'] = $actionPath . 'bhw_update.php';
+    // Chart data for dashboard
+    $allowedActions['get-chart-data'] = $actionPath . 'chart_data.php';
 
     if (array_key_exists($action, $allowedActions) && file_exists($allowedActions[$action])) {
         require $allowedActions[$action]; // All actions run here
@@ -88,6 +95,7 @@ $allowedPages = [
     'admin-announcement-edit' => ['file' => $basePath . 'admin/announcement_edit.php', 'secure' => true],
     'admin-reports' => ['file' => $basePath . 'admin/reports.php', 'secure' => true],
     'admin-bhw-users' => ['file' => $basePath . 'admin/bhw_users.php', 'secure' => true],
+    'admin-bhw-edit' => ['file' => $basePath . 'admin/bhw_edit.php', 'secure' => true],
     'admin-profile' => ['file' => $basePath . 'admin/profile.php', 'secure' => true],
 
     // Patient Portal

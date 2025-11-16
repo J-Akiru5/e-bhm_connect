@@ -91,3 +91,56 @@ include_once __DIR__ . '/../../includes/header_admin.php';
 // Include the footer
 include_once __DIR__ . '/../../includes/footer_admin.php';
 ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const ctx = document.getElementById('health-issues-chart').getContext('2d');
+	const yearFilter = document.getElementById('year-filter');
+	let myChart;
+
+	myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: [],
+			datasets: [{
+				label: '# of Visits',
+				data: [],
+				backgroundColor: 'rgba(0, 123, 255, 0.5)',
+				borderColor: 'rgba(0, 123, 255, 1)',
+				borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true,
+					ticks: {
+						precision: 0
+					}
+				}
+			},
+			responsive: true,
+			maintainAspectRatio: false
+		}
+	});
+
+	async function updateChart(year) {
+		myChart.data.labels = ['Loading...'];
+		myChart.data.datasets[0].data = [];
+		myChart.update();
+
+		const response = await fetch(`<?php echo BASE_URL; ?>?action=get-chart-data&year=${year}`);
+		const chartData = await response.json();
+
+		myChart.data.labels = chartData.labels;
+		myChart.data.datasets[0].data = chartData.data;
+		myChart.update();
+	}
+
+	yearFilter.addEventListener('change', () => {
+		updateChart(yearFilter.value);
+	});
+
+	updateChart('');
+});
+</script>
