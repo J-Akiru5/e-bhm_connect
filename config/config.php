@@ -6,6 +6,8 @@
 define('APP_NAME', 'E-BHM-CONNECT');
 define('APP_ENV', 'development');
 define('BASE_URL', 'http://localhost/e-bhm_connect/');
+define('TIMEZONE', 'Asia/Manila');
+define('GEMINI_API_KEY', 'AIzaSyDMkyzML13FYg6MZrCH9gIkDn_LVYh3w24');
 
 // Include database connection (creates $pdo)
 require_once __DIR__ . '/database.php';

@@ -40,7 +40,7 @@ if (empty($api_key)) {
 $prompt = "You are 'Gabby', a helpful health assistant for Barangay Bacong. Answer briefly and friendly. Do not provide medical diagnoses. If asked for a diagnosis, advise the user to see a BHW. Question: " . $user_message;
 
 // Gemini REST endpoint (using API key param)
-$url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' . urlencode($api_key);
+$url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' . urlencode($api_key);
 
 $payload = [
 	'contents' => [
