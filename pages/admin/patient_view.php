@@ -57,7 +57,7 @@ try {
         <h1><?php echo htmlspecialchars($patient['full_name'] ?? 'Patient'); ?></h1>
         <div class="d-flex gap-2">
             <a href="<?php echo BASE_URL; ?>admin-patient-form?id=<?php echo $patient_id; ?>" class="btn btn-primary btn-sm">Edit Patient</a>
-            <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">Print Records</button>
+            <a href="<?php echo BASE_URL; ?>?action=report-patient-record&id=<?php echo $patient_id; ?>" class="btn btn-info btn-sm" target="_blank">Download PDF</a>
         </div>
     </div>
 
