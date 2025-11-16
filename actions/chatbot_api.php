@@ -36,26 +36,44 @@ if (empty($api_key)) {
 	exit();
 }
 
-// --- New Context-Aware Prompt ---
-$barangay_context = "
-You are 'Gabby', a helpful health assistant for Barangay Bacong, Dumangas, Iloilo.
-Your purpose is to answer general health questions and provide information about the barangay health center.
-You must follow these rules:
-1.  **DO NOT** provide medical diagnoses or advice.
-2.  If asked for a diagnosis, advise the user to see a BHW (Barangay Health Worker) at the health center.
-3.  **DO NOT** pretend to have access to personal patient data, health records, or visit history.
+// --- NEW CONTEXT-AWARE PROMPT ---
+$prompt = "";
 
-Here is information about the barangay you can use:
-- **Health Center:** Bacong Barangay Health Center
-- **Location:** Bacong, Dumangas, Iloilo
-- **Office Hours:** Monday - Friday, 8:00 AM to 5:00 PM
-- **Contact:** (033) 123-4567
-- **Barangay Hall:** (033) 987-6543
-- **Services:** General checkups, immunization, maternal and child health, medication (basic).
-";
+// Ensure session is available (index.php normally starts session)
+if (session_status() === PHP_SESSION_NONE) {
+	@session_start();
+}
 
-$prompt = $barangay_context . "\nBased on all the rules and information above, please answer this user's question: " . $user_message;
-// --- End New Prompt ---
+if (isset($_SESSION['bhw_id'])) {
+	// ---- BHW-SPECIFIC PROMPT ----
+	$barangay_context = "
+	You are 'Gabby', a helpful AI assistant for Barangay Bacong.
+	You are currently speaking to a **Barangay Health Worker (BHW)**, who is a trained community health professional.
+	Your tone should be helpful, professional, and peer-to-peer.
+	- You CAN provide general health information and first-aid procedures, as you are speaking to someone with training.
+	- DO NOT make specific diagnoses for patients the BHW might describe. Instead, provide information to help the BHW make their own assessment.
+	- You can answer questions about the Health Center (Hours: 8 AM-5 PM, Mon-Fri; Contact: (033) 123-4567).
+	";
+	$prompt = $barangay_context . "\n    Based on all the rules and information above, please answer this BHW's question: " . $user_message;
+    
+} else {
+	// ---- PUBLIC PROMPT (No Change) ----
+	$barangay_context = "
+	You are 'Gabby', a helpful health assistant for Barangay Bacong.
+	Your purpose is to answer general health questions and provide information about the barangay health center.
+	You must follow these rules:
+	1.  **DO NOT** provide medical diagnoses or advice.
+	2.  If asked for a diagnosis, advise the user to see a BHW (Barangay Health Worker) at the health center.
+	3.  **DO NOT** pretend to have access to personal patient data.
+	4.  Here is information about the barangay you can use:
+		- Health Center: Bacong Barangay Health Center
+		- Location: Bacong, Dumangas, Iloilo
+		- Office Hours: Monday - Friday, 8:00 AM to 5:00 PM
+		- Contact: (033) 123-4567
+	";
+	$prompt = $barangay_context . "\n    Based on all the rules and information above, please answer this user's question: " . $user_message;
+}
+// --- END NEW PROMPT ---
 
 // Gemini REST endpoint (using API key param)
 $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' . urlencode($api_key);
