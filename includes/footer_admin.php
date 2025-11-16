@@ -3,6 +3,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/chatbot.js"></script>
     <script>
         function confirmDelete(event) {
             event.preventDefault(); // Stop the form from submitting immediately
@@ -53,5 +54,24 @@
     </script>
     <script src="<?php echo BASE_URL; ?>assets/js/main.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/patient_edit.js"></script>
+    
+    <!-- Chatbot UI (public/stateless) -->
+    <div id="chat-bubble">💬</div>
+
+    <div id="chat-window">
+        <div id="chat-header">
+            E-BHM Connect ("Gabby")
+            <span id="chat-close">X</span>
+        </div>
+        <div id="chat-messages">
+            <div class="chat-message bot">
+                Hi! I'm Gabby. How can I help you today?
+            </div>
+        </div>
+        <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Ask a question...">
+            <button id="chat-send-btn">→</button>
+        </div>
+    </div>
     </body>
     </html>
