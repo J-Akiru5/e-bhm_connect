@@ -34,6 +34,8 @@ if (isset($_GET['action'])) {
         'save-announcement' => $actionPath . 'announcement_save.php',
         'update-announcement' => $actionPath . 'announcement_update.php',
         'delete-announcement' => $actionPath . 'announcement_delete.php',
+        // Chatbot API
+        'chatbot-api' => $actionPath . 'chatbot_api.php',
         // Report actions
         'report-patient-list' => $actionPath . 'report_patient_list.php'
         // Add other actions here as we create them
