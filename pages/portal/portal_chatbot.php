@@ -22,14 +22,9 @@ $chat_history = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 Hi <?php echo htmlspecialchars($_SESSION['patient_full_name'] ?? ''); ?>! Ask me any general health questions.
             </div>
 
-            <?php foreach ($chat_history as $chat): ?>
-                <div class="chat-message user">
-                    <?php echo htmlspecialchars($chat['prompt_text']); ?>
-                </div>
-                <div class="chat-message bot">
-                    <?php echo htmlspecialchars($chat['response_text']); ?>
-                </div>
-            <?php endforeach; ?>
+            <script>
+                const chatHistory = <?php echo json_encode($chat_history); ?>;
+            </script>
         </div>
         <div id="chat-input-area" style="display:flex; gap:.5rem; padding:1rem;">
             <input type="text" id="chat-input" class="form-control" placeholder="Type your message...">

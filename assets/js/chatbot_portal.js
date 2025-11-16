@@ -1,4 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- NEW CODE BLOCK ---
+    // Get the messages container first
+    const initialChatMessages = document.getElementById('chat-messages');
+
+    // Check if our chatHistory variable exists (from PHP)
+    if (typeof chatHistory !== 'undefined' && initialChatMessages) {
+        // Loop through the history and add it to the UI
+        chatHistory.forEach(chat => {
+            // Add the user's old prompt
+            const userDiv = document.createElement('div');
+            userDiv.classList.add('chat-message', 'user');
+            userDiv.textContent = chat.prompt_text; // User text is always plain
+            initialChatMessages.appendChild(userDiv);
+
+            // Add the bot's old response
+            const botDiv = document.createElement('div');
+            botDiv.classList.add('chat-message', 'bot');
+            botDiv.innerHTML = marked.parse(chat.response_text); // Use marked.js
+            initialChatMessages.appendChild(botDiv);
+        });
+    }
+    // --- END NEW CODE BLOCK ---
+
     const sendBtn = document.getElementById('chat-send-btn');
     const chatInput = document.getElementById('chat-input');
     const chatMessages = document.getElementById('chat-messages');
