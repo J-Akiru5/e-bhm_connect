@@ -1,0 +1,51 @@
+/*
+ * Admin Fixed Layout
+ */
+
+body {
+    /* Prevent the main body from scrolling */
+    overflow: hidden;
+}
+
+#admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px; /* Set a fixed width */
+    z-index: 1000;
+    overflow-y: auto; /* Allow sidebar to scroll if content is too long */
+}
+
+#main-content-wrapper {
+    /* Main content area */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 280px; /* Must match sidebar width */
+    overflow-y: auto; /* This makes the CONTENT scrollable */
+    display: flex;
+    flex-direction: column;
+}
+
+#admin-top-nav {
+    /* Make the top nav sticky *within* the content area */
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+#main-content {
+    /* This holds the cards and dashboard */
+    padding: 20px;
+    flex-grow: 1;
+}
+
+#admin-footer {
+    /* This is a new footer for the content area */
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    flex-shrink: 0;
+}
