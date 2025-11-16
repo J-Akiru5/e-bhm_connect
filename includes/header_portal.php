@@ -39,7 +39,7 @@
 <?php
 // Patient portal header (placeholder)
 ?>
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -51,4 +51,4 @@
 <header>
     <h1>Patient Portal</h1>
 </header>
-<main>
+<main> -->
