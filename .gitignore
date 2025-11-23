@@ -12,4 +12,4 @@ secrets/
 
 # Vendor folders (if we ever add any)
 /vendor/
-/lib/
+/lib/config/config.php

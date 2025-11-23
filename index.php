@@ -13,49 +13,60 @@ if (isset($_GET['action'])) {
     $action = $_GET['action'];
     $actionPath = __DIR__ . '/actions/';
 
-    // Whitelist of allowed action files
+    // Whitelist of allowed action files (all in one array)
     $allowedActions = [
+        // Auth (BHW)
         'login-bhw' => $actionPath . 'login_bhw_action.php',
         'register-bhw' => $actionPath . 'register_bhw_action.php',
         'logout' => $actionPath . 'logout.php',
+
+        // Patient management
         'save-patient' => $actionPath . 'patient_save.php',
         'delete-patient' => $actionPath . 'patient_delete.php',
+
+        // Inventory
         'save-inventory-item' => $actionPath . 'inventory_save.php',
         'delete-inventory-item' => $actionPath . 'inventory_delete.php',
-        'update-inventory-item' => $actionPath . 'inventory_update.php'
-        ,
+        'update-inventory-item' => $actionPath . 'inventory_update.php',
+
+        // Vitals & Visits
         'save-vital' => $actionPath . 'vital_save.php',
-        'save-visit' => $actionPath . 'visit_save.php'
-        ,
+        'save-visit' => $actionPath . 'visit_save.php',
+
+        // Programs
         'save-program' => $actionPath . 'program_save.php',
         'update-program' => $actionPath . 'program_update.php',
         'delete-program' => $actionPath . 'program_delete.php',
-        // Announcements actions
+
+        // Announcements
         'save-announcement' => $actionPath . 'announcement_save.php',
         'update-announcement' => $actionPath . 'announcement_update.php',
         'delete-announcement' => $actionPath . 'announcement_delete.php',
-        // Chatbot API
+
+        // Chatbot APIs
         'chatbot-api' => $actionPath . 'chatbot_api.php',
-        // Report actions
+        'chatbot-portal-api' => $actionPath . 'chatbot_portal_api.php',
+
+        // Reports
         'report-patient-list' => $actionPath . 'report_patient_list.php',
         'report-inventory-stock' => $actionPath . 'report_inventory.php',
         'report-chronic-disease' => $actionPath . 'report_chronic.php',
         'report-my-record' => $actionPath . 'report_my_record.php',
-        'report-bhw-record' => $actionPath . 'report_bhw_record.php'
-        // Add other actions here as we create them
+        'report-bhw-record' => $actionPath . 'report_bhw_record.php',
+
+        // Patient portal auth/actions
+        'register-patient' => $actionPath . 'register_patient_action.php',
+        'login-patient' => $actionPath . 'login_patient_action.php',
+        'logout-patient' => $actionPath . 'logout_patient.php',
+
+        // Admin profile & BHW management
+        'update-profile' => $actionPath . 'update_profile.php',
+        'change-password' => $actionPath . 'change_password.php',
+        'update-bhw' => $actionPath . 'bhw_update.php',
+
+        // Dashboard/chart data
+        'get-chart-data' => $actionPath . 'chart_data.php',
     ];
-    // Patient portal actions
-    $allowedActions['register-patient'] = $actionPath . 'register_patient_action.php';
-    $allowedActions['login-patient'] = $actionPath . 'login_patient_action.php';
-    $allowedActions['logout-patient'] = $actionPath . 'logout_patient.php';
-    $allowedActions['chatbot-portal-api'] = $actionPath . 'chatbot_portal_api.php';
-    // Admin profile actions
-    $allowedActions['update-profile'] = $actionPath . 'update_profile.php';
-    $allowedActions['change-password'] = $actionPath . 'change_password.php';
-    // BHW management actions
-    $allowedActions['update-bhw'] = $actionPath . 'bhw_update.php';
-    // Chart data for dashboard
-    $allowedActions['get-chart-data'] = $actionPath . 'chart_data.php';
 
     if (array_key_exists($action, $allowedActions) && file_exists($allowedActions[$action])) {
         require $allowedActions[$action]; // All actions run here

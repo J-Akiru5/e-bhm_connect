@@ -137,3 +137,14 @@ CREATE TABLE `chatbot_history` (
   KEY `user_id_fk_chat` (`user_id`),
   CONSTRAINT `chatbot_history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `patient_users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `announcements` (
+  `announcement_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bhw_id` int(11) NULL DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`announcement_id`),
+  KEY `bhw_id_fk` (`bhw_id`),
+  CONSTRAINT `announcements_ibfk_1` FOREIGN KEY (`bhw_id`) REFERENCES `bhw_users` (`bhw_id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
