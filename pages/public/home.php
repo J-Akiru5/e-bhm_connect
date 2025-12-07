@@ -10,8 +10,9 @@ include_once __DIR__ . '/../../includes/header_public.php';
 :root{--teal:#0d9488;--dark-teal:#0b7b72;--blue:#0b5fa5;--muted:#6c757d}
 body.home-spa {background:#f5f8fa}
 .parallax {background-attachment: fixed; background-size: cover; background-position: center;}
-.hero {min-height:60vh; display:flex; align-items:center; color:#fff}
-.overlay {background: rgba(0,0,0,0.35); padding:4rem 0}
+.hero {min-height:60vh; display:flex; align-items:center; color:#fff; position:relative; overflow:hidden}
+.overlay {position:absolute; inset:0; background: rgba(0,0,0,0.55); display:flex; align-items:center;}
+.overlay .container{position:relative; z-index:2; padding:4rem 0}
 .section {padding:6rem 0}
 .section.light {background:#fff}
 .section.clean {background:#f8fbfc}
