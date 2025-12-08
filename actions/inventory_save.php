@@ -21,14 +21,35 @@ if ($item_name === '' || $quantity_in_stock === '') {
 }
 
 try {
-    $stmt = $pdo->prepare('INSERT INTO medication_inventory (item_name, description, quantity_in_stock, unit, last_restock) VALUES (:item_name, :description, :quantity_in_stock, :unit, :last_restock)');
-    $stmt->execute([
-        ':item_name' => $item_name,
-        ':description' => $description,
-        ':quantity_in_stock' => $quantity_in_stock,
-        ':unit' => $unit,
-        ':last_restock' => $last_restock
-    ]);
+    // Include category, batch_number, expiry_date, stock_alert_limit when available
+    $cols = ['item_name','description','quantity_in_stock','unit','last_restock','category','batch_number','expiry_date','stock_alert_limit'];
+    $available = array_filter($cols, function($c) use($pdo) { 
+        $stmt = $pdo->prepare("SELECT 1 FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'medication_inventory' AND column_name = :c LIMIT 1");
+        $stmt->execute([':c' => $c]);
+        return (bool)$stmt->fetchColumn();
+    });
+
+    $colList = implode(', ', $available);
+    $placeholders = implode(', ', array_map(function($c){ return ':' . $c; }, $available));
+    $sql = "INSERT INTO medication_inventory ({$colList}) VALUES ({$placeholders})";
+    $stmt = $pdo->prepare($sql);
+
+    $params = [];
+    foreach ($available as $col) {
+        switch ($col) {
+            case 'item_name': $params[':item_name'] = $item_name; break;
+            case 'description': $params[':description'] = $description; break;
+            case 'quantity_in_stock': $params[':quantity_in_stock'] = $quantity_in_stock; break;
+            case 'unit': $params[':unit'] = $unit; break;
+            case 'last_restock': $params[':last_restock'] = $last_restock; break;
+            case 'category': $params[':category'] = isset($_POST['category']) ? trim($_POST['category']) : null; break;
+            case 'batch_number': $params[':batch_number'] = isset($_POST['batch_number']) ? trim($_POST['batch_number']) : null; break;
+            case 'expiry_date': $params[':expiry_date'] = isset($_POST['expiry_date']) && $_POST['expiry_date'] !== '' ? trim($_POST['expiry_date']) : null; break;
+            case 'stock_alert_limit': $params[':stock_alert_limit'] = isset($_POST['stock_alert_limit']) && $_POST['stock_alert_limit'] !== '' ? (int)$_POST['stock_alert_limit'] : 10; break;
+        }
+    }
+
+    $stmt->execute($params);
 
     $_SESSION['form_success'] = 'Item added to inventory.';
 } catch (Throwable $e) {
