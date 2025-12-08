@@ -19,7 +19,7 @@
 <body class="bg-light">
 
     <div id="admin-sidebar" class="d-flex flex-column p-3 text-white bg-success">
-        <a href="<?php echo BASE_URL; ?>admin-dashboard" class="d-flex align-items-center mb-3 text-white text-decoration-none">
+        <a href="<?php echo BASE_URL; ?>index.php?page=admin-dashboard" class="d-flex align-items-center mb-3 text-white text-decoration-none">
             <span class="fs-4">Admin Portal</span>
         </a>
         <hr>
@@ -32,31 +32,31 @@
 
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a class="nav-link text-white <?php echo ($page === 'admin-dashboard') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-dashboard">Dashboard</a>
+                <a class="nav-link text-white <?php echo ($page === 'admin-dashboard') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>index.php?page=admin-dashboard">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white <?php echo ($page === 'admin-patients') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-patients">Patients</a>
+                <a class="nav-link text-white <?php echo ($page === 'admin-patients') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>index.php?page=admin-patients">Patients</a>
             </li>
              <li class="nav-item">
-                <a class="nav-link text-white <?php echo ($page === 'admin-inventory') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-inventory">Inventory</a>
+                <a class="nav-link text-white <?php echo ($page === 'admin-inventory') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>index.php?page=admin-inventory">Inventory</a>
             </li>
              <li class="nav-item">
-                <a class="nav-link text-white <?php echo ($page === 'admin-announcements') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-announcements">Announcements</a>
+                <a class="nav-link text-white <?php echo ($page === 'admin-announcements') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>index.php?page=admin-announcements">Announcements</a>
             </li>
              <li class="nav-item">
-                <a class="nav-link text-white <?php echo ($page === 'admin-reports') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-reports">Reports</a>
+                <a class="nav-link text-white <?php echo ($page === 'admin-reports') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>index.php?page=admin-reports">Reports</a>
             </li>
              <li class="nav-item">
-                <a class="nav-link text-white <?php echo ($page === 'admin-programs') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-programs">Programs</a>
+                <a class="nav-link text-white <?php echo ($page === 'admin-programs') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>index.php?page=admin-programs">Programs</a>
             </li>
              <li class="nav-item">
-                <a class="nav-link text-white <?php echo ($page === 'admin-bhw-users') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>admin-bhw-users">BHW Management</a>
+                <a class="nav-link text-white <?php echo ($page === 'admin-bhw-users') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>index.php?page=admin-bhw-users">BHW Management</a>
             </li>
         </ul>
         
         <div class="mt-auto">
             <hr>
-            <a href="<?php echo BASE_URL; ?>admin-profile" class="d-flex align-items-center text-white text-decoration-none p-2 rounded <?php echo ($page === 'admin-profile') ? 'active' : ''; ?>">
+            <a href="<?php echo BASE_URL; ?>index.php?page=admin-profile" class="d-flex align-items-center text-white text-decoration-none p-2 rounded <?php echo ($page === 'admin-profile') ? 'active' : ''; ?>">
                 <img src="https://via.placeholder.com/40" alt="Profile" width="40" height="40" class="rounded-circle me-2">
                 <strong><?php echo htmlspecialchars($_SESSION['bhw_full_name']); ?></strong>
             </a>
