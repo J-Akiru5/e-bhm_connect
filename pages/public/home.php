@@ -7,7 +7,7 @@ include_once __DIR__ . '/../../includes/header_public.php';
 
 <style>
 /* Parallax and layout styles (inline for quick iteration) */
-:root{--teal:#0d9488;--dark-teal:#0b7b72;--blue:#0b5fa5;--muted:#6c757d}
+:root{--teal:#B2A08F;--dark-teal:#0b7b72;--blue:#0b5fa5;--muted:#6c757d}
 body.home-spa {background:#f5f8fa}
 .parallax {background-attachment: fixed; background-size: cover; background-position: center; position: relative;}
 .hero {min-height:60vh; display:flex; align-items:center; color:#fff; position:relative; overflow:hidden}
@@ -38,11 +38,11 @@ body.home-spa {background:#f5f8fa}
         <h1 class="display-4 fw-bold" data-aos="fade-up">Welcome to E-BHM Connect</h1>
         <p class="lead text-light mb-4" data-aos="fade-up">Digitizing health services for efficiency, accuracy, and accessibility in Barangay Bacong.</p>
         <div class="d-flex justify-content-center gap-2">
-          <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-lg cta-btn">Patient Portal</a>
+          <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-lg cta-btn">Resident Portal</a>
           <a href="<?php echo BASE_URL; ?>?page=home#contact" class="btn btn-lg btn-outline-light">Contact Us</a>
         </div>
         <div class="mt-4">
-          <a href="<?php echo BASE_URL; ?>?page=portal_chatbot" class="btn btn-light" data-aos="fade-up">Chat with Gabby</a>
+          <button class="btn btn-light" data-aos="fade-up" onclick="(typeof window.openGabbyPanel === 'function') ? window.openGabbyPanel() : window.location.href='<?php echo BASE_URL; ?>?page=portal_chatbot';">Chat with Gabby</button>
         </div>
       </div>
     </div>
@@ -113,7 +113,7 @@ body.home-spa {background:#f5f8fa}
   </section>
 
   <!-- Announcements preview (image bg) -->
-  <section class="parallax" style="background-image:url('<?php echo BASE_URL; ?>assets/images/announcements_bg.jpg'); min-height:220px;">
+  <section id="announcements" class="parallax" style="background-image:url('<?php echo BASE_URL; ?>assets/images/announcements_bg.jpg'); min-height:220px;">
     <div class="overlay" style="background:rgba(11,95,165,0.35)">
       <div class="container text-center text-white">
         <h3 class="fw-bold">Latest Updates</h3>
@@ -175,23 +175,24 @@ if (typeof AOS !== 'undefined') {
 
 // Smooth scroll for in-page anchors when already on the home page
 document.addEventListener('DOMContentLoaded', function () {
+  // Generic smooth scroll for anchors that point to #fragment or ?page=home#fragment
   document.querySelectorAll('a[href*="#"]').forEach(function (anchor) {
     anchor.addEventListener('click', function (e) {
       var href = anchor.getAttribute('href');
       if (!href) return;
-      // Only intercept if the link points to the home page anchor (contains '?page=home#')
-      if (href.indexOf('?page=home#') !== -1) {
-        // If current URL already contains page=home, prevent navigation and smooth scroll
-        if (window.location.search.indexOf('page=home') !== -1) {
+      var parts = href.split('#');
+      var hash = parts[1] || null;
+      if (!hash) return;
+
+      // If the link navigates to home with an anchor or just an anchor, handle smooth scroll when on home
+      var shouldIntercept = href.indexOf('?page=home#') !== -1 || href.charAt(0) === '#' || (window.location.search.indexOf('page=home') !== -1);
+
+      if (shouldIntercept) {
+        var target = document.getElementById(hash);
+        if (target) {
           e.preventDefault();
-          var hash = href.split('#')[1];
-          if (!hash) return;
-          var target = document.getElementById(hash);
-          if (target) {
-            target.scrollIntoView({behavior:'smooth', block:'start'});
-          }
+          target.scrollIntoView({behavior:'smooth', block:'start'});
         }
-        // else let the browser navigate to the home page + anchor
       }
     });
   });

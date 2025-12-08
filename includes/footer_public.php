@@ -63,6 +63,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
+    <!-- AOS JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -71,12 +74,15 @@
     <script src="<?php echo BASE_URL; ?>assets/js/chatbot.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/resizable.js"></script>
 
-    <div id="chat-bubble">💬</div>
+    <div id="chat-bubble" role="button" aria-label="Chat with Gabby" title="Chat with Gabby"></div>
 
     <div id="chat-window">
         <div id="chat-resize-handle"></div>
         <div id="chat-header">
-            E-BHM Connect ("Gabby")
+            <div style="display:flex;align-items:center;gap:.5rem;justify-content:center;">
+                <img src="<?php echo BASE_URL; ?>assets/images/gabby_avatar.png" alt="Gabby" style="width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,0.12);" />
+                <div>Gabby — E-BHM Connect</div>
+            </div>
             <span id="chat-close">X</span>
         </div>
         <div id="chat-messages">

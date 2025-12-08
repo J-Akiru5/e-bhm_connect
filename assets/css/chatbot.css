@@ -3,9 +3,10 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 60px;
-    height: 60px;
-    background-color: #0d6efd; /* Bootstrap Primary */
+    width: 64px;
+        height: 64px;
+        /* Brand color fallback behind avatar */
+        background-color: #537EA9;
     color: white;
     border-radius: 50%;
     display: flex;
@@ -13,8 +14,43 @@
     justify-content: center;
     font-size: 28px;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 6px 18px rgba(83, 126, 169, 0.18);
     z-index: 1000;
+    background-image: url('../images/gabby_avatar.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        border: 3px solid #fff;
+    }
+    
+    /* Presence indicator (pulse) */
+    #chat-bubble::after {
+        content: '';
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #537EA9;
+        /* presence color matches chat */
+        box-shadow: 0 0 0 0 rgba(83, 126, 169, 0.5);
+        animation: gabby-pulse 2s infinite;
+        border: 2px solid #fff;
+    }
+    
+    @keyframes gabby-pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(83, 126, 169, 0.5);
+        }
+    
+        70% {
+            box-shadow: 0 0 0 10px rgba(83, 126, 169, 0);
+        }
+    
+        100% {
+            box-shadow: 0 0 0 0 rgba(83, 126, 169, 0);
+        }
 }
 
 /* --- Chat Window --- */
@@ -34,11 +70,11 @@
 }
 
 #chat-header {
-    background-color: #0d6efd;
+    background-color: #537EA9;
     color: white;
-    padding: 15px;
+    padding: 12px 14px;
     text-align: center;
-    font-weight: bold;
+    font-weight: 600;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -69,7 +105,7 @@
     align-self: flex-end;
 }
 .chat-message.bot {
-    background-color: #0d6efd;
+    background-color: #537EA9;
     color: white;
     align-self: flex-start;
 }
@@ -92,7 +128,7 @@
 }
 #chat-send-btn {
     border: none;
-    background: #0d6efd;
+    background: #537EA9;
     color: white;
     padding: 0 20px;
     cursor: pointer;

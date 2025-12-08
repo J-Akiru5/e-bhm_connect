@@ -21,8 +21,8 @@ if ($item_name === '' || $quantity_in_stock === '') {
 }
 
 try {
-    // Include category, batch_number, expiry_date, stock_alert_limit when available
-    $cols = ['item_name','description','quantity_in_stock','unit','last_restock','category','batch_number','expiry_date','stock_alert_limit'];
+        // Include category_id (backwards-compatible with older 'category' name), batch_number, expiry_date, stock_alert_limit when available
+        $cols = ['item_name','description','quantity_in_stock','unit','last_restock','category_id','category','batch_number','expiry_date','stock_alert_limit'];
     $available = array_filter($cols, function($c) use($pdo) { 
         $stmt = $pdo->prepare("SELECT 1 FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'medication_inventory' AND column_name = :c LIMIT 1");
         $stmt->execute([':c' => $c]);
@@ -42,10 +42,25 @@ try {
             case 'quantity_in_stock': $params[':quantity_in_stock'] = $quantity_in_stock; break;
             case 'unit': $params[':unit'] = $unit; break;
             case 'last_restock': $params[':last_restock'] = $last_restock; break;
-            case 'category': $params[':category'] = isset($_POST['category']) ? trim($_POST['category']) : null; break;
+            case 'category_id':
+                $val = isset($_POST['category_id']) ? trim($_POST['category_id']) : (isset($_POST['category']) ? trim($_POST['category']) : null);
+                $params[':category_id'] = $val !== '' ? (int)$val : null;
+                break;
+            case 'category':
+                // fallback for legacy column name
+                $params[':category'] = isset($_POST['category']) ? trim($_POST['category']) : null;
+                break;
             case 'batch_number': $params[':batch_number'] = isset($_POST['batch_number']) ? trim($_POST['batch_number']) : null; break;
-            case 'expiry_date': $params[':expiry_date'] = isset($_POST['expiry_date']) && $_POST['expiry_date'] !== '' ? trim($_POST['expiry_date']) : null; break;
-            case 'stock_alert_limit': $params[':stock_alert_limit'] = isset($_POST['stock_alert_limit']) && $_POST['stock_alert_limit'] !== '' ? (int)$_POST['stock_alert_limit'] : 10; break;
+            case 'expiry_date':
+                $ed = isset($_POST['expiry_date']) && $_POST['expiry_date'] !== '' ? trim($_POST['expiry_date']) : null;
+                if ($ed) {
+                    try { $d = new DateTime($ed); $ed = $d->format('Y-m-d'); } catch (Throwable $e) { $ed = null; }
+                }
+                $params[':expiry_date'] = $ed;
+                break;
+            case 'stock_alert_limit':
+                $params[':stock_alert_limit'] = isset($_POST['stock_alert_limit']) && $_POST['stock_alert_limit'] !== '' ? (int)$_POST['stock_alert_limit'] : 10;
+                break;
         }
     }
 

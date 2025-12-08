@@ -26,9 +26,14 @@ try {
 ?>
 
 <div class="container">
-    <div class="card mb-3">
+    <style>
+        .stat-card { transition: transform .18s ease, box-shadow .18s ease; }
+        .stat-card:hover{ transform: translateY(-6px); box-shadow: 0 12px 30px rgba(16,24,32,0.06); }
+        .table thead th{ color:#495057; font-weight:600; }
+    </style>
+    <div class="card mb-3 stat-card">
         <div class="card-body">
-            <h5 class="card-title">Search & Filter</h5>
+            <h4 class="card-title">Search & Filter</h4>
             <form method="GET" action="">
                 <div class="input-group">
                     <input type="text" class="form-control" name="search" placeholder="Search by program name..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
@@ -40,12 +45,12 @@ try {
     </div>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Health Program Monitoring</h1>
+        <h2 class="h4">Health Program Monitoring</h2>
     </div>
 
     <div class="row g-4">
         <div class="col-md-4">
-            <div class="card">
+            <div class="card stat-card">
                 <div class="card-header">Add New Health Program</div>
                 <div class="card-body">
                     <form method="post" action="<?php echo BASE_URL; ?>?action=save-program">
@@ -78,7 +83,7 @@ try {
         </div>
 
         <div class="col-md-8">
-            <div class="card">
+            <div class="card stat-card">
                 <div class="card-header">Current & Past Programs</div>
                 <div class="card-body">
                     <div class="table-responsive">

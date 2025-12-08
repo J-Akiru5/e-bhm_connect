@@ -44,9 +44,14 @@ if (isset($_SESSION['form_error'])) {
 }
 ?>
 
-<div class="card mb-3">
+<style>
+	.stat-card { transition: transform .18s ease, box-shadow .18s ease; }
+	.stat-card:hover{ transform: translateY(-6px); box-shadow: 0 12px 30px rgba(16,24,32,0.06); }
+	.table thead th{ color:#495057; font-weight:600; }
+</style>
+<div class="card mb-3 stat-card">
 	<div class="card-body">
-		<h5 class="card-title">Search Patient</h5>
+		<h4 class="card-title">Search Patient</h4>
 		<form method="GET" action="">
 			<div class="input-group">
 				<input type="text" class="form-control" name="search" placeholder="Search by patient name..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
@@ -58,7 +63,7 @@ if (isset($_SESSION['form_error'])) {
 </div>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-	<h1>Patient Records</h1>
+	<h2 class="h4">Patient Records</h2>
 	<a href="<?php echo BASE_URL; ?>admin-patient-form" class="btn btn-success mb-3">Add New Patient</a>
 </div>
 

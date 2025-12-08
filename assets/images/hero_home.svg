@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="600" viewBox="0 0 1600 600">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#8b6f5e" />
+      <stop offset="1" stop-color="#B2A08F" />
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="600" fill="url(#g)" />
+  <g fill="#fff" font-family="Poppins, Arial, sans-serif">
+    <text x="80" y="220" font-size="48" font-weight="700">E-BHM Connect</text>
+    <text x="80" y="280" font-size="24" opacity="0.9">Digitizing health services for Barangay Bacong</text>
+  </g>
+</svg>

@@ -23,6 +23,14 @@ try {
     header('Location: ' . BASE_URL . 'admin-inventory');
     exit();
 }
+
+// Load categories
+try {
+    $catsStmt = $pdo->query("SELECT category_id, category_name FROM inventory_categories ORDER BY category_name ASC");
+    $categories = $catsStmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Throwable $e) {
+    $categories = [];
+}
 ?>
 
 <div class="container">
@@ -45,6 +53,33 @@ try {
                 <div class="mb-3">
                     <label class="form-label">Description</label>
                     <textarea name="description" class="form-control" rows="3"><?php echo htmlspecialchars($item['description']); ?></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Category</label>
+                        <select name="category_id" class="form-select">
+                            <option value="">-- Select category --</option>
+                            <?php foreach ($categories as $c): ?>
+                                <option value="<?php echo $c['category_id']; ?>" <?php echo (isset($item['category_id']) && $item['category_id'] == $c['category_id']) ? 'selected' : ''; ?>><?php echo htmlspecialchars($c['category_name']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Batch Number</label>
+                        <input type="text" name="batch_number" class="form-control" value="<?php echo htmlspecialchars($item['batch_number'] ?? ''); ?>">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Expiry Date</label>
+                        <input type="date" name="expiry_date" class="form-control" value="<?php echo htmlspecialchars($item['expiry_date'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Stock Alert Limit</label>
+                        <input type="number" name="stock_alert_limit" class="form-control" min="0" step="1" value="<?php echo htmlspecialchars($item['stock_alert_limit'] ?? 10); ?>">
+                    </div>
                 </div>
 
                 <div class="row">

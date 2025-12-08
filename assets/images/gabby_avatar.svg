@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <circle cx="128" cy="80" r="56" fill="#B2A08F" />
+  <rect x="32" y="144" width="192" height="80" rx="20" fill="#f8f9fa" />
+  <text x="128" y="178" font-family="Poppins, Arial, sans-serif" font-size="28" text-anchor="middle" fill="#333">Gabby</text>
+</svg>
