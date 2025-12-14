@@ -21,8 +21,8 @@
         :root{ --brand-teal: #B2A08F; --brand-dark-teal: #0b7b72; --card-radius:12px; --sidebar-width:280px; }
         body{ font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
         /* Note: layout rules for sidebar and main content live in assets/css/admin.css. */
-        /* Ensure top nav uses brand and nav links are visible */
-        #admin-top-nav { background: var(--brand-teal) !important; box-shadow: none; }
+        /* Ensure top nav uses brand gradient and nav links are visible */
+        #admin-top-nav { background: linear-gradient(90deg, rgba(178,160,143,1), rgba(178,160,143,0.85)) !important; box-shadow: none; }
         #admin-top-nav .nav-link { color: #fff !important; }
         /* Sidebar header */
         #admin-sidebar .fs-4{ font-weight:600; color:#fff; }
