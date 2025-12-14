@@ -18,11 +18,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        :root{ --brand-teal: #B2A08F; --brand-dark-teal: #0b7b72; --card-radius:12px; }
+        :root{ --brand-teal: #B2A08F; --brand-dark-teal: #0b7b72; --card-radius:12px; --sidebar-width:280px; }
         body{ font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
-        /* Sidebar */
-        #admin-sidebar{ width:260px; min-height:100vh; position:fixed; top:0; left:0; overflow:hidden; background: linear-gradient(180deg,var(--brand-dark-teal), rgba(13,148,136,0.06)); border-top-right-radius:16px; border-bottom-right-radius:16px; box-shadow: 0 6px 18px rgba(16,24,32,0.06); }
-        #main-content-wrapper{ margin-left:260px; transition: margin-left .22s ease; }
+        /* Note: layout rules for sidebar and main content live in assets/css/admin.css. */
+        /* Ensure top nav uses brand and nav links are visible */
+        #admin-top-nav { background: var(--brand-teal) !important; box-shadow: none; }
+        #admin-top-nav .nav-link { color: #fff !important; }
         /* Sidebar header */
         #admin-sidebar .fs-4{ font-weight:600; color:#fff; }
         /* Nav links */
@@ -32,9 +33,8 @@
         #admin-sidebar img.profile-avatar{ width:44px; height:44px; object-fit:cover; border-radius:10px; }
         /* Gabby mascot in sidebar profile */
         .sidebar-gabby{ width:48px; height:48px; border-radius:12px; object-fit:cover; border:2px solid rgba(255,255,255,0.12); box-shadow: 0 6px 18px rgba(4,15,35,0.06); }
-        /* Top nav */
-        #admin-top-nav{ background: var(--brand-teal); box-shadow:none; }
-        #admin-top-nav .nav-link{ color:#fff; }
+        /* Top nav (additional safety) */
+        #admin-top-nav{ box-shadow:none; }
         /* Cards and interactive elements */
         .card{ border-radius: var(--card-radius); }
         .clickable{ cursor:pointer; transition: transform .18s ease, box-shadow .18s ease; }
