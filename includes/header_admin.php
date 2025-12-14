@@ -25,6 +25,7 @@
         #admin-top-nav { background: linear-gradient(90deg, rgba(178,160,143,1), rgba(178,160,143,0.85)) !important; box-shadow: none; }
         #admin-top-nav .nav-link { color: #fff !important; }
         /* Sidebar header */
+        #admin-sidebar { background: linear-gradient(180deg, rgba(178,160,143,1), rgba(178,160,143,0.88)); }
         #admin-sidebar .fs-4{ font-weight:600; color:#fff; }
         /* Nav links */
         #admin-sidebar .nav-link{ color: rgba(255,255,255,0.92); background: transparent; border-radius:10px; transition: all .18s ease; }
