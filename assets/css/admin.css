@@ -3,8 +3,8 @@
  */
 
 body {
-    /* Prevent the main body from scrolling */
-    overflow: hidden;
+    /* Allow horizontal scrolling on mobile, prevent vertical body scroll */
+    overflow-x: hidden;
 }
 
 #admin-sidebar {

@@ -54,10 +54,12 @@ nav a{margin-right:8px}
   scroll-margin-top: 88px
 }
 
-/* Theme variables matching admin dashboard */
+/* Theme variables - Medical Teal Standard */
 :root {
-  --brand-teal: #B2A08F;
-  --brand-dark: #0b7b72;
+  --brand-primary: #20c997;
+  --brand-dark: #0f5132;
+  --brand-light: #e6fffa;
+  --brand-teal: #20c997;
   --card-radius: 12px;
 }
 
@@ -87,7 +89,7 @@ nav a{margin-right:8px}
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--brand-teal);
+  background: var(--brand-primary);
   color: #fff;
   box-shadow: 0 8px 22px rgba(13, 148, 136, 0.06);
   margin-right: 12px;
@@ -95,8 +97,8 @@ nav a{margin-right:8px}
 
 /* CTA button */
 .cta-btn {
-  background: var(--brand-teal);
-  border-color: var(--brand-teal);
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
   color: #fff;
 }
 

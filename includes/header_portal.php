@@ -12,6 +12,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
+        :root {
+            --brand-primary: #20c997;
+            --brand-dark: #0f5132;
+            --brand-light: #e6fffa;
+        }
         body {
             background-color: #f8f9fa;
             display: flex;
@@ -21,10 +26,19 @@
         main {
             flex-grow: 1;
         }
+        /* Ensure buttons use teal theme */
+        .btn-primary {
+            background-color: var(--brand-primary);
+            border-color: var(--brand-primary);
+        }
+        .btn-primary:hover {
+            background-color: var(--brand-dark);
+            border-color: var(--brand-dark);
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background-color: #20c997;">
         <div class="container">
             <a class="navbar-brand fs-4 fw-bold" href="<?php echo BASE_URL; ?>portal-dashboard">Patient Portal</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#portalNavbar">

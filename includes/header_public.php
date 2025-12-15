@@ -27,7 +27,7 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background-color: #B2A08F;">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background-color: #20c997;">
         <div class="container">
             <a class="navbar-brand fs-4 fw-bold d-flex align-items-center" href="<?php echo BASE_URL; ?>home">
                 <img src="assets/images/e-logo.png" alt="Logo" width="40" height="40" class="me-2 rounded" />
