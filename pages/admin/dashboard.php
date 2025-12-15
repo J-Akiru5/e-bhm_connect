@@ -40,15 +40,15 @@ foreach ($recent as $row) {
 ?>
 
 <style>
-    :root{ --brand-teal: #B2A08F; --brand-dark: #0b7b72; }
-    .stat-card { background: #fff; border-radius: 12px; padding:18px; transition: transform .18s ease, box-shadow .18s ease; }
+    :root{ --brand-primary: #20c997; --brand-dark: #0f5132; }
+    .stat-card { background: #fff; border-radius: 12px; padding:18px; transition: transform .18s ease, box-shadow .18s ease; border-left: 4px solid var(--brand-primary); }
     .stat-card:hover { transform: translateY(-6px); box-shadow: 0 14px 40px rgba(16,24,32,0.06); }
     .stat-icon { font-size: 1.6rem; color: #fff; }
-    .stat-bubble { width:56px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:var(--brand-teal); margin-right:12px; box-shadow:0 8px 22px rgba(0,0,0,0.06); }
+    .stat-bubble { width:56px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:var(--brand-primary); margin-right:12px; box-shadow:0 8px 22px rgba(0,0,0,0.06); }
     .stat-value { font-weight:700; font-size:1.45rem; }
     .stat-label { color: #6c757d; font-size:0.95rem; }
     .card-quick-actions .btn { min-width: 180px; }
-    .chart-card { min-height: 320px; border-radius:12px; overflow:hidden; box-shadow:0 8px 30px rgba(4,15,35,0.04); }
+    .chart-card { min-height: 320px; border-radius:12px; overflow:hidden; box-shadow:0 8px 30px rgba(4,15,35,0.04); background: #fff; }
     .chart-card .card-body { padding:16px; }
     .chart-card .card-title { margin-bottom:12px; font-weight:600; }
     .chart-header { border-bottom:1px solid #eef2f6; padding-bottom:10px; margin-bottom:12px; }
@@ -65,7 +65,7 @@ foreach ($recent as $row) {
     <!-- Top Row - Stat Cards -->
     <div class="row g-3 mb-4">
         <div class="col-12 col-sm-6 col-md-3">
-                <div class="stat-card h-100 d-flex align-items-center">
+                <div class="stat-card h-100 d-flex align-items-center shadow-sm rounded-3">
                     <div class="stat-bubble">
                         <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
                           <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3z"/>
@@ -80,7 +80,7 @@ foreach ($recent as $row) {
         </div>
 
         <div class="col-12 col-sm-6 col-md-3">
-            <div class="stat-card h-100 d-flex align-items-center">
+            <div class="stat-card h-100 d-flex align-items-center shadow-sm rounded-3">
                 <div class="stat-bubble">
                     <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
                       <path d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
@@ -95,7 +95,7 @@ foreach ($recent as $row) {
         </div>
 
         <div class="col-12 col-sm-6 col-md-3">
-            <div class="stat-card h-100 d-flex align-items-center">
+            <div class="stat-card h-100 d-flex align-items-center shadow-sm rounded-3">
                 <div class="stat-bubble" style="background:#ffc107;">
                     <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
                       <path d="M2 1.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5V3a2 2 0 0 1-1 1.732V6a2 2 0 0 1 1 1.732V10a2 2 0 0 1-1 1.732v1.268a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5V13A2 2 0 0 1 2 11.268V9.999A2 2 0 0 1 1 8.268V6.536A2 2 0 0 1 2 4.804V3.232A2 2 0 0 1 1 3V1.5z"/>
@@ -109,7 +109,7 @@ foreach ($recent as $row) {
         </div>
 
         <div class="col-12 col-sm-6 col-md-3">
-            <div class="stat-card h-100 d-flex align-items-center">
+            <div class="stat-card h-100 d-flex align-items-center shadow-sm rounded-3">
                 <div class="stat-bubble" style="background: #198754;">
                     <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
                       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.97 10.97l-2.47-2.47 1.06-1.06 1.41 1.41 3.47-3.47 1.06 1.06-4.53 4.53z"/>
@@ -199,7 +199,7 @@ foreach ($recent as $row) {
                                 labels: ['Sent','Failed','Pending'],
                                 datasets: [{
                                     data: [smsData.sent, smsData.failed, smsData.pending],
-                                    backgroundColor: ['#B2A08F','#dc3545','#6c757d'],
+                                    backgroundColor: ['#20c997','#dc3545','#6c757d'],
                                     hoverOffset: 6
                                 }]
                             },
@@ -220,12 +220,12 @@ foreach ($recent as $row) {
                                 datasets: [{
                                     label: 'Registrations',
                                     data: registrations,
-                                    borderColor: '#B2A08F',
-                                    backgroundColor: 'rgba(178,160,143,0.12)',
+                                    borderColor: '#20c997',
+                                    backgroundColor: 'rgba(32, 201, 151, 0.12)',
                                     tension: 0.4,
                                     fill: true,
                                     pointRadius: 4,
-                                    pointBackgroundColor: '#B2A08F'
+                                    pointBackgroundColor: '#20c997'
                                 }]
                             },
                             options: {

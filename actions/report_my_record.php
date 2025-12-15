@@ -2,6 +2,14 @@
 // actions/report_my_record.php
 // Generate a PDF report for the logged-in patient using session ID and FPDF
 
+// Ensure session is started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include required configuration files
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../lib/fpdf/fpdf.php';
 
 // Ensure session has patient_id

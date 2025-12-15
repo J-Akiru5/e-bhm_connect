@@ -2,6 +2,15 @@
 // actions/login_bhw_action.php
 // Handle BHW login logic securely using PDO prepared statements.
 // Session and DB are initialized by the central router (index.php)
+// Ensure session is started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include required configuration files
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/database.php';
+
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

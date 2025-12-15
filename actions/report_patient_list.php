@@ -2,9 +2,15 @@
 // actions/report_patient_list.php
 // Generate PDF of full patient list using FPDF
 
-// Do not output any HTML from this script
-require_once __DIR__ . '/../lib/fpdf/fpdf.php';
+// Ensure session is started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include required configuration files
+require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../lib/fpdf/fpdf.php';
 
 class PDF extends FPDF {
     public function Header() {
