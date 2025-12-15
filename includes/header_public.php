@@ -55,7 +55,7 @@
                 </ul>
                 
                 <div class="d-flex">
-                   <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-light me-2">Patient Portal</a>
+                   <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-light me-2">Resident Portal</a>
                     <a href="<?php echo BASE_URL; ?>login-bhw" class="btn btn-primary-emphasis">BHW Login</a>
                 </div>
             </div>

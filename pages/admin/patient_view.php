@@ -44,6 +44,11 @@ try {
     $stmt5->execute([':id' => $patient_id]);
     $family = $stmt5->fetchAll(PDO::FETCH_ASSOC);
 
+    // Available medication inventory (items with stock > 0)
+    $stmtInv = $pdo->prepare('SELECT * FROM medication_inventory WHERE quantity_in_stock > 0 ORDER BY item_name ASC');
+    $stmtInv->execute();
+    $inventory = $stmtInv->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (Throwable $e) {
     error_log('Patient view load error: ' . $e->getMessage());
     $_SESSION['form_error'] = 'An error occurred while loading patient data.';
@@ -58,6 +63,7 @@ try {
         <div class="d-flex gap-2">
             <a href="<?php echo BASE_URL; ?>admin-patient-form?id=<?php echo $patient_id; ?>" class="btn btn-primary btn-sm">Edit Patient</a>
             <a href="<?php echo BASE_URL; ?>?action=report-patient-record&id=<?php echo $patient_id; ?>" class="btn btn-info btn-sm" target="_blank">Download PDF</a>
+            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#dispenseModal">Dispense Medicine</button>
         </div>
     </div>
 
@@ -275,6 +281,49 @@ try {
 </div>
 
 <?php include_once __DIR__ . '/../../includes/footer_admin.php'; ?>
+ 
+<!-- Dispense Medicine Modal -->
+<div class="modal fade" id="dispenseModal" tabindex="-1" aria-labelledby="dispenseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dispenseModalLabel">Dispense Medicine</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="<?php echo BASE_URL; ?>actions/medicine_dispense_save.php">
+                <div class="modal-body">
+                    <input type="hidden" name="patient_id" value="<?php echo $patient_id; ?>">
+
+                    <div class="mb-3">
+                        <label for="medicine_id" class="form-label">Medicine</label>
+                        <select id="medicine_id" name="medicine_id" class="form-select" required>
+                            <option value="">-- Select medicine --</option>
+                            <?php if (!empty($inventory)): foreach ($inventory as $item): ?>
+                                <option value="<?php echo (int)$item['item_id']; ?>"><?php echo htmlspecialchars($item['item_name']); ?> (Stock: <?php echo (int)$item['quantity_in_stock']; ?>)</option>
+                            <?php endforeach; else: ?>
+                                <option value="">No medicines available</option>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" id="quantity" name="quantity" class="form-control" min="1" value="1" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes (optional)</label>
+                        <input type="text" id="notes" name="notes" class="form-control" placeholder="e.g., Taken with food">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Dispense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <?php
 // Admin: View single patient (placeholder)
 require_once __DIR__ . '/../../includes/header_admin.php';

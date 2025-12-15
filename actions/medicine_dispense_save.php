@@ -1,45 +1,102 @@
 <?php
-// Save medicine dispensing record
-if (session_status() === PHP_SESSION_NONE) session_start();
+// actions/medicine_dispense_save.php
+// Start session and load config + database
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 
-// Only allow BHWs (admin) to record dispensing
-if (!isset($_SESSION['bhw_id'])) {
-    $_SESSION['flash_error'] = 'You must be logged in to record dispensing.';
-    header('Location: ' . BASE_URL . 'login-bhw');
-    exit;
+// Only allow POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ' . (defined('BASE_URL') ? BASE_URL : '/e-bhm_connect/') . 'admin-patients');
+    exit();
 }
 
-$resident_id = isset($_POST['resident_id']) ? (int)$_POST['resident_id'] : 0;
-$item_id = isset($_POST['item_id']) && $_POST['item_id'] !== '' ? (int)$_POST['item_id'] : null;
-$quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
-$notes = isset($_POST['notes']) ? trim((string)$_POST['notes']) : '';
-$bhw_id = (int)$_SESSION['bhw_id'];
+// Input sanitization
+$patient_id = isset($_POST['patient_id']) ? (int) $_POST['patient_id'] : 0;
+$medicine_id = 0;
+if (isset($_POST['medicine_id'])) {
+    $medicine_id = (int) $_POST['medicine_id'];
+} elseif (isset($_POST['item_id'])) {
+    $medicine_id = (int) $_POST['item_id'];
+}
+$quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 0;
+$notes = isset($_POST['notes']) ? trim($_POST['notes']) : null;
+$bhw_id = isset($_SESSION['bhw_id']) ? (int) $_SESSION['bhw_id'] : null;
 
-if ($resident_id <= 0 || $quantity <= 0) {
-    $_SESSION['flash_error'] = 'Invalid resident or quantity.';
-    header('Location: ' . BASE_URL . 'admin-patient-view?id=' . $resident_id);
-    exit;
+// Helper for Redirect
+$redirect_url = (defined('BASE_URL') ? BASE_URL : '/e-bhm_connect/') . 'admin-patient-view?id=' . $patient_id;
+
+// 4. Validation
+if ($patient_id <= 0 || $medicine_id <= 0) {
+    $_SESSION['form_error'] = 'Error: Missing patient or medicine selection.';
+    header('Location: ' . $redirect_url);
+    exit();
+}
+
+if ($quantity <= 0) {
+    $_SESSION['form_error'] = 'Error: Quantity must be greater than zero.';
+    header('Location: ' . $redirect_url);
+    exit();
 }
 
 try {
-    // Try to insert the record (table may not exist)
-    $sql = "INSERT INTO medicine_dispensing_log (resident_id, item_id, quantity, bhw_id, dispensed_at, notes) VALUES (:resident_id, :item_id, :quantity, :bhw_id, NOW(), :notes)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':resident_id' => $resident_id,
-        ':item_id' => $item_id,
-        ':quantity' => $quantity,
-        ':bhw_id' => $bhw_id,
+    // 5. Database Transaction
+    if (!isset($pdo) || !($pdo instanceof PDO)) {
+        throw new RuntimeException('Database connection not available.');
+    }
+
+    $pdo->beginTransaction();
+
+    // Step A: Lock & Check Stock
+    $sel = $pdo->prepare('SELECT quantity_in_stock FROM medication_inventory WHERE item_id = :id FOR UPDATE');
+    $sel->execute([':id' => $medicine_id]);
+    $row = $sel->fetch(PDO::FETCH_ASSOC);
+
+    if (!$row) {
+        $pdo->rollBack();
+        $_SESSION['form_error'] = 'Error: Medicine not found.';
+        header('Location: ' . $redirect_url);
+        exit();
+    }
+
+    if ((int)$row['quantity_in_stock'] < $quantity) {
+        $pdo->rollBack();
+        $_SESSION['form_error'] = 'Error: Insufficient stock.';
+        header('Location: ' . $redirect_url);
+        exit();
+    }
+
+    // Step B: Deduct Stock
+    $upd = $pdo->prepare('UPDATE medication_inventory SET quantity_in_stock = quantity_in_stock - :qty WHERE item_id = :id');
+    $upd->execute([':qty' => $quantity, ':id' => $medicine_id]);
+
+    // Step C: Log Dispense
+    // Use patient_id column to match schema
+    $ins = $pdo->prepare('INSERT INTO medicine_dispensing_log (patient_id, item_id, quantity, bhw_id, notes) VALUES (:pid, :mid, :qty, :bid, :notes)');
+    $ins->execute([
+        ':pid' => $patient_id,
+        ':mid' => $medicine_id,
+        ':qty' => $quantity,
+        ':bid' => $bhw_id,
         ':notes' => $notes
     ]);
 
-    $_SESSION['flash_success'] = 'Dispensing record saved.';
-} catch (PDOException $e) {
-    error_log('medicine_dispense_save error: ' . $e->getMessage());
-    $_SESSION['flash_error'] = 'Failed to save dispensing record. Please ensure the `medicine_dispensing_log` table exists.';
-}
+    // 6. Commit
+    $pdo->commit();
 
-header('Location: ' . BASE_URL . 'admin-patient-view?id=' . $resident_id);
-exit;
+    $_SESSION['form_success'] = 'Success: Medicine dispensed.';
+    header('Location: ' . $redirect_url);
+    exit();
+
+} catch (Throwable $e) {
+    if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+    error_log('Dispense Error: ' . $e->getMessage());
+    $_SESSION['form_error'] = 'System Error: Could not dispense.';
+    header('Location: ' . $redirect_url);
+    exit();
+}

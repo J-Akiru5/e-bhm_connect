@@ -52,7 +52,22 @@ document.addEventListener('DOMContentLoaded', () => {
             // Remove loading indicator
             removeLoadingMessage();
             // Add bot's response
-            addMessageToUI(data.reply || 'Sorry, no reply.', 'bot');
+            const botReply = data.reply || 'Sorry, no reply.';
+            addMessageToUI(botReply, 'bot');
+
+            // Fire-and-forget: save conversation to server-side history
+            try {
+                fetch('actions/chatbot_save.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: messageText, response: botReply })
+                }).catch(err => {
+                    // Non-blocking; log but do not surface to user
+                    console.warn('Failed to save chat log:', err);
+                });
+            } catch (e) {
+                console.warn('Chat log save error:', e);
+            }
         })
         .catch(error => {
             removeLoadingMessage();

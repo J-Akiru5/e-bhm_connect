@@ -7,6 +7,7 @@ config/config.php
 .env.local
 config/*.local.php
 config/*.secret.php
+config/secrets.php
 *.key
 secrets/
 

@@ -25,7 +25,7 @@ if (isset($_SESSION['register_success'])) {
 <div class="vh-100 d-flex align-items-center justify-content-center">
     <div class="card shadow-sm" style="max-width:640px; width:100%">
         <div class="card-body p-4">
-            <h3 class="card-title mb-3 text-center">Patient Registration</h3>
+            <h3 class="card-title mb-3 text-center">Resident Registration</h3>
 
             <form method="post" action="?action=register-patient">
                 <h5 class="mb-2">Verify Your Identity</h5>
@@ -36,6 +36,25 @@ if (isset($_SESSION['register_success'])) {
                 <div class="mb-3">
                     <label for="birthdate" class="form-label">Birthdate</label>
                     <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="sex" class="form-label">Gender/Sex</label>
+                        <select id="sex" name="sex" class="form-select">
+                            <option value="">Prefer not to say</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="contact" class="form-label">Contact Number</label>
+                        <input type="text" class="form-control" id="contact" name="contact" placeholder="09XXXXXXXXX">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" name="address">
+                    </div>
                 </div>
 
                 <hr>

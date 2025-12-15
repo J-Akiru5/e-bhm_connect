@@ -2,9 +2,20 @@
  * Admin Fixed Layout
  */
 
+:root {
+    --brand-primary: #20c997;
+    --brand-dark: #0f5132;
+    --brand-light: #e6fffa;
+    --text-dark: #343a40;
+    --border: #dee2e6;
+    --card-radius: 12px;
+    --sidebar-width: 280px;
+}
 body {
-    /* Prevent the main body from scrolling */
-    overflow: hidden;
+    /* Allow vertical scrolling on mobile; prevent horizontal overflow only */
+        overflow-x: hidden;
+        font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        color: var(--text-dark);
 }
 
 #admin-sidebar {
@@ -12,7 +23,8 @@ body {
     top: 0;
     left: 0;
     bottom: 0;
-    width: 280px; /* Set a fixed width */
+    width: var(--sidebar-width);
+        /* Set a fixed width */
     z-index: 1000;
     overflow-y: auto; /* Allow sidebar to scroll if content is too long */
 }
@@ -23,7 +35,8 @@ body {
     top: 0;
     right: 0;
     bottom: 0;
-    left: 280px; /* Must match sidebar width */
+    left: var(--sidebar-width);
+        /* Must match sidebar width */
     overflow-y: auto; /* This makes the CONTENT scrollable */
     display: flex;
     flex-direction: column;
@@ -45,8 +58,8 @@ body {
 #admin-footer {
     /* This is a new footer for the content area */
     padding: 10px 20px;
-    background-color: #f8f9fa;
-    border-top: 1px solid #dee2e6;
+    background-color: var(--brand-light);
+        border-top: 1px solid var(--border);
     flex-shrink: 0;
 }
 
@@ -54,7 +67,7 @@ body {
 @media (max-width: 991.98px) {
     #admin-sidebar {
         /* hide off-canvas by default */
-        transform: translateX(-280px);
+        transform: translateX(calc(-1 * var(--sidebar-width)));
         transition: transform 0.25s ease-in-out;
         will-change: transform;
         z-index: 1100; /* above backdrop */
@@ -88,3 +101,100 @@ body {
 /* Ensure admin elements stacking order */
 #admin-sidebar { z-index: 1100; }
 #admin-top-nav { z-index: 1050; }
+
+/* Theme-driven admin visuals moved from inline header styles */
+#admin-top-nav {
+    background: linear-gradient(90deg, var(--brand-primary), var(--brand-dark));
+    box-shadow: none;
+}
+
+#admin-top-nav .nav-link {
+    color: #fff !important;
+}
+
+#admin-sidebar {
+    background: linear-gradient(180deg, var(--brand-dark), var(--brand-primary));
+}
+
+#admin-sidebar .fs-4 {
+    font-weight: 600;
+    color: #fff;
+}
+
+#admin-sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.92);
+    background: transparent;
+    border-radius: 10px;
+    transition: all .18s ease;
+}
+
+#admin-sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(6px);
+    color: #fff;
+}
+
+#admin-sidebar .nav-link.active {
+    background: #fff;
+    color: var(--brand-dark) !important;
+    font-weight: 700;
+}
+
+#admin-sidebar img.profile-avatar {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.sidebar-gabby {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 6px 18px rgba(4, 15, 35, 0.06);
+}
+
+.card {
+    border-radius: var(--card-radius);
+}
+
+.clickable {
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.clickable:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(16, 24, 32, 0.08);
+}
+
+.table thead th {
+    background: #f6f7f9;
+    text-transform: uppercase;
+    font-size: .8rem;
+    letter-spacing: .02em;
+}
+
+.btn-brand {
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: #fff;
+}
+
+.btn-outline-brand {
+    color: var(--brand-primary);
+    border-color: rgba(13, 149, 136, 0.12);
+}
+
+.icon-bubble {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: var(--brand-primary);
+}
