@@ -1,8 +1,16 @@
 <?php
-// (index.php includes config/config.php)
-// **FIX: We must manually include the database connection here**
-require_once __DIR__ . '/../lib/fpdf/fpdf.php';
+// actions/report_chronic.php
+// Generate chronic disease report
+
+// Ensure session is started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include required configuration files
+require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../lib/fpdf/fpdf.php';
 
 class PDF extends FPDF {
     // Page header
