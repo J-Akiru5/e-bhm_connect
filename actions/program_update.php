@@ -1,6 +1,15 @@
 <?php
 // actions/program_update.php
 // Update existing health program
+// Ensure session is started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include required configuration files
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/database.php';
+
 
 // Router bootstraps session, $pdo and BASE_URL
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

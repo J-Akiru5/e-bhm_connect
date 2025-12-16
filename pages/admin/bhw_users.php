@@ -2,9 +2,31 @@
 // pages/admin/bhw_users.php
 // BHW User Management list
 include_once __DIR__ . '/../../includes/header_admin.php';
+require_once __DIR__ . '/../../includes/pagination_helper.php';
 
 $bhw_users = [];
+$pagination = ['current_page' => 1, 'total_pages' => 1, 'total_records' => 0];
+$per_page = 10;
+
 try {
+    // Count total records first
+    $count_sql = 'SELECT COUNT(*) FROM bhw_users';
+    $params = [];
+
+    if (!empty($_GET['search'])) {
+        $search_term = '%' . $_GET['search'] . '%';
+        $count_sql .= ' WHERE full_name LIKE ?';
+        $params[] = $search_term;
+    }
+    
+    $count_stmt = $pdo->prepare($count_sql);
+    $count_stmt->execute($params);
+    $total_records = (int) $count_stmt->fetchColumn();
+
+    // Calculate pagination
+    $current_page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+    $pagination = paginate($total_records, $per_page, $current_page);
+
     // Base SQL
     $sql = 'SELECT bhw_id, full_name, username, bhw_unique_id, assigned_area FROM bhw_users';
     $params = [];
@@ -15,7 +37,7 @@ try {
         $params[] = $search_term;
     }
 
-    $sql .= ' ORDER BY full_name ASC';
+    $sql .= ' ORDER BY full_name ASC LIMIT ' . $pagination['per_page'] . ' OFFSET ' . $pagination['offset'];
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
@@ -83,6 +105,11 @@ try {
                     </tbody>
                 </table>
             </div>
+            
+            <!-- Pagination -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <?php echo render_pagination($pagination, get_pagination_base_url()); ?>
+            </div>
         </div>
     </div>
 
@@ -102,9 +129,3 @@ try {
 </div>
 
 <?php include_once __DIR__ . '/../../includes/footer_admin.php'; ?>
-<?php
-// Admin: BHW users management (placeholder)
-require_once __DIR__ . '/../../includes/header_admin.php';
-?>
-
-<?php require_once __DIR__ . '/../../includes/footer_admin.php';

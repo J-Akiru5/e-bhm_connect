@@ -2,9 +2,31 @@
 // pages/admin/programs.php
 include_once __DIR__ . '/../../includes/header_admin.php';
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../includes/pagination_helper.php';
 
 $programs = [];
+$pagination = ['current_page' => 1, 'total_pages' => 1, 'total_records' => 0];
+$per_page = 10;
+
 try {
+    // Count total records first
+    $count_sql = 'SELECT COUNT(*) FROM health_programs';
+    $params = [];
+
+    if (!empty($_GET['search'])) {
+        $search_term = '%' . $_GET['search'] . '%';
+        $count_sql .= ' WHERE program_name LIKE ?';
+        $params[] = $search_term;
+    }
+    
+    $count_stmt = $pdo->prepare($count_sql);
+    $count_stmt->execute($params);
+    $total_records = (int) $count_stmt->fetchColumn();
+
+    // Calculate pagination
+    $current_page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+    $pagination = paginate($total_records, $per_page, $current_page);
+
     // Base SQL for programs
     $sql = 'SELECT * FROM health_programs';
     $params = [];
@@ -15,7 +37,7 @@ try {
         $params[] = $search_term;
     }
 
-    $sql .= ' ORDER BY start_date DESC';
+    $sql .= ' ORDER BY start_date DESC LIMIT ' . $pagination['per_page'] . ' OFFSET ' . $pagination['offset'];
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
@@ -121,6 +143,11 @@ try {
                                 <?php endif; ?>
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <?php echo render_pagination($pagination, get_pagination_base_url()); ?>
                     </div>
                 </div>
             </div>

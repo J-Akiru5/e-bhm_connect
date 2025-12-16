@@ -1,6 +1,29 @@
 <?php
 // pages/admin/messages.php
 include_once __DIR__ . '/../../includes/header_admin.php';
+require_once __DIR__ . '/../../includes/pagination_helper.php';
+
+$pagination = ['current_page' => 1, 'total_pages' => 1, 'total_records' => 0];
+$per_page = 10;
+$failed_messages = [];
+
+try {
+    // Count total failed messages
+    $count_stmt = $pdo->prepare("SELECT COUNT(*) FROM sms_queue WHERE status = 'failed'");
+    $count_stmt->execute();
+    $total_records = (int) $count_stmt->fetchColumn();
+    
+    // Calculate pagination
+    $current_page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+    $pagination = paginate($total_records, $per_page, $current_page);
+    
+    // Fetch failed messages with pagination
+    $stmt = $pdo->prepare("SELECT id, phone_number, message, created_at FROM sms_queue WHERE status = 'failed' ORDER BY created_at DESC LIMIT " . $pagination['per_page'] . " OFFSET " . $pagination['offset']);
+    $stmt->execute();
+    $failed_messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Throwable $e) {
+    error_log('SMS fetch error: ' . $e->getMessage());
+}
 
 // Ensure $pdo is available (index.php loads config/database)
 // Display flash messages
@@ -50,28 +73,26 @@ if (isset($_SESSION['sms_error'])) {
                     </thead>
                     <tbody>
                         <?php
-                        try {
-                            $stmt = $pdo->prepare("SELECT id, phone_number, message, created_at FROM sms_queue WHERE status = 'failed' ORDER BY created_at DESC");
-                            $stmt->execute();
-                            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                            if (!$rows) {
-                                echo '<tr><td colspan="4" class="text-center">No failed messages.</td></tr>';
-                            } else {
-                                foreach ($rows as $r) {
-                                    echo '<tr>';
-                                    echo '<td>' . htmlspecialchars($r['created_at']) . '</td>';
-                                    echo '<td>' . htmlspecialchars($r['phone_number']) . '</td>';
-                                    echo '<td>' . htmlspecialchars($r['message']) . '</td>';
-                                    echo '<td><a class="btn btn-sm btn-warning" href="?action=resend-sms&id=' . urlencode($r['id']) . '">Resend</a></td>';
-                                    echo '</tr>';
-                                }
+                        if (empty($failed_messages)) {
+                            echo '<tr><td colspan="4" class="text-center">No failed messages.</td></tr>';
+                        } else {
+                            foreach ($failed_messages as $r) {
+                                echo '<tr>';
+                                echo '<td>' . htmlspecialchars($r['created_at']) . '</td>';
+                                echo '<td>' . htmlspecialchars($r['phone_number']) . '</td>';
+                                echo '<td>' . htmlspecialchars($r['message']) . '</td>';
+                                echo '<td><a class="btn btn-sm btn-warning" href="?action=resend-sms&id=' . urlencode($r['id']) . '">Resend</a></td>';
+                                echo '</tr>';
                             }
-                        } catch (Throwable $e) {
-                            echo '<tr><td colspan="4" class="text-danger">Error loading failed messages.</td></tr>';
                         }
                         ?>
                     </tbody>
                 </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <?php echo render_pagination($pagination, get_pagination_base_url()); ?>
             </div>
         </div>
     </div>

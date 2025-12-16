@@ -2,13 +2,28 @@
 // pages/admin/announcements.php
 // Admin: Manage announcements
 include_once __DIR__ . '/../../includes/header_admin.php';
+require_once __DIR__ . '/../../includes/pagination_helper.php';
+
+$announcements = [];
+$pagination = ['current_page' => 1, 'total_pages' => 1, 'total_records' => 0];
+$per_page = 10;
 
 // Fetch announcements with author name
 try {
-    $stmt = $pdo->query("SELECT a.*, b.full_name 
+    // Count total
+    $count_stmt = $pdo->query("SELECT COUNT(*) FROM announcements");
+    $total_records = (int) $count_stmt->fetchColumn();
+    
+    // Calculate pagination
+    $current_page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+    $pagination = paginate($total_records, $per_page, $current_page);
+
+    $stmt = $pdo->prepare("SELECT a.*, b.full_name 
                     FROM announcements a 
                     LEFT JOIN bhw_users b ON a.bhw_id = b.bhw_id 
-                    ORDER BY a.created_at DESC");
+                    ORDER BY a.created_at DESC
+                    LIMIT " . $pagination['per_page'] . " OFFSET " . $pagination['offset']);
+    $stmt->execute();
     $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $e) {
     error_log('Announcements fetch error: ' . $e->getMessage());
@@ -87,6 +102,11 @@ if (isset($_SESSION['form_error'])) {
                                 <?php endif; ?>
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <?php echo render_pagination($pagination, get_pagination_base_url()); ?>
                     </div>
                 </div>
             </div>

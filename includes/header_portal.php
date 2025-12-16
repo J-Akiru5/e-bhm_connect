@@ -1,6 +1,6 @@
 <?php
 // includes/header_portal.php
-// Simple header for logged-in patient portal
+// Modern header for logged-in patient portal
 // (index.php handles session_start() and $page variable)
 ?>
 <!DOCTYPE html>
@@ -9,64 +9,221 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Portal - E-BHM Connect</title>
+    
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Poppins Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
+    
     <style>
-        :root{ --brand-dark: #0f5132; }
+        /* Portal-specific overrides */
         body {
-            background-color: #f8f9fa;
-            display: flex;
-            flex-direction: column;
+            background: var(--gray-100);
             min-height: 100vh;
-            font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
         }
-        main {
-            flex-grow: 1;
+        
+        .portal-navbar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: var(--space-3) 0;
+            box-shadow: var(--shadow-md);
         }
-        .btn-teal{ background: var(--brand-dark); border-color: var(--brand-dark); color:#fff; }
-        .btn-outline-teal{ color:var(--brand-dark); border-color:var(--brand-dark); background:transparent; }
+        
+        .portal-navbar .navbar-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .portal-navbar .brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            color: var(--white);
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+            text-decoration: none;
+        }
+        
+        .portal-navbar .brand img {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-lg);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .portal-navbar .nav-links {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .portal-navbar .nav-link {
+            padding: var(--space-2) var(--space-4);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+            text-decoration: none;
+        }
+        
+        .portal-navbar .nav-link:hover,
+        .portal-navbar .nav-link.active {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .portal-navbar .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .portal-main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: var(--space-8) var(--space-6);
+        }
+        
+        /* Portal Cards */
+        .portal-card {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+            transition: all var(--transition-base);
+        }
+        
+        .portal-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .portal-card-header {
+            padding: var(--space-4) var(--space-6);
+            background: linear-gradient(135deg, var(--primary-light), var(--white));
+            border-bottom: 1px solid var(--gray-200);
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .portal-card-body {
+            padding: var(--space-6);
+        }
+        
+        /* Mobile menu toggle */
+        .portal-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            padding: var(--space-2);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .portal-menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--white);
+            border-radius: var(--radius-full);
+        }
+        
+        @media (max-width: 768px) {
+            .portal-navbar .nav-links {
+                display: none;
+            }
+            
+            .portal-menu-toggle {
+                display: flex;
+            }
+            
+            .portal-navbar.menu-open .nav-links {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--primary-dark);
+                padding: var(--space-4);
+            }
+            
+            .portal-main {
+                padding: var(--space-6) var(--space-4);
+            }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background-color: var(--brand-dark, #0f5132);">
-        <div class="container">
-            <a class="navbar-brand fs-4 fw-bold d-flex align-items-center" href="<?php echo BASE_URL; ?>portal-dashboard">
-                <img src="<?php echo BASE_URL; ?>assets/images/e-logo.png" alt="Logo" width="40" height="40" class="me-2 rounded" />
-                E-BHM Connect
+    <nav class="portal-navbar" id="portalNav">
+        <div class="navbar-container">
+            <a class="brand" href="<?php echo BASE_URL; ?>portal-dashboard">
+                <img src="<?php echo BASE_URL; ?>assets/images/e-logo.png" alt="Logo" />
+                <span>E-BHM Connect</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#portalNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="portalNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo ($page === 'portal-dashboard') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>portal-dashboard">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo ($page === 'portal-chatbot') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>portal-chatbot">Chat with Gabby</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a href="<?php echo BASE_URL; ?>?action=logout-patient" class="btn btn-teal">Logout</a>
-                </div>
+            
+            <ul class="nav-links">
+                <li>
+                    <a class="nav-link <?php echo ($page === 'portal-dashboard') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>portal-dashboard">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px; vertical-align: middle;">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link <?php echo ($page === 'portal-chatbot') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>portal-chatbot">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px; vertical-align: middle;">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Chat with Gabby
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="nav-actions">
+                <span style="color: rgba(255,255,255,0.85); font-size: var(--font-size-sm); margin-right: var(--space-2);">
+                    <?php echo htmlspecialchars($_SESSION['patient_full_name'] ?? 'User'); ?>
+                </span>
+                <a href="<?php echo BASE_URL; ?>?action=logout-patient" class="btn btn-sm" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.2);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: middle;">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Logout
+                </a>
             </div>
+            
+            <button class="portal-menu-toggle" id="portalMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
-    <main class="container mt-4">
-<?php
-// Patient portal header (placeholder)
-?>
-<!-- <!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Patient Portal - E-BHM-CONNECT</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
-</head>
-<body>
-<header>
-    <h1>Patient Portal</h1>
-</header>
-<main> -->
+    
+    <main class="portal-main">
+
+<script>
+document.getElementById('portalMenuToggle')?.addEventListener('click', function() {
+    document.getElementById('portalNav').classList.toggle('menu-open');
+});
+</script>

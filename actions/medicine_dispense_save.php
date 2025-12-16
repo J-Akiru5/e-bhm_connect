@@ -1,10 +1,12 @@
 <?php
 // actions/medicine_dispense_save.php
-// Start session and load config + database
+// Handles medicine dispensing with stock checks and logging
+// Ensure session is started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 
@@ -74,8 +76,8 @@ try {
     $upd->execute([':qty' => $quantity, ':id' => $medicine_id]);
 
     // Step C: Log Dispense
-    // Use patient_id column to match schema
-    $ins = $pdo->prepare('INSERT INTO medicine_dispensing_log (patient_id, item_id, quantity, bhw_id, notes) VALUES (:pid, :mid, :qty, :bid, :notes)');
+    // Use patient_id column to match schema, include dispensed_at
+    $ins = $pdo->prepare('INSERT INTO medicine_dispensing_log (patient_id, item_id, quantity, bhw_id, dispensed_at, notes) VALUES (:pid, :mid, :qty, :bid, NOW(), :notes)');
     $ins->execute([
         ':pid' => $patient_id,
         ':mid' => $medicine_id,

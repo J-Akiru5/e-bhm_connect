@@ -1,6 +1,14 @@
 <?php
 // actions/chatbot_save.php
 // Save chatbot conversation history to DB
+// Ensure session is started
+if (session_status() === PHP_SESSION_NONE) {
+	session_start();
+}
+
+// Include required configuration files
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/database.php';
 
 header('Content-Type: application/json');
 
@@ -8,11 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	http_response_code(405);
 	echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
 	exit();
-}
-
-// Ensure session is available
-if (session_status() === PHP_SESSION_NONE) {
-	session_start();
 }
 
 // Expect JSON payload

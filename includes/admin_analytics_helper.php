@@ -18,6 +18,10 @@ if (!function_exists('fetch_dashboard_data')) {
         $result = [
             'total_patients' => 0,
             'total_bhws' => 0,
+            'total_inventory' => 0,
+            'total_announcements' => 0,
+            'total_programs' => 0,
+            'low_stock_items' => 0,
             'sms_stats' => [
                 'sent' => 0,
                 'failed' => 0,
@@ -40,27 +44,59 @@ if (!function_exists('fetch_dashboard_data')) {
             $stmt = $pdo->query('SELECT COUNT(*) FROM bhw_users');
             $result['total_bhws'] = (int) $stmt->fetchColumn();
 
-            // SMS stats grouped by status
-            $smsStmt = $pdo->query("SELECT status, COUNT(*) AS count FROM sms_queue GROUP BY status");
-            $rows = $smsStmt->fetchAll(PDO::FETCH_ASSOC);
-            // normalize statuses to expected keys while preserving any other status values
-            $stats = [
-                'sent' => 0,
-                'failed' => 0,
-                'pending' => 0,
-            ];
-            foreach ($rows as $r) {
-                $status = isset($r['status']) ? strtolower((string) $r['status']) : '';
-                $cnt = isset($r['count']) ? (int) $r['count'] : 0;
-                if ($status === '') continue;
-                if (array_key_exists($status, $stats)) {
-                    $stats[$status] = $cnt;
-                } else {
-                    // add other statuses dynamically
-                    $stats[$status] = $cnt;
-                }
+            // Total inventory items
+            try {
+                $stmt = $pdo->query('SELECT COUNT(*) FROM medication_inventory');
+                $result['total_inventory'] = (int) $stmt->fetchColumn();
+                
+                // Low stock items (below alert threshold or <= 10 if no threshold set)
+                $stmt = $pdo->query('SELECT COUNT(*) FROM medication_inventory WHERE quantity_in_stock <= COALESCE(stock_alert_limit, 10)');
+                $result['low_stock_items'] = (int) $stmt->fetchColumn();
+            } catch (Exception $e) {
+                // Table might not exist
             }
-            $result['sms_stats'] = $stats;
+            
+            // Total announcements
+            try {
+                $stmt = $pdo->query('SELECT COUNT(*) FROM announcements');
+                $result['total_announcements'] = (int) $stmt->fetchColumn();
+            } catch (Exception $e) {
+                // Table might not exist
+            }
+            
+            // Total programs
+            try {
+                $stmt = $pdo->query('SELECT COUNT(*) FROM health_programs');
+                $result['total_programs'] = (int) $stmt->fetchColumn();
+            } catch (Exception $e) {
+                // Table might not exist
+            }
+
+            // SMS stats grouped by status
+            try {
+                $smsStmt = $pdo->query("SELECT status, COUNT(*) AS count FROM sms_queue GROUP BY status");
+                $rows = $smsStmt->fetchAll(PDO::FETCH_ASSOC);
+                // normalize statuses to expected keys while preserving any other status values
+                $stats = [
+                    'sent' => 0,
+                    'failed' => 0,
+                    'pending' => 0,
+                ];
+                foreach ($rows as $r) {
+                    $status = isset($r['status']) ? strtolower((string) $r['status']) : '';
+                    $cnt = isset($r['count']) ? (int) $r['count'] : 0;
+                    if ($status === '') continue;
+                    if (array_key_exists($status, $stats)) {
+                        $stats[$status] = $cnt;
+                    } else {
+                        // add other statuses dynamically
+                        $stats[$status] = $cnt;
+                    }
+                }
+                $result['sms_stats'] = $stats;
+            } catch (Exception $e) {
+                // sms_queue table might not exist yet
+            }
 
             // Recent registrations: last 6 months (including current month)
             // Build the months skeleton so months with zero appear

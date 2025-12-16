@@ -2,6 +2,7 @@
 // Medication & Supply Inventory (Admin)
 // Auth enforced by router; header/footer provide layout and SweetAlert
 include_once __DIR__ . '/../../includes/header_admin.php';
+require_once __DIR__ . '/../../includes/pagination_helper.php';
 
 /* Visual updates: Teal theme, rounded cards, hover lift and badges */
 ?>
@@ -20,10 +21,38 @@ include_once __DIR__ . '/../../includes/header_admin.php';
 <?php
 
 $inventory_items = [];
+$pagination = ['current_page' => 1, 'total_pages' => 1, 'total_records' => 0];
+$per_page = 10;
+
 try {
     // Load categories for dropdown
     $catsStmt = $pdo->query("SELECT category_id, category_name FROM inventory_categories ORDER BY category_name ASC");
     $categories = $catsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Count total records first
+    $count_sql = "SELECT COUNT(*) FROM medication_inventory mi";
+    $params = [];
+    $where = [];
+    
+    if (!empty($_GET['search'])) {
+        $where[] = "mi.item_name LIKE ?";
+        $params[] = '%' . $_GET['search'] . '%';
+    }
+    if (!empty($_GET['category']) && is_numeric($_GET['category'])) {
+        $where[] = "mi.category_id = ?";
+        $params[] = (int)$_GET['category'];
+    }
+    if (!empty($where)) {
+        $count_sql .= ' WHERE ' . implode(' AND ', $where);
+    }
+    
+    $count_stmt = $pdo->prepare($count_sql);
+    $count_stmt->execute($params);
+    $total_records = (int) $count_stmt->fetchColumn();
+
+    // Calculate pagination
+    $current_page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+    $pagination = paginate($total_records, $per_page, $current_page);
 
     // Base SQL query with optional category name
     $sql = "SELECT mi.*, ic.category_name FROM medication_inventory mi LEFT JOIN inventory_categories ic ON mi.category_id = ic.category_id";
@@ -42,13 +71,14 @@ try {
         $sql .= ' WHERE ' . implode(' AND ', $where);
     }
 
-    $sql .= " ORDER BY mi.item_name ASC";
+    $sql .= " ORDER BY mi.item_name ASC LIMIT " . $pagination['per_page'] . " OFFSET " . $pagination['offset'];
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $inventory_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $e) {
     error_log('Inventory fetch error: ' . $e->getMessage());
+    $categories = [];
 }
 ?>
 
@@ -191,6 +221,11 @@ try {
                                 <?php endif; ?>
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <?php echo render_pagination($pagination, get_pagination_base_url()); ?>
                     </div>
                 </div>
             </div>

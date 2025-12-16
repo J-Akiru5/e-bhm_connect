@@ -2,27 +2,46 @@
 // Protected: View all patients
 // Authentication enforced by the central router (index.php)
 include_once __DIR__ . '/../../includes/header_admin.php';
+require_once __DIR__ . '/../../includes/pagination_helper.php';
 
 // Fetch patients from database
 require_once __DIR__ . '/../../config/database.php';
 
 $patients = [];
+$pagination = ['current_page' => 1, 'total_pages' => 1, 'total_records' => 0];
+$per_page = 10;
+
 try {
-	// Base SQL query
+	// Count total records first
+	$count_sql = "SELECT COUNT(*) FROM patients";
+	$params = [];
+
+	if (!empty($_GET['search'])) {
+		$search_term = '%' . $_GET['search'] . '%';
+		$count_sql .= " WHERE full_name LIKE ?";
+		$params[] = $search_term;
+	}
+
+	$count_stmt = $pdo->prepare($count_sql);
+	$count_stmt->execute($params);
+	$total_records = (int) $count_stmt->fetchColumn();
+
+	// Calculate pagination
+	$current_page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+	$pagination = paginate($total_records, $per_page, $current_page);
+
+	// Base SQL query with LIMIT
 	$sql = "SELECT * FROM patients";
 	$params = [];
 
-	// If a search term is provided, add WHERE clause
 	if (!empty($_GET['search'])) {
 		$search_term = '%' . $_GET['search'] . '%';
 		$sql .= " WHERE full_name LIKE ?";
 		$params[] = $search_term;
 	}
 
-	// Add ordering
-	$sql .= " ORDER BY full_name ASC";
+	$sql .= " ORDER BY full_name ASC LIMIT " . $pagination['per_page'] . " OFFSET " . $pagination['offset'];
 
-	// Prepare and execute
 	$stmt = $pdo->prepare($sql);
 	$stmt->execute($params);
 	$patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -103,6 +122,11 @@ if (isset($_SESSION['form_error'])) {
 				<?php endforeach; ?>
 			</tbody>
 		</table>
+	</div>
+	
+	<!-- Pagination -->
+	<div class="d-flex justify-content-between align-items-center mt-3">
+		<?php echo render_pagination($pagination, get_pagination_base_url()); ?>
 	</div>
 <?php endif; ?>
 

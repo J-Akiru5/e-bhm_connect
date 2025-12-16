@@ -3,63 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-BHM Connect - Barangay Bacong</title>
+    <title>E-BHM Connect - Barangay Bacong Health Management</title>
     
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     
+    <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
     <!-- AOS (Animate On Scroll) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-    <!-- Poppins font for subtle typography refresh -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
-    <style>
-        body {
-            background-color: #f8f9fa;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        main {
-            flex-grow: 1; /* Makes the main content grow to fill space */
-        }
-    </style>
+    <!-- Poppins Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom Glassmorphism Styles -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
 </head>
-<body>
+<body class="dark-theme">
 
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background-color: #B2A08F;">
-        <div class="container">
-            <a class="navbar-brand fs-4 fw-bold d-flex align-items-center" href="<?php echo BASE_URL; ?>home">
-                <img src="assets/images/e-logo.png" alt="Logo" width="40" height="40" class="me-2 rounded" />
-                E-BHM Connect
+    <!-- Glassmorphism Navbar -->
+    <nav class="glass-navbar" id="mainNavbar">
+        <div class="navbar-container">
+            <a class="brand" href="<?php echo BASE_URL; ?>?page=home">
+                <img src="<?php echo BASE_URL; ?>assets/images/e-logo.png" alt="E-BHM Connect Logo" />
+                <span>E-BHM Connect</span>
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#publicNavbar" aria-controls="publicNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <ul class="nav-links">
+                <li><a class="nav-link <?php echo (isset($page) && $page === 'home') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>?page=home">Home</a></li>
+                <li><a class="nav-link" href="<?php echo BASE_URL; ?>?page=home#about">About</a></li>
+                <li><a class="nav-link" href="<?php echo BASE_URL; ?>?page=home#services">Services</a></li>
+                <li><a class="nav-link" href="<?php echo BASE_URL; ?>?page=announcements">Announcements</a></li>
+                <li><a class="nav-link" href="<?php echo BASE_URL; ?>?page=home#contact">Contact</a></li>
+            </ul>
             
-            <div class="collapse navbar-collapse" id="publicNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                               <a class="nav-link <?php echo (isset($page) && $page === 'home') ? 'active' : ''; ?>" aria-current="page" href="<?php echo BASE_URL; ?>?page=home#hero">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?php echo BASE_URL; ?>?page=home#announcements">Announcements</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?php echo BASE_URL; ?>?page=home#about">Our Mission &amp; Vision</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?php echo BASE_URL; ?>?page=home#contact">Contact Us</a>
-                        </li>
-                </ul>
-                
-                <div class="d-flex">
-                   <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-light me-2">Resident Portal</a>
-                    <a href="<?php echo BASE_URL; ?>login-bhw" class="btn btn-primary-emphasis">BHW Login</a>
-                </div>
+            <div class="nav-actions">
+                <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-glass btn-sm">Resident Portal</a>
+                <a href="<?php echo BASE_URL; ?>login-bhw" class="btn btn-primary btn-sm">BHW Login</a>
             </div>
+            
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
-    <main class="container mt-4">
+    <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('mainNavbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+    
+    // Mobile menu toggle
+    document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+        document.getElementById('mainNavbar').classList.toggle('menu-open');
+    });
+    </script>

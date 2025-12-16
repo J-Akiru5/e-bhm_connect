@@ -1,166 +1,286 @@
 <!DOCTYPE html>
 <?php
 // Consolidated Single Page Parallax Home
+// Fetch announcements for the widget
+$announcementsStmt = $pdo->query("SELECT a.*, b.full_name 
+                    FROM announcements a 
+                    LEFT JOIN bhw_users b ON a.bhw_id = b.bhw_id 
+                    ORDER BY a.created_at DESC LIMIT 5");
+$recentAnnouncements = $announcementsStmt->fetchAll(PDO::FETCH_ASSOC);
+
 // Include the public header
 include_once __DIR__ . '/../../includes/header_public.php';
 ?>
 
-<style>
-/* Parallax and layout styles (inline for quick iteration) */
-:root{--teal:#B2A08F;--dark-teal:#0b7b72;--blue:#0b5fa5;--muted:#6c757d}
-body.home-spa {background:#f5f8fa}
-.parallax {background-attachment: fixed; background-size: cover; background-position: center; position: relative;}
-.hero {min-height:60vh; display:flex; align-items:center; color:#fff; position:relative; overflow:hidden}
-.hero .overlay {position:absolute; inset:0; background: rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center}
-.hero .overlay .container{position:relative; z-index:2; padding:4rem 0}
-/* Ensure any parallax section overlay fills the full section (e.g., announcements divider) */
-.parallax .overlay {position:absolute; inset:0; display:flex; align-items:center; justify-content:center}
-.parallax .overlay .container{position:relative; z-index:2}
-.section {padding:6rem 0}
-.section.light {background:#fff}
-.section.clean {background:#f8fbfc}
-.services-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem}
-.service-card {background:#fff; border-radius:8px; padding:1.25rem; box-shadow:0 6px 20px rgba(13,148,136,0.06); transition: transform .25s ease, box-shadow .25s ease}
-.service-card:hover {transform:translateY(-8px); box-shadow:0 18px 40px rgba(13,148,136,0.12)}
-.cta-btn {background:var(--teal); color:#fff}
-.anchor-offset {scroll-margin-top:90px}
-
-/* Responsive tweaks */
-@media (max-width:768px){ .overlay {padding:2rem 0} .section{padding:3rem 0} .parallax{background-attachment: scroll} }
-</style>
-
-<main class="home-spa">
-
-  <!-- Hero (Parallax) -->
-  <section id="hero" class="parallax hero" style="background-image:url('<?php echo BASE_URL; ?>assets/images/hero_bg.jpg');">
-    <div class="overlay w-100">
-      <div class="container text-center">
-        <h1 class="display-4 fw-bold" data-aos="fade-up">Welcome to E-BHM Connect</h1>
-        <p class="lead text-light mb-4" data-aos="fade-up">Digitizing health services for efficiency, accuracy, and accessibility in Barangay Bacong.</p>
-        <div class="d-flex justify-content-center gap-2">
-          <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-lg cta-btn">Resident Portal</a>
-          <a href="<?php echo BASE_URL; ?>?page=home#contact" class="btn btn-lg btn-outline-light">Contact Us</a>
-        </div>
-        <div class="mt-4">
-          <button class="btn btn-light" data-aos="fade-up" onclick="(typeof window.openGabbyPanel === 'function') ? window.openGabbyPanel() : window.location.href='<?php echo BASE_URL; ?>?page=portal_chatbot';">Chat with Gabby</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- About (clean) -->
-  <section id="about" class="section light anchor-offset">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 mb-4">
-          <h2 class="fw-bold" data-aos="fade-right">Our Mission &amp; Vision</h2>
-          <p class="text-muted" data-aos="fade-right">To digitize and securely manage patient health records, streamline healthcare services, and empower Barangay Health Workers with digital tools.</p>
-          <p class="text-muted" data-aos="fade-right">To create a healthier community in Bacong, Dumangas by leveraging technology for efficient, reliable, and accessible health services.</p>
-        </div>
-        <div class="col-lg-6">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h5 class="mb-3">Barangay Information</h5>
-              <p><strong>Barangay Name:</strong> Bacong, Dumangas</p>
-              <p><strong>Location:</strong> 10.8500° N, 122.6833° E</p>
-              <p><strong>Population:</strong> 5,240 residents</p>
-              <p><strong>Contact:</strong> (033) 123-4567 | baconghall@gmail.com</p>
+    <!-- Hero Section with Recent Updates Widget -->
+    <section class="hero-section" id="hero">
+        <!-- Animated Background Orbs -->
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        
+        <div class="hero-content">
+            <!-- Left Side: Hero Text -->
+            <div class="hero-text" data-aos="fade-up">
+                <div class="hero-badge">
+                    <span class="pulse"></span>
+                    Barangay Health Services
+                </div>
+                
+                <h1 class="hero-title">
+                    Welcome to<br>
+                    <span class="highlight">E-BHM Connect</span>
+                </h1>
+                
+                <p class="hero-subtitle">
+                    Digitizing health services for efficiency, accuracy, and accessibility in Barangay Bacong. Access your health records, schedule appointments, and stay connected with your community.
+                </p>
+                
+                <div class="hero-actions">
+                    <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-primary btn-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Resident Portal
+                    </a>
+                    <a href="<?php echo BASE_URL; ?>?page=home#contact" class="btn btn-outline btn-lg">Contact Us</a>
+                </div>
+                
+                <div style="margin-top: var(--space-6);">
+                    <button class="btn btn-glass" onclick="(typeof window.openGabbyPanel === 'function') ? window.openGabbyPanel() : window.location.href='<?php echo BASE_URL; ?>?page=portal_chatbot';">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Chat with Gabby
+                    </button>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Divider (parallax subtle image) -->
-  <section class="parallax" style="background-image:url('<?php echo BASE_URL; ?>assets/images/divider_wave.jpg'); min-height:180px;"></section>
-
-  <!-- Services (clean) -->
-  <section id="services" class="section clean anchor-offset">
-    <div class="container">
-      <div class="text-center mb-4">
-        <h2 class="fw-bold">Our Services</h2>
-        <p class="text-muted">Accessible, community-centered healthcare services.</p>
-      </div>
-
-      <div class="services-grid">
-        <div class="service-card text-center" data-aos="zoom-in" data-aos-delay="100">
-          <img src="<?php echo BASE_URL; ?>assets/images/service_vaccination.jpg" alt="Vaccination" class="img-fluid rounded mb-3" />
-          <h5>Vaccination</h5>
-          <p class="small text-muted">Immunization schedules and records.</p>
-        </div>
-        <div class="service-card text-center" data-aos="zoom-in" data-aos-delay="200">
-          <img src="<?php echo BASE_URL; ?>assets/images/service_checkup.jpg" alt="Checkups" class="img-fluid rounded mb-3" />
-          <h5>Checkups</h5>
-          <p class="small text-muted">Routine health monitoring and consultations.</p>
-        </div>
-        <div class="service-card text-center" data-aos="zoom-in" data-aos-delay="300">
-          <img src="<?php echo BASE_URL; ?>assets/images/service_maternity.jpg" alt="Maternity Care" class="img-fluid rounded mb-3" />
-          <h5>Maternity Care</h5>
-          <p class="small text-muted">Maternal health and pre/post-natal services.</p>
-        </div>
-        <div class="service-card text-center" data-aos="zoom-in" data-aos-delay="400">
-          <img src="<?php echo BASE_URL; ?>assets/images/service_chronic.jpg" alt="Chronic Disease Support" class="img-fluid rounded mb-3" />
-          <h5>Chronic Disease Support</h5>
-          <p class="small text-muted">Management programs for chronic conditions.</p>
-        </div>
-      </div>
-
-      <div class="text-center mt-4">
-        <a href="?page=announcements" class="btn btn-outline-primary">Latest Updates</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Announcements preview (image bg) -->
-  <section id="announcements" class="parallax" style="background-image:url('<?php echo BASE_URL; ?>assets/images/announcements_bg.jpg'); min-height:220px;">
-    <div class="overlay" style="background:rgba(11,95,165,0.35)">
-      <div class="container text-center text-white">
-        <h3 class="fw-bold">Latest Updates</h3>
-        <p class="mb-3">Stay informed with the latest announcements from the barangay health center.</p>
-        <a href="?page=announcements" class="btn btn-light">View All Announcements</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact (clean) -->
-  <section id="contact" class="section light anchor-offset">
-    <div class="container">
-      <div class="text-center mb-4">
-        <h2 class="fw-bold" data-aos="fade-up">Contact Us</h2>
-        <p class="text-muted" data-aos="fade-up">For inquiries or assistance, reach out to us.</p>
-      </div>
-
-      <div class="row g-4 justify-content-center">
-        <div class="col-md-5">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body p-4">
-              <h3 class="card-title text-primary-emphasis">Bacong Health Center</h3>
-              <p class="card-text"><strong>Address:</strong> Bacong, Dumangas</p>
-              <p class="card-text"><strong>Contact:</strong> (033) 123-4567</p>
-              <p class="card-text"><strong>Email:</strong> healthcenter@bacong.gov</p>
+            
+            <!-- Right Side: Recent Community Updates Widget -->
+            <div class="updates-widget" data-aos="fade-up" data-aos-delay="200">
+                <div class="updates-widget-header">
+                    <h3>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        Recent Community Updates
+                    </h3>
+                </div>
+                <div class="updates-widget-content">
+                    <?php if (empty($recentAnnouncements)): ?>
+                        <div class="update-item">
+                            <div class="update-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                            <div class="update-content">
+                                <div class="update-title">No announcements yet</div>
+                                <div class="update-time">Check back later for updates</div>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($recentAnnouncements as $announcement): ?>
+                            <a href="<?php echo BASE_URL; ?>?page=announcements#announcement-<?php echo $announcement['announcement_id']; ?>" class="update-item">
+                                <div class="update-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="update-content">
+                                    <div class="update-title"><?php echo htmlspecialchars($announcement['title']); ?></div>
+                                    <div class="update-time"><?php echo date('M j, Y', strtotime($announcement['created_at'])); ?></div>
+                                </div>
+                            </a>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+                <div class="updates-widget-footer">
+                    <a href="<?php echo BASE_URL; ?>?page=announcements">View All Announcements →</a>
+                </div>
             </div>
-          </div>
         </div>
+    </section>
 
-        <div class="col-md-5">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body p-4">
-              <h3 class="card-title text-primary-emphasis">Barangay Hall</h3>
-              <p class="card-text"><strong>Contact:</strong> (033) 987-6543</p>
-              <p class="card-text"><strong>Email:</strong> barangaybacong@gmail.com</p>
-              <p class="card-text mt-3">
-                <a href="https://www.facebook.com/barangay.bacong.2025" target="_blank" class="btn btn-primary">Facebook</a>
-                <a href="https://www.google.com/maps/search/?api=1&query=Barangay+Bacong+Dumangas+Iloilo" target="_blank" class="btn btn-success">Google Maps</a>
-              </p>
+    <!-- CTA Section: Are you a registered resident? -->
+    <section class="cta-section" id="register-cta">
+        <div class="cta-card" data-aos="zoom-in">
+            <h2 class="cta-title">Are you a registered resident?</h2>
+            <p class="cta-text">
+                Join our digital health management system to access your health records, receive important health updates, and stay connected with Barangay Bacong Health Center.
+            </p>
+            <a href="<?php echo BASE_URL; ?>register-patient" class="btn btn-primary btn-lg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                Register Now!
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section section-light anchor-offset">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Our Mission &amp; Vision</h2>
+                <p class="section-subtitle">Committed to delivering accessible and quality healthcare services to every resident of Barangay Bacong.</p>
             </div>
-          </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="info-card h-100">
+                        <h3>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right: 8px; vertical-align: middle;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="16"></line>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                            </svg>
+                            Our Mission
+                        </h3>
+                        <p>To digitize and securely manage patient health records, streamline healthcare services, and empower Barangay Health Workers with digital tools for better community health management.</p>
+                        <h3 class="mt-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right: 8px; vertical-align: middle;">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Our Vision
+                        </h3>
+                        <p>To create a healthier community in Bacong, Dumangas by leveraging technology for efficient, reliable, and accessible health services for all residents.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="info-card h-100">
+                        <h3>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right: 8px; vertical-align: middle;">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            Barangay Information
+                        </h3>
+                        <p><strong>Barangay Name:</strong> Bacong, Dumangas</p>
+                        <p><strong>Location:</strong> Dumangas, Iloilo, Philippines</p>
+                        <p><strong>Population:</strong> 1,385+ residents</p>
+                        <p><strong>Health Center:</strong> Bacong Barangay Health Center</p>
+                        <p><strong>Contact:</strong> (033) 123-4567</p>
+                        <p><strong>Email:</strong> healthcenter@bacong.gov</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-</main>
+    <!-- Services Section -->
+    <section id="services" class="section section-alt anchor-offset">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Our Services</h2>
+                <p class="section-subtitle">Accessible, community-centered healthcare services for every resident.</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                    </div>
+                    <h5>Vaccination Programs</h5>
+                    <p>Comprehensive immunization schedules and records for infants, children, and adults.</p>
+                </div>
+                
+                <div class="service-card" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                        </svg>
+                    </div>
+                    <h5>Health Checkups</h5>
+                    <p>Routine health monitoring, blood pressure checks, and general consultations.</p>
+                </div>
+                
+                <div class="service-card" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                    </div>
+                    <h5>Maternity Care</h5>
+                    <p>Maternal health services including prenatal and postnatal care support.</p>
+                </div>
+                
+                <div class="service-card" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                        </svg>
+                    </div>
+                    <h5>Chronic Disease Management</h5>
+                    <p>Support programs for diabetes, hypertension, and other chronic conditions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section section-light anchor-offset">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Contact Us</h2>
+                <p class="section-subtitle">For inquiries or assistance, reach out to us through any of these channels.</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-5" data-aos="fade-right">
+                    <div class="info-card h-100">
+                        <h3>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right: 8px; vertical-align: middle;">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                            </svg>
+                            Bacong Health Center
+                        </h3>
+                        <p><strong>Address:</strong> Bacong, Dumangas, Iloilo</p>
+                        <p><strong>Contact:</strong> (033) 123-4567</p>
+                        <p><strong>Email:</strong> healthcenter@bacong.gov</p>
+                        <p><strong>Hours:</strong> Monday - Friday, 8AM - 5PM</p>
+                    </div>
+                </div>
+
+                <div class="col-md-5" data-aos="fade-left">
+                    <div class="info-card h-100">
+                        <h3>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right: 8px; vertical-align: middle;">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            Barangay Hall
+                        </h3>
+                        <p><strong>Contact:</strong> (033) 987-6543</p>
+                        <p><strong>Email:</strong> barangaybacong@gmail.com</p>
+                        <div class="mt-4 d-flex gap-2 flex-wrap">
+                            <a href="https://www.facebook.com/barangay.bacong.2025" target="_blank" class="btn btn-primary btn-sm">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                                Facebook
+                            </a>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Barangay+Bacong+Dumangas+Iloilo" target="_blank" class="btn btn-outline-brand btn-sm">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 <?php
 // Include the public footer
@@ -170,12 +290,11 @@ include_once __DIR__ . '/../../includes/footer_public.php';
 <script>
 // Initialize AOS with desired options for the home page
 if (typeof AOS !== 'undefined') {
-  AOS.init({ duration: 1000, once: true });
+  AOS.init({ duration: 800, once: true, offset: 100 });
 }
 
 // Smooth scroll for in-page anchors when already on the home page
 document.addEventListener('DOMContentLoaded', function () {
-  // Generic smooth scroll for anchors that point to #fragment or ?page=home#fragment
   document.querySelectorAll('a[href*="#"]').forEach(function (anchor) {
     anchor.addEventListener('click', function (e) {
       var href = anchor.getAttribute('href');
@@ -184,7 +303,6 @@ document.addEventListener('DOMContentLoaded', function () {
       var hash = parts[1] || null;
       if (!hash) return;
 
-      // If the link navigates to home with an anchor or just an anchor, handle smooth scroll when on home
       var shouldIntercept = href.indexOf('?page=home#') !== -1 || href.charAt(0) === '#' || (window.location.search.indexOf('page=home') !== -1);
 
       if (shouldIntercept) {

@@ -129,13 +129,28 @@ CREATE TABLE `health_programs` (
 -- 10. Chatbot History
 CREATE TABLE `chatbot_history` (
   `history_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `prompt_text` text NOT NULL,
   `response_text` text NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`history_id`),
   KEY `user_id_fk_chat` (`user_id`),
-  CONSTRAINT `chatbot_history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `patient_users` (`user_id`) ON DELETE CASCADE
+  CONSTRAINT `chatbot_history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `patient_users` (`user_id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 11. SMS Queue
+CREATE TABLE IF NOT EXISTS `sms_queue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `phone_number` varchar(20) NOT NULL,
+  `message` text NOT NULL,
+  `status` enum('pending','sent','failed') NOT NULL DEFAULT 'pending',
+  `attempts` int(11) NOT NULL DEFAULT 0,
+  `last_attempt` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `sent_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `status_idx` (`status`),
+  KEY `created_at_idx` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `announcements` (
