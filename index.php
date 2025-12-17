@@ -148,6 +148,7 @@ $allowedPages = [
     'admin-reports' => ['file' => $basePath . 'admin/reports.php', 'secure' => true],
     'admin-bhw-users' => ['file' => $basePath . 'admin/bhw_users.php', 'secure' => true],
     'admin-bhw-edit' => ['file' => $basePath . 'admin/bhw_edit.php', 'secure' => true],
+    'admin-user-management' => ['file' => $basePath . 'admin/user_management.php', 'secure' => 'superadmin'],
     'admin-profile' => ['file' => $basePath . 'admin/profile.php', 'secure' => true],
     'admin-account-settings' => ['file' => $basePath . 'admin/account_settings.php', 'secure' => true],
     'admin-app-settings' => ['file' => $basePath . 'admin/app_settings.php', 'secure' => 'superadmin'],
