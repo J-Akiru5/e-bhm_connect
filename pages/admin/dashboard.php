@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Re-init on theme change
-document.addEventListener('themeChanged', function() {
+document.addEventListener('themechange', function() {
     setTimeout(initCharts, 50);
 });
 
