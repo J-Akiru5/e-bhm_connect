@@ -269,6 +269,7 @@ return [
     // ========================
     'notifications' => [
         'title' => 'Mga Notification',
+        'loading' => 'Naglo-load ng mga notification...',
         'mark_read' => 'Markahan bilang Nabasa',
         'mark_all_read' => 'Markahan Lahat bilang Nabasa',
         'delete_notification' => 'Tanggalin ang Notification',

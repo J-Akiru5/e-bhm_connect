@@ -269,6 +269,7 @@ return [
     // ========================
     'notifications' => [
         'title' => 'Notifications',
+        'loading' => 'Loading notifications...',
         'mark_read' => 'Mark as Read',
         'mark_all_read' => 'Mark All as Read',
         'delete_notification' => 'Delete Notification',
