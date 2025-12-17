@@ -139,7 +139,7 @@
     }
     
     html {
-      scroll-behavior: smooth;
+      height: 100%;
 }
 
 body {
@@ -150,7 +150,8 @@ body {
       line-height: 1.6;
       color: var(--text-primary);
       background: var(--body-bg);
-    overflow-x: hidden;
+    height: 100%;
+    overflow: hidden;
     -webkit-font-smoothing: antialiased;
       transition: background-color var(--transition-base), color var(--transition-base);
 }
@@ -268,6 +269,24 @@ body {
     flex-direction: column;
     z-index: 1;
       transition: left var(--transition-base);
+    -webkit-overflow-scrolling: touch;
+}
+
+#main-content-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+#main-content-wrapper::-webkit-scrollbar-track {
+  background: var(--gray-200);
+}
+
+#main-content-wrapper::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 4px;
+}
+
+#main-content-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
 }
 
 #main-content {
@@ -275,6 +294,7 @@ body {
   padding: 24px;
   position: relative;
   z-index: 1;
+  min-height: 100%;
 }
 
 /* ============================================
