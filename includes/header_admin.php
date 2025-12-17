@@ -4,6 +4,11 @@
  * Glassmorphism Design with Dark/Light Theme Support
  */
 
+// Prevent browser caching of admin pages
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+
 // Include helpers
 require_once __DIR__ . '/auth_helpers.php';
 require_once __DIR__ . '/translation_helper.php';
