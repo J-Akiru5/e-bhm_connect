@@ -1,0 +1,287 @@
+{
+  "project_metadata": {
+    "title": "Electronic Barangay Health Management System (E-BHM Connect)",
+    "subtitle": "An Integrated ICT Solution of Barangay Health Management Access in Brgy. Bacong, Dumangas Iloilo",
+    "authors": [
+      "Jester Baculio",
+      "Rica Jel Deypalubos",
+      "Iza Marie Jamero",
+      "Adrian Japitana",
+      "Jojit Villarente"
+    ],
+    "institution": "Iloilo State University of Fisheries Science and Technology - Dumangas Campus",
+    "target_location": "Brgy. Bacong, Dumangas, Iloilo",
+    "beneficiaries": [
+      "Barangay Health Workers (BHWs)",
+      "Residents of the Barangay",
+      "Local Government Units (LGUs)",
+      "Academic Institutions"
+    ]
+  },
+  "chapter_1": {
+    "title": "Introduction",
+    "project_context": "Transitioning from manual, paper-based record-keeping to a web-based system to address inaccessibility, inadequate data treatment, and inefficient record keeping.",
+    "objectives": [
+      "Digitize and securely manage patient health records for accurate tracking.",
+      "Streamline consultations and health program reporting.",
+      "Implement automated SMS notifications for health information dissemination.",
+      "Evaluate system usability, functionality, and reliability using ISO 25010:2011."
+    ],
+    "scope": [
+      "Patient health records management (registration, consultation, diagnosis, referrals).",
+      "Health program monitoring (immunization, maternal/child health).",
+      "Medication and supply tracking.",
+      "Automated SMS notifications.",
+      "Chatbot assistant (Gabby) for inquiries."
+    ],
+    "limitations": [
+      "Piloted only in Barangay Bacong.",
+      "Requires stable internet connection (offline access is limited).",
+      "No advanced telemedicine video features."
+    ],
+    "conceptual_framework": {
+      "input": [
+        "Patient medical records",
+        "BHW data",
+        "Administrator credentials"
+      ],
+      "process": [
+        "Encoding and storing records",
+        "Disseminating health info",
+        "Generating SMS notifications"
+      ],
+      "output": [
+        "Improved data accessibility",
+        "Automated SMS notifications",
+        "Efficient household health monitoring",
+        "Digitalized record management"
+      ]
+    }
+  },
+  "chapter_3": {
+    "title": "Technical Background, Methodology and Procedures",
+    "methodology": "Rapid Application Development (RAD)",
+    "tech_stack": {
+      "frontend": ["HTML5", "CSS3", "JavaScript", "Bootstrap (for responsiveness)"],
+      "backend": "Vanilla PHP",
+      "database": "MySQL (via XAMPP)",
+      "server": "Localhost (XAMPP)",
+      "integrations": ["Simple SMS Gateway", "Weather API (mentioned in design spec)"]
+    },
+    "functional_requirements": [
+      "Cross-Device Accessibility (Desktop, Laptop, Mobile, Tablet).",
+      "Responsive Design (Adapts to different screen sizes).",
+      "User-Friendly Navigation.",
+      "Continuous Availability (24/7).",
+      "Secure Login/Authentication.",
+      "Data Validation and Integrity."
+    ],
+    "system_modules": [
+      {
+        "module_name": "Admin Dashboard",
+        "features": ["Visualize collected data", "Manage sections (Uploads, Chat Queries, Create Test)"]
+      },
+      {
+        "module_name": "Uploads Management",
+        "features": ["Add/Edit Announcements", "Manage Health FAQs"]
+      },
+      {
+        "module_name": "Chat Queries",
+        "features": ["View user queries", "Manage responses"]
+      },
+      {
+        "module_name": "Patient Portal",
+        "features": ["View medical records", "View upcoming appointments", "View health announcements"]
+      }
+    ],
+    "workflows": {
+      "hipo_structure": {
+        "interface": "Homepage, Login/Register, Forms",
+        "core_processes": "Admin notifications, SMS broadcasting, Dashboard management, Interactive forms",
+        "database_interaction": "Storing user data, health services, FAQs",
+        "output": "Customized dashboard views, Real-time notifications, Reports"
+      },
+      "user_roles": {
+        "admin": [
+          "Manage users",
+          "Manage content",
+          "Send notifications",
+          "Oversee health program data",
+          "View reports"
+        ],
+        "health_worker": [
+          "Fill out health service forms",
+          "Monitor health data on dashboard"
+        ],
+        "resident_patient": [
+          "Register/Login",
+          "View health announcements",
+          "Book appointments",
+          "Receive SMS notifications"
+        ]
+      },
+      "login_flow": "User inputs credentials -> System verifies against Database -> If success, redirect to Dashboard -> If fail, show error."
+    }
+  },
+  "chapter_4": {
+    "title": "Presentation, Analysis, and Interpretation",
+    "implemented_features": [
+      {
+        "objective": "Manage User and Administrator Accounts",
+        "functionality": "Create, retrieve, update, and delete accounts (CRUD) with secure access."
+      }
+    ],
+    "visual_assets": [
+      "Login Page (BHW Login)",
+      "Landing Page (Home, Announcements, Mission/Vision, Contact Us)"
+    ]
+  },
+  "revision_notes_from_text": {
+    "framework_conflict": "Text mentions Laravel on page 20, but Vanilla PHP on page 19. User comment on page 29 explicitly requests removal of Laravel mentions.",
+    "testing": "Blackbox testing mention removed; focus on orienting admin before start.",
+    "offline_capability": "Conflict noted in text: Methodology says offline compatible, but limitations say internet required. Needs verification."
+  }
+}{
+  "project_metadata": {
+    "title": "Electronic Barangay Health Management System (E-BHM Connect)",
+    "subtitle": "An Integrated ICT Solution of Barangay Health Management Access in Brgy. Bacong, Dumangas Iloilo",
+    "authors": [
+      "Jester Baculio",
+      "Rica Jel Deypalubos",
+      "Iza Marie Jamero",
+      "Adrian Japitana",
+      "Jojit Villarente"
+    ],
+    "institution": "Iloilo State University of Fisheries Science and Technology - Dumangas Campus",
+    "target_location": "Brgy. Bacong, Dumangas, Iloilo",
+    "beneficiaries": [
+      "Barangay Health Workers (BHWs)",
+      "Residents of the Barangay",
+      "Local Government Units (LGUs)",
+      "Academic Institutions"
+    ]
+  },
+  "chapter_1": {
+    "title": "Introduction",
+    "project_context": "Transitioning from manual, paper-based record-keeping to a web-based system to address inaccessibility, inadequate data treatment, and inefficient record keeping.",
+    "objectives": [
+      "Digitize and securely manage patient health records for accurate tracking.",
+      "Streamline consultations and health program reporting.",
+      "Implement automated SMS notifications for health information dissemination.",
+      "Evaluate system usability, functionality, and reliability using ISO 25010:2011."
+    ],
+    "scope": [
+      "Patient health records management (registration, consultation, diagnosis, referrals).",
+      "Health program monitoring (immunization, maternal/child health).",
+      "Medication and supply tracking.",
+      "Automated SMS notifications.",
+      "Chatbot assistant (Gabby) for inquiries."
+    ],
+    "limitations": [
+      "Piloted only in Barangay Bacong.",
+      "Requires stable internet connection (offline access is limited).",
+      "No advanced telemedicine video features."
+    ],
+    "conceptual_framework": {
+      "input": [
+        "Patient medical records",
+        "BHW data",
+        "Administrator credentials"
+      ],
+      "process": [
+        "Encoding and storing records",
+        "Disseminating health info",
+        "Generating SMS notifications"
+      ],
+      "output": [
+        "Improved data accessibility",
+        "Automated SMS notifications",
+        "Efficient household health monitoring",
+        "Digitalized record management"
+      ]
+    }
+  },
+  "chapter_3": {
+    "title": "Technical Background, Methodology and Procedures",
+    "methodology": "Rapid Application Development (RAD)",
+    "tech_stack": {
+      "frontend": ["HTML5", "CSS3", "JavaScript", "Bootstrap (for responsiveness)"],
+      "backend": "Vanilla PHP",
+      "database": "MySQL (via XAMPP)",
+      "server": "Localhost (XAMPP)",
+      "integrations": ["Simple SMS Gateway", "Weather API (mentioned in design spec)"]
+    },
+    "functional_requirements": [
+      "Cross-Device Accessibility (Desktop, Laptop, Mobile, Tablet).",
+      "Responsive Design (Adapts to different screen sizes).",
+      "User-Friendly Navigation.",
+      "Continuous Availability (24/7).",
+      "Secure Login/Authentication.",
+      "Data Validation and Integrity."
+    ],
+    "system_modules": [
+      {
+        "module_name": "Admin Dashboard",
+        "features": ["Visualize collected data", "Manage sections (Uploads, Chat Queries, Create Test)"]
+      },
+      {
+        "module_name": "Uploads Management",
+        "features": ["Add/Edit Announcements", "Manage Health FAQs"]
+      },
+      {
+        "module_name": "Chat Queries",
+        "features": ["View user queries", "Manage responses"]
+      },
+      {
+        "module_name": "Patient Portal",
+        "features": ["View medical records", "View upcoming appointments", "View health announcements"]
+      }
+    ],
+    "workflows": {
+      "hipo_structure": {
+        "interface": "Homepage, Login/Register, Forms",
+        "core_processes": "Admin notifications, SMS broadcasting, Dashboard management, Interactive forms",
+        "database_interaction": "Storing user data, health services, FAQs",
+        "output": "Customized dashboard views, Real-time notifications, Reports"
+      },
+      "user_roles": {
+        "admin": [
+          "Manage users",
+          "Manage content",
+          "Send notifications",
+          "Oversee health program data",
+          "View reports"
+        ],
+        "health_worker": [
+          "Fill out health service forms",
+          "Monitor health data on dashboard"
+        ],
+        "resident_patient": [
+          "Register/Login",
+          "View health announcements",
+          "Book appointments",
+          "Receive SMS notifications"
+        ]
+      },
+      "login_flow": "User inputs credentials -> System verifies against Database -> If success, redirect to Dashboard -> If fail, show error."
+    }
+  },
+  "chapter_4": {
+    "title": "Presentation, Analysis, and Interpretation",
+    "implemented_features": [
+      {
+        "objective": "Manage User and Administrator Accounts",
+        "functionality": "Create, retrieve, update, and delete accounts (CRUD) with secure access."
+      }
+    ],
+    "visual_assets": [
+      "Login Page (BHW Login)",
+      "Landing Page (Home, Announcements, Mission/Vision, Contact Us)"
+    ]
+  },
+  "revision_notes_from_text": {
+    "framework_conflict": "Text mentions Laravel on page 20, but Vanilla PHP on page 19. User comment on page 29 explicitly requests removal of Laravel mentions.",
+    "testing": "Blackbox testing mention removed; focus on orienting admin before start.",
+    "offline_capability": "Conflict noted in text: Methodology says offline compatible, but limitations say internet required. Needs verification."
+  }
+}

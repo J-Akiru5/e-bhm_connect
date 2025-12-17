@@ -4,11 +4,6 @@
  * Glassmorphism Design with Dark/Light Theme Support
  */
 
-// Prevent browser caching of admin pages
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
-
 // Include helpers
 require_once __DIR__ . '/auth_helpers.php';
 require_once __DIR__ . '/translation_helper.php';
@@ -276,17 +271,6 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                         </a>
                     </li>
                     <?php if (is_superadmin()): ?>
-                    <li>
-                        <a href="<?php echo BASE_URL; ?>admin-user-management" class="sidebar-nav-link <?php echo ($page === 'admin-user-management') ? 'active' : ''; ?>">
-                            <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                            User Management
-                        </a>
-                    </li>
                     <li>
                         <a href="<?php echo BASE_URL; ?>admin-app-settings" class="sidebar-nav-link <?php echo ($page === 'admin-app-settings') ? 'active' : ''; ?>">
                             <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
