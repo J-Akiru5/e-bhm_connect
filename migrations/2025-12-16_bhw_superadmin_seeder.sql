@@ -24,7 +24,7 @@ INSERT INTO bhw_users (
     'superadmin',
     'healthcenter.head@example.com',
     -- Default password: SuperAdmin@2025 (CHANGE IN PRODUCTION!)
-    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    '$2y$10$nY9WrJoLEYPtbxbnO/Wh7e2d.WBQdUOZ/auPwYWRT0LJzIcaXVF4G',
     'SUPERADMIN-001',
     1,
     'approved',
