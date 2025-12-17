@@ -477,7 +477,7 @@ function initCharts() {
         smsChart = new Chart(pieEl, {
             type: 'doughnut',
             data: {
-                labels: ['<?php echo __('dashboard.sms_sent'); ?>', '<?php echo __('dashboard.sms_failed'); ?>', '<?php echo __('dashboard.sms_pending'); ?>'],
+                labels: [<?php echo json_encode(__('dashboard.sms_sent')); ?>, <?php echo json_encode(__('dashboard.sms_failed')); ?>, <?php echo json_encode(__('dashboard.sms_pending')); ?>],
                 datasets: [{
                     data: [smsData.sent, smsData.failed, smsData.pending],
                     backgroundColor: ['#10b981', '#ef4444', '#64748b'],
@@ -505,7 +505,7 @@ function initCharts() {
             data: {
                 labels: months,
                 datasets: [{
-                    label: '<?php echo __('dashboard.recent_registrations'); ?>',
+                    label: <?php echo json_encode(__('dashboard.recent_registrations')); ?>,
                     data: registrations,
                     borderColor: colors.primary,
                     backgroundColor: 'rgba(32, 201, 151, 0.1)',
@@ -537,7 +537,7 @@ function initCharts() {
             data: {
                 labels: inventoryData.labels,
                 datasets: [{
-                    label: '<?php echo __('inventory.quantity'); ?>',
+                    label: <?php echo json_encode(__('inventory.quantity')); ?>,
                     data: inventoryData.quantities,
                     backgroundColor: inventoryData.colors,
                     borderRadius: 6,
@@ -576,7 +576,7 @@ function initCharts() {
             data: {
                 labels: visitsData.labels,
                 datasets: [{
-                    label: '<?php echo __('dashboard.recent_visits'); ?>',
+                    label: <?php echo json_encode(__('dashboard.recent_visits')); ?>,
                     data: visitsData.counts,
                     borderColor: colors.secondary,
                     backgroundColor: 'rgba(99, 102, 241, 0.1)',
