@@ -1,0 +1,162 @@
+{
+  "healthRecordsDashboard": {
+    "pregnancyTracking": {
+      "title": "Pregnancy Tracking Form",
+      "fields": [
+        {"name": "dateOfIdentification", "type": "date"},
+        {"name": "pregnantWomanName", "type": "string"},
+        {"name": "age", "type": "number"},
+        {"name": "birthDate", "type": "date"},
+        {"name": "husbandName", "type": "string"},
+        {"name": "phoneNumber", "type": "string"},
+        {"name": "lmp", "type": "date", "description": "Last Menstrual Period"},
+        {"name": "edc", "type": "date", "description": "Estimated Date of Confinement"},
+        {"name": "ttStatus", "type": "string", "description": "Tetanus Toxoid Status"},
+        {"name": "nhtsStatus", "type": "string", "options": ["NHTS", "Non-NHTS"]},
+        {"name": "gravidaPara", "type": "string", "description": "G-P (Gravida-Para) score"},
+        {
+          "name": "outcome",
+          "type": "group",
+          "fields": [
+            {"name": "dateOfDelivery", "type": "date"},
+            {"name": "placeOfDelivery", "type": "string"},
+            {"name": "typeOfDelivery", "type": "string"},
+            {"name": "outcomeOfBirth", "type": "string"}
+          ]
+        },
+        {"name": "remarks", "type": "text"}
+      ]
+    },
+    "childCareFemale12to59Months": {
+      "title": "Record for 12-59 Months (Female)",
+      "fields": [
+        {"name": "recordNumber", "type": "number"},
+        {"name": "childName", "type": "string"},
+        {"name": "age", "type": "number"},
+        {"name": "dateOfBirth", "type": "date"},
+        {"name": "sex", "type": "string", "value": "Female"},
+        {"name": "vitaminA_200k_IU", "type": "string", "description": "Date given"},
+        {"name": "albendazole_400mg", "type": "string", "description": "Date given"}
+      ]
+    },
+    "natalityRecord": {
+      "title": "Natality (Birth) Record",
+      "fields": [
+        {"name": "dateOfBirth", "type": "date"},
+        {"name": "babyCompleteName", "type": "string"},
+        {"name": "sex", "type": "string", "options": ["M", "F"]},
+        {"name": "weight", "type": "number"},
+        {"name": "timeOfBirth", "type": "time"},
+        {"name": "deliveryType", "type": "string", "options": ["CS", "Normal"]},
+        {"name": "placeOfDelivery", "type": "string"},
+        {"name": "motherCompleteName", "type": "string"},
+        {"name": "motherAge", "type": "number"},
+        {"name": "bhwInCharge", "type": "string", "description": "Barangay Health Worker in Charge"}
+      ]
+    },
+    "mortalityRecord": {
+      "title": "Mortality (Death) Record",
+      "fields": [
+        {"name": "recordNumber", "type": "number"},
+        {"name": "dateOfDeath", "type": "date"},
+        {"name": "deceasedCompleteName", "type": "string"},
+        {"name": "age", "type": "number"},
+        {"name": "sex", "type": "string", "options": ["M", "F"]},
+        {"name": "placeOfDeath", "type": "string"},
+        {"name": "causeOfDeath", "type": "string"},
+        {"name": "bhwInCharge", "type": "string"}
+      ]
+    },
+    "hypertensiveDiabeticMasterlist": {
+      "title": "Masterlist of Hypertensive and Diabetic Patients",
+      "fields": [
+        {"name": "recordNumber", "type": "number"},
+        {"name": "nhtsMember", "type": "boolean"},
+        {"name": "dateOfEnrollment", "type": "date"},
+        {"name": "lastName", "type": "string"},
+        {"name": "firstName", "type": "string"},
+        {"name": "middleName", "type": "string"},
+        {"name": "sex", "type": "string", "options": ["M", "F"]},
+        {"name": "age", "type": "number"},
+        {"name": "dateOfBirth", "type": "date"},
+        {"name": "philhealthNo", "type": "string"},
+        {"name": "isHypertensive", "type": "boolean"},
+        {"name": "isDiabetic", "type": "boolean"},
+        {"name": "typeOfTest", "type": "string", "options": ["FBS", "HbA1c", "OGTT", "RBS"]},
+        {"name": "bloodSugarLevel", "type": "number"},
+        {
+          "name": "medicationsTaken",
+          "type": "group",
+          "fields": [
+            {"name": "amlo5", "type": "boolean"},
+            {"name": "amlo10", "type": "boolean"},
+            {"name": "losartan50", "type": "boolean"},
+            {"name": "losartan100", "type": "boolean"},
+            {"name": "metoprolol", "type": "boolean"},
+            {"name": "simvastatin", "type": "boolean"},
+            {"name": "metformin", "type": "boolean"},
+            {"name": "gliclazide", "type": "boolean"},
+            {"name": "insulin", "type": "boolean"}
+          ]
+        },
+        {"name": "remarks", "type": "text"}
+      ]
+    },
+    "ntpClientMonitoring": {
+      "title": "NTP (Tuberculosis Program) Client Monitoring Record",
+      "fields": [
+        {"name": "dateTxStarted", "type": "date"},
+        {"name": "patientCompleteName", "type": "string"},
+        {"name": "age", "type": "number"},
+        {"name": "sex", "type": "string", "options": ["M", "F"]},
+        {"name": "barangayAddress", "type": "string"},
+        {"name": "bhwInCharge", "type": "string"},
+        {"name": "tbCaseNo", "type": "string"},
+        {"name": "dateExamBeforeTx", "type": "date"},
+        {"name": "registrationType", "type": "string", "options": ["New", "Relapsed"]},
+        {"name": "weight", "type": "number"},
+        {
+          "name": "weighingSchedule",
+          "type": "group",
+          "fields": [
+            {"name": "month1", "type": "number"},
+            {"name": "month2", "type": "number"},
+            {"name": "month3", "type": "number"},
+            {"name": "month4", "type": "number"},
+            {"name": "month5", "type": "number"},
+            {"name": "month6", "type": "number"}
+          ]
+        },
+        {"name": "diseaseClassification", "type": "string"},
+        {"name": "endOfTreatment", "type": "string"},
+        {"name": "outcome", "type": "string"}
+      ]
+    },
+    "wraTracking": {
+      "title": "Women of Reproductive Age (WRA) Tracking Tool",
+      "fields": [
+        {"name": "name", "type": "string"},
+        {"name": "isNhts", "type": "boolean"},
+        {"name": "age", "type": "number"},
+        {"name": "birthdate", "type": "date"},
+        {"name": "completeAddress", "type": "string"},
+        {"name": "contactNumber", "type": "string"},
+        {
+          "name": "monthlyStatus",
+          "type": "group",
+          "fields": [
+            {"name": "jan", "type": "string"}, {"name": "feb", "type": "string"},
+            {"name": "mar", "type": "string"}, {"name": "apr", "type": "string"},
+            {"name": "may", "type": "string"}, {"name": "jun", "type": "string"},
+            {"name": "jul", "type": "string"}, {"name": "aug", "type": "string"},
+            {"name": "sep", "type": "string"}, {"name": "oct", "type": "string"},
+            {"name": "nov", "type": "string"}, {"name": "dec", "type": "string"}
+          ]
+        },
+        {"name": "remarks", "type": "text"},
+        {"name": "familyPlanningMethod", "type": "string"},
+        {"name": "healthPersonnelAssigned", "type": "string"}
+      ]
+    }
+  }
+}

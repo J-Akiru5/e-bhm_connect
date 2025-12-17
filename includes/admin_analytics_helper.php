@@ -2,13 +2,13 @@
 /**
  * Admin analytics helper
  *
- * Provides a single function fetch_dashboard_data($pdo) that returns
- * an array with metrics used by the admin dashboard.
+ * Provides dashboard data functions for the admin dashboard.
  *
- * - total_patients: int
- * - total_bhws: int
- * - sms_stats: array (keys: sent, failed, pending)
- * - recent_registrations: array of ['month' => 'Mon YYYY', 'count' => int] for the last 6 months
+ * Functions:
+ * - fetch_dashboard_data($pdo): Main dashboard statistics
+ * - get_inventory_chart_data($pdo): Medicine inventory for bar chart
+ * - get_recent_visits($pdo, $limit): Recent patient visits
+ * - get_recent_audit_logs($pdo, $limit): Recent audit log entries
  */
 
 if (!function_exists('fetch_dashboard_data')) {
@@ -140,6 +140,184 @@ if (!function_exists('fetch_dashboard_data')) {
             return $result;
         }
 
+        return $result;
+    }
+}
+
+/**
+ * Get inventory data for bar chart
+ * Returns top items by quantity with their stock levels
+ */
+if (!function_exists('get_inventory_chart_data')) {
+    function get_inventory_chart_data($pdo, $limit = 10)
+    {
+        $result = [
+            'labels' => [],
+            'quantities' => [],
+            'alert_levels' => [],
+            'colors' => [],
+        ];
+        
+        try {
+            $stmt = $pdo->prepare("
+                SELECT 
+                    item_name,
+                    quantity_in_stock,
+                    COALESCE(stock_alert_limit, 10) as alert_limit
+                FROM medication_inventory
+                ORDER BY quantity_in_stock ASC
+                LIMIT ?
+            ");
+            $stmt->execute([$limit]);
+            $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            foreach ($items as $item) {
+                $result['labels'][] = $item['item_name'];
+                $result['quantities'][] = (int)$item['quantity_in_stock'];
+                $result['alert_levels'][] = (int)$item['alert_limit'];
+                
+                // Color based on stock level
+                $qty = (int)$item['quantity_in_stock'];
+                $alert = (int)$item['alert_limit'];
+                if ($qty <= $alert) {
+                    $result['colors'][] = 'rgba(239, 68, 68, 0.8)'; // Red - low stock
+                } elseif ($qty <= $alert * 2) {
+                    $result['colors'][] = 'rgba(245, 158, 11, 0.8)'; // Yellow - warning
+                } else {
+                    $result['colors'][] = 'rgba(32, 201, 151, 0.8)'; // Green - good
+                }
+            }
+        } catch (Exception $e) {
+            error_log('[get_inventory_chart_data] ' . $e->getMessage());
+        }
+        
+        return $result;
+    }
+}
+
+/**
+ * Get recent patient visits
+ */
+if (!function_exists('get_recent_visits')) {
+    function get_recent_visits($pdo, $limit = 10)
+    {
+        $visits = [];
+        
+        try {
+            $stmt = $pdo->prepare("
+                SELECT 
+                    hv.visit_id,
+                    hv.visit_date,
+                    hv.visit_type,
+                    hv.notes,
+                    hv.created_at,
+                    CONCAT(p.first_name, ' ', p.last_name) as patient_name,
+                    p.patient_id,
+                    CONCAT(b.first_name, ' ', b.last_name) as bhw_name
+                FROM health_visits hv
+                LEFT JOIN patients p ON hv.patient_id = p.patient_id
+                LEFT JOIN bhw_users b ON hv.bhw_id = b.bhw_id
+                ORDER BY hv.created_at DESC
+                LIMIT ?
+            ");
+            $stmt->execute([$limit]);
+            $visits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log('[get_recent_visits] ' . $e->getMessage());
+        }
+        
+        return $visits;
+    }
+}
+
+/**
+ * Get recent audit logs for dashboard
+ */
+if (!function_exists('get_recent_audit_logs')) {
+    function get_recent_audit_logs($pdo, $limit = 10)
+    {
+        $logs = [];
+        
+        try {
+            $stmt = $pdo->prepare("
+                SELECT 
+                    al.log_id,
+                    al.action,
+                    al.entity_type,
+                    al.entity_id,
+                    al.details,
+                    al.created_at,
+                    al.user_type,
+                    CASE 
+                        WHEN al.user_type = 'bhw' THEN CONCAT(b.first_name, ' ', b.last_name)
+                        WHEN al.user_type = 'patient' THEN CONCAT(p.first_name, ' ', p.last_name)
+                        ELSE 'System'
+                    END as user_name
+                FROM audit_logs al
+                LEFT JOIN bhw_users b ON al.user_type = 'bhw' AND al.user_id = b.bhw_id
+                LEFT JOIN patients p ON al.user_type = 'patient' AND al.user_id = p.patient_id
+                ORDER BY al.created_at DESC
+                LIMIT ?
+            ");
+            $stmt->execute([$limit]);
+            $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            // Table might not exist yet
+            error_log('[get_recent_audit_logs] ' . $e->getMessage());
+        }
+        
+        return $logs;
+    }
+}
+
+/**
+ * Get visits per month for chart
+ */
+if (!function_exists('get_visits_chart_data')) {
+    function get_visits_chart_data($pdo)
+    {
+        $result = [
+            'labels' => [],
+            'counts' => [],
+        ];
+        
+        try {
+            $months = [];
+            $now = new DateTimeImmutable('now');
+            for ($i = 5; $i >= 0; $i--) {
+                $m = $now->modify("-{$i} months");
+                $key = $m->format('Y-m');
+                $months[$key] = [
+                    'label' => $m->format('M Y'),
+                    'count' => 0,
+                ];
+            }
+            
+            $stmt = $pdo->prepare("
+                SELECT DATE_FORMAT(visit_date, '%Y-%m') AS ym, COUNT(*) AS count
+                FROM health_visits
+                WHERE visit_date >= DATE_SUB(CURDATE(), INTERVAL 5 MONTH)
+                GROUP BY ym
+                ORDER BY ym ASC
+            ");
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            foreach ($rows as $r) {
+                $ym = $r['ym'] ?? null;
+                if ($ym !== null && isset($months[$ym])) {
+                    $months[$ym]['count'] = (int)$r['count'];
+                }
+            }
+            
+            foreach ($months as $data) {
+                $result['labels'][] = $data['label'];
+                $result['counts'][] = $data['count'];
+            }
+        } catch (Exception $e) {
+            error_log('[get_visits_chart_data] ' . $e->getMessage());
+        }
+        
         return $result;
     }
 }

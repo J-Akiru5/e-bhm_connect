@@ -180,8 +180,8 @@ a:hover {
   z-index: 1000;
   padding: var(--space-4) 0;
   background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--glass-border);
   transition: all var(--transition-base);
 }
@@ -326,8 +326,8 @@ a:hover {
   
   .btn-glass {
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
     color: var(--white);
   }
@@ -467,8 +467,8 @@ a:hover {
     gap: var(--space-2);
     padding: var(--space-2) var(--space-4);
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-full);
     color: var(--primary);
@@ -530,8 +530,8 @@ a:hover {
   /* ---------------------- GLASS CARDS ---------------------- */
   .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-2xl);
     padding: var(--space-6);
@@ -546,8 +546,8 @@ a:hover {
   
   .glass-card-light {
     background: var(--glass-bg-light);
-    backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border-light);
     border-radius: var(--radius-2xl);
     padding: var(--space-6);
@@ -563,8 +563,8 @@ a:hover {
   /* ---------------------- UPDATES WIDGET ---------------------- */
   .updates-widget {
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-2xl);
     overflow: hidden;
@@ -691,8 +691,8 @@ a:hover {
     max-width: 600px;
     margin: 0 auto;
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-2xl);
     padding: var(--space-10);
@@ -1016,8 +1016,8 @@ a:hover {
     width: 100%;
     max-width: 440px;
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-2xl);
     padding: var(--space-10);
@@ -1267,8 +1267,8 @@ a:hover {
       left: 0;
       right: 0;
       background: rgba(15, 23, 42, 0.98);
-      backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: var(--glass-blur);
       padding: var(--space-4);
       border-top: 1px solid var(--glass-border);
     }

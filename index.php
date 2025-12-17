@@ -55,12 +55,16 @@ if (isset($_GET['action'])) {
         'send-broadcast' => $actionPath . 'sms_actions.php',
         'resend-sms' => $actionPath . 'sms_actions.php',
 
+        // Email verification
+        'verify-bhw-email' => $actionPath . 'verify_bhw_email.php',
+
         // Reports
         'report-patient-list' => $actionPath . 'report_patient_list.php',
         'report-inventory-stock' => $actionPath . 'report_inventory.php',
         'report-chronic-disease' => $actionPath . 'report_chronic.php',
         'report-my-record' => $actionPath . 'report_my_record.php',
         'report-bhw-record' => $actionPath . 'report_bhw_record.php',
+        'report-health-records' => $actionPath . 'report_health_records.php',
 
         // Patient portal auth/actions
         'register-patient' => $actionPath . 'register_patient_action.php',
@@ -74,6 +78,26 @@ if (isset($_GET['action'])) {
 
         // Dashboard/chart data
         'get-chart-data' => $actionPath . 'chart_data.php',
+        
+        // Preferences and notifications
+        'save-preferences' => $actionPath . 'save_preferences.php',
+        'notification-api' => $actionPath . 'notification_api.php',
+
+        // Health Records Actions
+        'save-pregnancy-tracking' => $actionPath . 'health_records_save.php',
+        'delete-pregnancy-tracking' => $actionPath . 'health_records_delete.php',
+        'save-childcare-record' => $actionPath . 'health_records_save.php',
+        'delete-childcare-record' => $actionPath . 'health_records_delete.php',
+        'save-natality-record' => $actionPath . 'health_records_save.php',
+        'delete-natality-record' => $actionPath . 'health_records_delete.php',
+        'save-mortality-record' => $actionPath . 'health_records_save.php',
+        'delete-mortality-record' => $actionPath . 'health_records_delete.php',
+        'save-chronic-disease' => $actionPath . 'health_records_save.php',
+        'delete-chronic-disease' => $actionPath . 'health_records_delete.php',
+        'save-ntp-client' => $actionPath . 'health_records_save.php',
+        'delete-ntp-client' => $actionPath . 'health_records_delete.php',
+        'save-wra-tracking' => $actionPath . 'health_records_save.php',
+        'delete-wra-tracking' => $actionPath . 'health_records_delete.php',
     ];
 
     if (array_key_exists($action, $allowedActions) && file_exists($allowedActions[$action])) {
@@ -97,6 +121,9 @@ $allowedPages = [
     'contact' => ['file' => $basePath . 'public/contact.php', 'secure' => false],
     'mission-vision' => ['file' => $basePath . 'public/mission_vision.php', 'secure' => false],
     'announcements' => ['file' => $basePath . 'public/announcements.php', 'secure' => false],
+    'about' => ['file' => $basePath . 'public/about.php', 'secure' => false],
+    'privacy' => ['file' => $basePath . 'public/privacy.php', 'secure' => false],
+    'help' => ['file' => $basePath . 'public/help.php', 'secure' => false],
 
     // Login/Register
     'login-bhw' => ['file' => $basePath . 'login_bhw.php', 'secure' => false],
@@ -122,6 +149,19 @@ $allowedPages = [
     'admin-bhw-users' => ['file' => $basePath . 'admin/bhw_users.php', 'secure' => true],
     'admin-bhw-edit' => ['file' => $basePath . 'admin/bhw_edit.php', 'secure' => true],
     'admin-profile' => ['file' => $basePath . 'admin/profile.php', 'secure' => true],
+    'admin-account-settings' => ['file' => $basePath . 'admin/account_settings.php', 'secure' => true],
+    'admin-app-settings' => ['file' => $basePath . 'admin/app_settings.php', 'secure' => 'superadmin'],
+    'admin-audit-logs' => ['file' => $basePath . 'admin/audit_logs.php', 'secure' => 'admin'],
+
+    // Health Records Module
+    'admin-health-records' => ['file' => $basePath . 'admin/health_records/index.php', 'secure' => true],
+    'admin-health-records-pregnancy' => ['file' => $basePath . 'admin/health_records/pregnancy_tracking.php', 'secure' => true],
+    'admin-health-records-childcare' => ['file' => $basePath . 'admin/health_records/child_care.php', 'secure' => true],
+    'admin-health-records-natality' => ['file' => $basePath . 'admin/health_records/natality.php', 'secure' => true],
+    'admin-health-records-mortality' => ['file' => $basePath . 'admin/health_records/mortality.php', 'secure' => true],
+    'admin-health-records-chronic' => ['file' => $basePath . 'admin/health_records/chronic_diseases.php', 'secure' => true],
+    'admin-health-records-ntp' => ['file' => $basePath . 'admin/health_records/ntp_monitoring.php', 'secure' => true],
+    'admin-health-records-wra' => ['file' => $basePath . 'admin/health_records/wra_tracking.php', 'secure' => true],
 
     // Patient Portal
     'portal-dashboard' => ['file' => $basePath . 'portal/portal_dashboard.php', 'secure' => 'patient'], // Example for patient auth
@@ -142,6 +182,36 @@ if (array_key_exists($page, $allowedPages)) {
         $_SESSION['login_error'] = 'You must be logged in to access this page.';
         header('Location: ' . BASE_URL . 'login-bhw');
         exit();
+    }
+    
+    // **Admin-only guard (requires admin or superadmin role)**
+    if ($pageData['secure'] === 'admin') {
+        if (!isset($_SESSION['bhw_id'])) {
+            $_SESSION['login_error'] = 'You must be logged in to access this page.';
+            header('Location: ' . BASE_URL . 'login-bhw');
+            exit();
+        }
+        $userRole = $_SESSION['bhw_role'] ?? 'bhw';
+        if (!in_array($userRole, ['admin', 'superadmin'])) {
+            $_SESSION['login_error'] = 'You do not have permission to access this page.';
+            header('Location: ' . BASE_URL . 'admin-dashboard');
+            exit();
+        }
+    }
+    
+    // **Superadmin-only guard**
+    if ($pageData['secure'] === 'superadmin') {
+        if (!isset($_SESSION['bhw_id'])) {
+            $_SESSION['login_error'] = 'You must be logged in to access this page.';
+            header('Location: ' . BASE_URL . 'login-bhw');
+            exit();
+        }
+        $userRole = $_SESSION['bhw_role'] ?? 'bhw';
+        if ($userRole !== 'superadmin') {
+            $_SESSION['login_error'] = 'Only Super Administrators can access this page.';
+            header('Location: ' . BASE_URL . 'admin-dashboard');
+            exit();
+        }
     }
     
     // **This is our new 'Patient' guard**
