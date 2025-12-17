@@ -223,8 +223,11 @@
     <div id="chat-window">
         <div id="chat-resize-handle"></div>
         <div id="chat-header">
-            E-BHM Connect ("Gabby")
-            <span id="chat-close">X</span>
+            <div class="chat-title">
+                <img src="<?php echo BASE_URL; ?>assets/images/gabby_avatar.png" alt="Gabby" style="width:32px;height:32px;border-radius:8px;border:2px solid rgba(255,255,255,0.12);" />
+                <div>Gabby — E-BHM Connect</div>
+            </div>
+            <span id="chat-close">✕</span>
         </div>
         <div id="chat-messages">
             <div class="chat-message bot">

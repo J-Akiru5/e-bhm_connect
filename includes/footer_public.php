@@ -75,7 +75,7 @@
     <div id="chat-window">
         <div id="chat-resize-handle"></div>
         <div id="chat-header">
-            <div style="display:flex;align-items:center;gap:.5rem;justify-content:center;">
+            <div class="chat-title">
                 <img src="<?php echo BASE_URL; ?>assets/images/gabby_avatar.png" alt="Gabby" style="width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,0.12);" />
                 <div>Gabby — E-BHM Connect</div>
             </div>

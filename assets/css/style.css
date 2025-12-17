@@ -716,6 +716,7 @@ a:hover {
   
   .section-light {
     background: var(--white);
+    color: var(--dark);
   }
   
   .section-dark {
@@ -739,8 +740,23 @@ a:hover {
   
   .section-subtitle {
     font-size: var(--font-size-lg);
-    color: var(--gray-500);
-}
+    color: var(--gray-700);
+    }
+    
+    /* Improve contrast for info cards on light sections */
+    .section-light .info-card {
+      background: var(--white);
+      color: var(--gray-700);
+      border: 1px solid rgba(30, 41, 59, 0.04);
+    }
+    
+    .section-light .info-card p {
+      color: var(--gray-700);
+    }
+    
+    .section-light .info-card h3 {
+      color: var(--primary-dark);
+    }
 
 .container {
   max-width: 1280px;
@@ -832,6 +848,13 @@ a:hover {
   
   .info-card p strong {
     color: var(--gray-700);
+  }
+
+  /* Ensure high contrast text on light sections (homepage) */
+  .section-light .section-subtitle,
+  .section-light p,
+  .section-light .info-card p {
+    color: var(--dark);
   }
   
   /* ---------------------- ANNOUNCEMENTS ---------------------- */
