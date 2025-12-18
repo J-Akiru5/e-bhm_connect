@@ -101,6 +101,12 @@
             btn.classList.toggle('active', btnTheme === currentTheme);
         });
 
+        // Update new premium toggle buttons
+        document.querySelectorAll('[data-theme-val]').forEach(btn => {
+            const btnTheme = btn.getAttribute('data-theme-val');
+            btn.classList.toggle('active', btnTheme === currentTheme);
+        });
+
         // Update icons in toggle buttons
         const effectiveTheme = getEffectiveTheme(currentTheme);
         document.querySelectorAll('[data-theme-icon]').forEach(icon => {
@@ -215,7 +221,7 @@
             });
         });
 
-        // Specific theme toggle buttons
+        // Specific theme toggle buttons (legacy)
         document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -223,6 +229,25 @@
                 setTheme(theme);
             });
         });
+
+        // New premium theme toggle buttons
+        document.querySelectorAll('[data-theme-val]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent bubbling to wrapper
+                const theme = btn.getAttribute('data-theme-val');
+                setTheme(theme);
+            });
+        });
+
+        // Theme switch wrapper (toggle on click)
+        const themeWrapper = document.getElementById('themeToggle');
+        if (themeWrapper) {
+            themeWrapper.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleTheme();
+            });
+        }
     }
 
     // Apply theme immediately (before DOM ready) to prevent flash

@@ -10,7 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
-
+require_once __DIR__ . '/../includes/auth_helpers.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . BASE_URL . 'admin-profile');
     exit();
@@ -44,6 +44,7 @@ try {
     $update = $pdo->prepare('UPDATE bhw_users SET password_hash = :password_hash WHERE bhw_id = :bhw_id');
     $update->execute([':password_hash' => $new_password_hash, ':bhw_id' => $bhw_id]);
 
+    log_audit('change_password', 'bhw', $bhw_id);
     $_SESSION['form_success'] = 'Password changed successfully.';
     header('Location: ' . BASE_URL . 'admin-profile');
     exit();

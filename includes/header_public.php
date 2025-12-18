@@ -22,6 +22,11 @@
     
     <!-- Custom Glassmorphism Styles -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
+
+    <!-- Driver.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+    <!-- Driver.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
 </head>
 <body class="dark-theme">
 
@@ -42,8 +47,19 @@
             </ul>
             
             <div class="nav-actions">
-                <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-glass btn-sm">Resident Portal</a>
-                <a href="<?php echo BASE_URL; ?>login-bhw" class="btn btn-primary btn-sm">BHW Login</a>
+                <!-- Check for Patient Session -->
+                <?php if (isset($_SESSION['patient_id'])): ?>
+                    <a href="<?php echo BASE_URL; ?>?page=portal-dashboard" class="btn btn-glass btn-sm">My Portal</a>
+                <?php else: ?>
+                    <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-glass btn-sm">Resident Portal</a>
+                <?php endif; ?>
+
+                <!-- Check for BHW Session -->
+                <?php if (isset($_SESSION['bhw_id'])): ?>
+                    <a href="<?php echo BASE_URL; ?>?page=admin-dashboard" class="btn btn-primary btn-sm">Dashboard</a>
+                <?php else: ?>
+                    <a href="<?php echo BASE_URL; ?>login-bhw" class="btn btn-primary btn-sm">BHW Login</a>
+                <?php endif; ?>
             </div>
             
             <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation">

@@ -9,13 +9,17 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
-
+require_once __DIR__ . '/../includes/security_helper.php';
+require_once __DIR__ . '/../includes/auth_helpers.php';
 
 // Router bootstraps session, $pdo and BASE_URL
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . BASE_URL . 'admin-programs');
     exit();
 }
+
+// Validate CSRF token
+require_csrf();
 
 $program_name = isset($_POST['program_name']) ? trim($_POST['program_name']) : '';
 $description = isset($_POST['description']) ? trim($_POST['description']) : '';
@@ -32,6 +36,8 @@ try {
         ':end_date' => $end_date,
         ':status' => $status
     ]);
+    $newId = $pdo->lastInsertId();
+    log_audit('create_program', 'program', (int)$newId, ['name' => $program_name]);
 
     $_SESSION['form_success'] = 'Program saved.';
 } catch (Throwable $e) {

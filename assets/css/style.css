@@ -849,13 +849,12 @@ a:hover {
   .info-card p strong {
     color: var(--gray-700);
   }
-
-  /* Ensure high contrast text on light sections (homepage) */
-  .section-light .section-subtitle,
-  .section-light p,
-  .section-light .info-card p {
-    color: var(--dark);
-  }
+    /* Ensure high contrast text on light sections (homepage) */
+    .section-light .section-subtitle,
+    .section-light p,
+    .section-light .info-card p {
+      color: var(--dark);
+    }
   
   /* ---------------------- ANNOUNCEMENTS ---------------------- */
   .announcements-grid {

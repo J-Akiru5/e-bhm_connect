@@ -63,7 +63,22 @@ if (isset($_GET['id'])) {
         <a href="<?php echo BASE_URL; ?>admin-patients" class="btn btn-secondary">Back to Patients</a>
     </div>
 
-    <form method="post" action="?action=save-patient">
+    <?php if (isset($_SESSION['form_success'])): ?>
+        <div class="alert alert-success">
+            <?php echo htmlspecialchars($_SESSION['form_success']);
+            unset($_SESSION['form_success']); ?>
+        </div>
+    <?php endif; ?>
+    
+    <?php if (isset($_SESSION['form_error'])): ?>
+        <div class="alert alert-danger">
+            <?php echo htmlspecialchars($_SESSION['form_error']);
+            unset($_SESSION['form_error']); ?>
+        </div>
+    <?php endif; ?>
+    
+    <form method="post" action="<?php echo BASE_URL; ?>?action=save-patient">
+        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
         <input type="hidden" name="patient_id" value="<?php echo htmlspecialchars($patient_id); ?>">
 
         <div class="card mb-3">

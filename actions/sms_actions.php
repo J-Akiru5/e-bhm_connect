@@ -83,6 +83,13 @@ try {
                 exit();
             }
 
+            // Check if gateway is configured before doing anything
+            if (!defined('GATEWAY_URL') || GATEWAY_URL === '') {
+                $_SESSION['sms_error'] = 'SMS Gateway is not configured. Please configure GATEWAY_URL in your settings before sending messages.';
+                header('Location: ' . BASE_URL . 'admin-messages');
+                exit();
+            }
+
             $message = isset($_POST['message']) ? trim($_POST['message']) : '';
             if ($message === '') {
                 $_SESSION['sms_error'] = 'Message body cannot be empty.';
@@ -95,6 +102,12 @@ try {
             $stmt->execute();
             $contacts = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
+            if (count($contacts) === 0) {
+                $_SESSION['sms_error'] = 'No patients with contact numbers found.';
+                header('Location: ' . BASE_URL . 'admin-messages');
+                exit();
+            }
+
             $inserted = 0;
             $ins = $pdo->prepare("INSERT INTO sms_queue (phone_number, message, status, created_at) VALUES (:phone, :message, 'pending', NOW())");
             foreach ($contacts as $c) {
@@ -106,7 +119,14 @@ try {
             // Process immediately
             $result = process_batch_sms($pdo);
 
-            $_SESSION['sms_success'] = "Queued {$inserted} messages. Sent: {$result['sent']}, Failed: {$result['failed']}";
+            // Provide accurate feedback
+            if ($result['sent'] === 0 && $result['failed'] > 0) {
+                $_SESSION['sms_error'] = "Messages queued but sending failed ({$result['failed']} failed). Please check your SMS gateway configuration.";
+            } elseif ($result['sent'] === 0 && $result['failed'] === 0) {
+                $_SESSION['sms_error'] = "No messages were sent. Gateway may not be responding.";
+            } else {
+                $_SESSION['sms_success'] = "Sent {$result['sent']} messages successfully." . ($result['failed'] > 0 ? " Failed: {$result['failed']}" : "");
+            }
             header('Location: ' . BASE_URL . 'admin-messages');
             exit();
             break;

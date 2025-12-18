@@ -1,141 +1,383 @@
 <?php
-// About E-BHM Connect
+// About E-BHM Connect - Modernized
 include_once __DIR__ . '/../../includes/header_public.php';
 ?>
+
+<?php
+// Fetch Dynamic Stats
+$stats = [
+    'residents' => 0,
+    'health_workers' => 0,
+    'programs' => 0
+];
+
+try {
+    // Count Residents (Patients)
+    $stmt = $pdo->query("SELECT COUNT(*) FROM patients");
+    $stats['residents'] = $stmt->fetchColumn();
+
+    // Count Health Workers (BHWs)
+    $stmt = $pdo->query("SELECT COUNT(*) FROM bhw_users WHERE role IN ('admin', 'bhw', 'superadmin')");
+    $stats['health_workers'] = $stmt->fetchColumn();
+
+    // Count Active Programs
+    $stmt = $pdo->query("SELECT COUNT(*) FROM health_programs WHERE status = 'Active'");
+    $stats['programs'] = $stmt->fetchColumn();
+
+} catch (Exception $e) {
+    error_log("Error fetching stats: " . $e->getMessage());
+}
+?>
+
 <style>
-.glass-card { background: rgba(255, 255, 255, 0.08); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); padding: 32px; margin-bottom: 24px; }
-.page-header { text-align: center; margin-bottom: 48px; }
-.page-title { font-size: 2.5rem; font-weight: 700; color: #ffffff; margin-bottom: 12px; }
-.page-subtitle { color: rgba(255, 255, 255, 0.6); font-size: 1.125rem; }
-.content-section { margin-bottom: 32px; }
-.content-section h2 { font-size: 1.75rem; font-weight: 600; color: #20c997; margin-bottom: 16px; }
-.content-section p { color: rgba(255, 255, 255, 0.8); line-height: 1.8; font-size: 1rem; }
-.feature-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 20px; margin-top: 24px; }
-@media (min-width: 768px) { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .feature-grid { grid-template-columns: repeat(3, 1fr); } }
-.feature-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 24px; text-align: center; transition: all 0.25s ease; }
-.feature-card:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.08); }
-.feature-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 16px; }
-.feature-icon.primary { background: rgba(32, 201, 151, 0.2); color: #20c997; }
-.feature-icon.info { background: rgba(99, 102, 241, 0.2); color: #6366f1; }
-.feature-icon.warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-.feature-title { font-size: 1.125rem; font-weight: 600; color: #ffffff; margin-bottom: 8px; }
-.feature-description { color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; line-height: 1.5; }
+/* Immersive Hero & Dark Theme Adaptation */
+.about-hero {
+    position: relative;
+    padding: 140px 0 80px;
+    background: linear-gradient(135deg, rgba(32, 201, 151, 0.95), rgba(13, 110, 81, 0.95)), 
+                url('<?php echo BASE_URL; ?>assets/images/hero_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    margin-bottom: -40px;
+    z-index: 1;
+}
+
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 50%;
+    height: 200%;
+    background: rgba(255,255,255,0.05);
+    transform: rotate(15deg);
+    pointer-events: none;
+}
+
+.about-content {
+    background: var(--dark);
+    position: relative;
+    z-index: 2;
+    padding-bottom: var(--space-20);
+}
+
+.about-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50px;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(4px);
+    border: none;
+}
+
+.about-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: white;
+    letter-spacing: -0.02em;
+}
+
+.about-subtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Glass Cards */
+.glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-color: rgba(32, 201, 151, 0.2);
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.card-text {
+    color: var(--gray-400);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+/* Feature Grid */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.feature-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    background: rgba(32, 201, 151, 0.05);
+    border-color: rgba(32, 201, 151, 0.2);
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--primary);
+}
+
+.feature-item h4 {
+    color: white;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.feature-item p {
+    color: var(--gray-500);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Stats Strip */
+.stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin: 4rem 0;
+    padding: 2rem;
+    background: rgba(32, 201, 151, 0.05);
+    border: 1px solid rgba(32, 201, 151, 0.1);
+    border-radius: var(--radius-xl);
+}
+
+.stat-box {
+    text-align: center;
+}
+
+.stat-num {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-desc {
+    color: var(--primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@media (max-width: 992px) {
+    .stats-strip { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .about-title { font-size: 2.5rem; }
+    .stats-strip { grid-template-columns: 1fr; gap: 1.5rem; }
+}
 </style>
 
-<div class="container" style="padding: 48px 24px; max-width: 1200px; margin: 0 auto;">
-    <div class="page-header">
-        <h1 class="page-title">About E-BHM Connect</h1>
-        <p class="page-subtitle">Empowering Community Health Through Technology</p>
+<!-- Immersive Hero -->
+<section class="about-hero">
+    <!-- Animated Orbs -->
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    
+    <div class="container position-relative z-2 text-center">
+        <div class="about-badge" data-aos="fade-down">
+            <i class="fas fa-info-circle"></i> About Us
+        </div>
+        <h1 class="about-title" data-aos="fade-up" data-aos-delay="100">
+            E-BHM Connect
+        </h1>
+        <p class="about-subtitle" data-aos="fade-up" data-aos-delay="200">
+            Revolutionizing community healthcare with a modern, secure, and accessible digital management system for Barangay Bacong.
+        </p>
     </div>
+</section>
 
-    <div class="glass-card">
-        <div class="content-section">
-            <h2><i class="fas fa-info-circle"></i> What is E-BHM Connect?</h2>
-            <p>
-                E-BHM Connect is a comprehensive Electronic Barangay Health Management system designed to digitize and streamline 
-                health services in barangay communities. Our platform bridges the gap between Barangay Health Workers (BHWs), 
-                healthcare providers, and community members through an innovative web-based solution.
-            </p>
-            <p>
-                Built with modern technology and following mobile-first design principles, E-BHM Connect ensures that healthcare 
-                management is accessible, efficient, and user-friendly for all stakeholders in the community health ecosystem.
-            </p>
+<!-- Content Area -->
+<section class="about-content">
+    <div class="container">
+        
+        <!-- Stats Strip -->
+        <div class="stats-strip" data-aos="fade-up">
+            <div class="stat-box">
+                <div class="stat-num"><?php echo number_format($stats['residents']); ?>+</div>
+                <div class="stat-desc">Residents Served</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num"><?php echo number_format($stats['health_workers']); ?>+</div>
+                <div class="stat-desc">Health Workers</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num">99%</div>
+                <div class="stat-desc">System Uptime</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num"><?php echo number_format($stats['programs']); ?>+</div>
+                <div class="stat-desc">Core Programs</div>
+            </div>
         </div>
 
-        <div class="content-section">
-            <h2><i class="fas fa-bullseye"></i> Our Mission</h2>
-            <p>
-                To transform barangay health services by providing accessible, efficient, and comprehensive digital tools that empower 
-                Barangay Health Workers to deliver quality healthcare to their communities while ensuring patient data security and 
-                privacy.
-            </p>
-        </div>
-
-        <div class="content-section">
-            <h2><i class="fas fa-eye"></i> Our Vision</h2>
-            <p>
-                A future where every barangay in the Philippines has access to modern digital health management systems, enabling 
-                data-driven decision making, improved patient outcomes, and seamless healthcare delivery at the grassroots level.
-            </p>
-        </div>
-    </div>
-
-    <div class="glass-card">
-        <h2 style="text-align: center; color: #20c997; margin-bottom: 32px;">
-            <i class="fas fa-star"></i> Key Features
-        </h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon primary">
-                    <i class="fas fa-users"></i>
+        <!-- Main Info Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-12">
+                <div class="glass-card" data-aos="fade-up">
+                    <h2 class="card-title">
+                        <i class="fas fa-laptop-medical"></i> What is E-BHM Connect?
+                    </h2>
+                    <p class="card-text">
+                        E-BHM Connect is a comprehensive Electronic Barangay Health Management system designed to digitize and streamline 
+                        health services in barangay communities. Our platform bridges the gap between Barangay Health Workers (BHWs), 
+                        healthcare providers, and community members through an innovative web-based solution.
+                    </p>
+                    <p class="card-text mb-0">
+                        Built with modern technology and following mobile-first design principles, E-BHM Connect ensures that healthcare 
+                        management is accessible, efficient, and user-friendly for all stakeholders in the community health ecosystem.
+                    </p>
                 </div>
-                <h3 class="feature-title">Patient Management</h3>
-                <p class="feature-description">Comprehensive patient records, visit tracking, and health monitoring</p>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon info">
-                    <i class="fas fa-box"></i>
+            <div class="col-md-6">
+                <div class="glass-card" data-aos="fade-up" data-aos-delay="100">
+                    <h2 class="card-title">
+                        <i class="fas fa-bullseye"></i> Our Mission
+                    </h2>
+                    <p class="card-text">
+                        To transform barangay health services by providing accessible, efficient, and comprehensive digital tools that empower 
+                        Barangay Health Workers to deliver quality healthcare to their communities while ensuring patient data security and privacy.
+                    </p>
                 </div>
-                <h3 class="feature-title">Inventory System</h3>
-                <p class="feature-description">Track medical supplies, medicines, and equipment in real-time</p>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon warning">
-                    <i class="fas fa-heartbeat"></i>
+            <div class="col-md-6">
+                <div class="glass-card" data-aos="fade-up" data-aos-delay="200">
+                    <h2 class="card-title">
+                        <i class="fas fa-eye"></i> Our Vision
+                    </h2>
+                    <p class="card-text">
+                        A future where every barangay in the Philippines has access to modern digital health management systems, enabling 
+                        data-driven decision making, improved patient outcomes, and seamless healthcare delivery at the grassroots level.
+                    </p>
                 </div>
-                <h3 class="feature-title">Vital Signs Monitoring</h3>
-                <p class="feature-description">Record and track patient vitals over time</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon primary">
-                    <i class="fas fa-sms"></i>
-                </div>
-                <h3 class="feature-title">SMS Notifications</h3>
-                <p class="feature-description">Automated health reminders and appointment alerts</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon info">
-                    <i class="fas fa-chart-bar"></i>
-                </div>
-                <h3 class="feature-title">Reports & Analytics</h3>
-                <p class="feature-description">Generate comprehensive health reports and insights</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon warning">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <h3 class="feature-title">AI Chatbot</h3>
-                <p class="feature-description">24/7 health information and guidance</p>
             </div>
         </div>
-    </div>
 
-    <div class="glass-card">
-        <div class="content-section">
-            <h2><i class="fas fa-handshake"></i> Our Commitment</h2>
-            <p>
-                E-BHM Connect is committed to maintaining the highest standards of data security, patient privacy, and system reliability. 
-                We continuously improve our platform based on feedback from BHWs and healthcare professionals to ensure it meets the 
-                evolving needs of community health services.
-            </p>
-            <p>
-                We believe that technology should empower, not complicate. That's why we've designed E-BHM Connect with simplicity and 
-                efficiency in mind, ensuring that even users with minimal technical experience can navigate and utilize the system effectively.
-            </p>
+        <!-- Key Features Grid -->
+        <div class="glass-card" data-aos="fade-up">
+            <div class="text-center mb-4">
+                <h2 class="card-title justify-content-center">
+                    <i class="fas fa-star"></i> Key Features
+                </h2>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h4>Patient Management</h4>
+                    <p>Secure records & visit tracking</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <h4>Inventory System</h4>
+                    <p>Real-time machine & supply tracking</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h4>Vital Monitoring</h4>
+                    <p>Track health metrics over time</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h4>SMS Alerts</h4>
+                    <p>Automated appointment reminders</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Analytics</h4>
+                    <p>Data-driven health insights</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h4>AI Assistant</h4>
+                    <p>24/7 support with Gabby</p>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div style="text-align: center; margin-top: 48px;">
-        <a href="<?php echo BASE_URL; ?>" class="btn btn-primary" style="padding: 14px 32px; font-size: 1.125rem;">
-            <i class="fas fa-home"></i> Back to Home
-        </a>
+        <!-- Back Button -->
+        <div class="text-center mt-5" data-aos="fade-up">
+            <a href="<?php echo BASE_URL; ?>" class="btn btn-outline-light rounded-pill px-4 py-2">
+                <i class="fas fa-arrow-left me-2"></i> Back to Home
+            </a>
+        </div>
+
     </div>
-</div>
+</section>
+
+<script>
+if (typeof AOS !== 'undefined') {
+    AOS.init({ duration: 800, once: true, offset: 50 });
+}
+</script>
 
 <?php include_once __DIR__ . '/../../includes/footer_public.php'; ?>

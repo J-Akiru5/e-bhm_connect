@@ -10,7 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
-
+require_once __DIR__ . '/../includes/auth_helpers.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . BASE_URL . 'admin-announcements');
     exit();
@@ -33,6 +33,7 @@ try {
         ':content' => $content,
         ':id' => $announcement_id
     ]);
+    log_audit('update_announcement', 'announcement', $announcement_id, ['title' => $title]);
 
     $_SESSION['form_success'] = 'Announcement updated.';
 } catch (Throwable $e) {

@@ -3,7 +3,8 @@
         <!-- Footer -->
         <footer id="admin-footer">
             <div class="footer-copyright">
-                © <?php echo date('Y'); ?> E-BHM Connect. <?php echo __('footer.all_rights_reserved'); ?>
+                <span style="color:var(--primary); font-weight:600;">E-BHM Connect</span> &copy; <?php echo date('Y'); ?>.
+                <?php echo __('footer.all_rights_reserved'); ?>
             </div>
             <div class="footer-links">
                 <a href="<?php echo BASE_URL; ?>?page=about"><?php echo __('footer.about'); ?></a>
@@ -45,14 +46,14 @@
         event.preventDefault();
         const form = event.target;
         Swal.fire({
-            title: '<?php echo __('dialogs.confirm_delete_title'); ?>',
-            text: '<?php echo __('dialogs.confirm_delete_text'); ?>',
+            title: <?php echo json_encode(__('dialogs.confirm_delete_title')); ?>,
+            text: <?php echo json_encode(__('dialogs.confirm_delete_text')); ?>,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
             cancelButtonColor: '#64748b',
-            confirmButtonText: '<?php echo __('dialogs.yes_delete'); ?>',
-            cancelButtonText: '<?php echo __('dialogs.cancel'); ?>'
+            confirmButtonText: <?php echo json_encode(__('dialogs.yes_delete')); ?>,
+            cancelButtonText: <?php echo json_encode(__('dialogs.cancel')); ?>
         }).then((result) => {
             if (result.isConfirmed) {
                 form.submit();
@@ -93,103 +94,42 @@
     </script>
 
     <script>
-    // Notification Dropdown
+    // Sidebar Scroll Position Persistence
     (function(){
-        const btn = document.getElementById('notificationBtn');
-        const dropdown = document.getElementById('notificationDropdown');
-        const markAllBtn = document.getElementById('markAllRead');
+        const sidebar = document.getElementById('admin-sidebar');
+        const sidebarNav = sidebar ? sidebar.querySelector('.sidebar-nav') : null;
+        const STORAGE_KEY = 'ebhm_sidebar_scroll';
         
-        if(btn && dropdown){
-            btn.addEventListener('click', function(e){
-                e.preventDefault();
-                e.stopPropagation();
-                dropdown.classList.toggle('show');
-                
-                // Load notifications if opening
-                if(dropdown.classList.contains('show')){
-                    loadNotifications();
+        if(sidebarNav){
+            // Restore scroll position after layout is ready (use requestAnimationFrame)
+            requestAnimationFrame(function(){
+                const savedScroll = localStorage.getItem(STORAGE_KEY);
+                if(savedScroll){
+                    sidebarNav.scrollTop = parseInt(savedScroll, 10);
                 }
             });
             
-            // Close on outside click
+            // Debounced scroll save (reduce writes)
+            let scrollTimeout;
+            sidebarNav.addEventListener('scroll', function(){
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(function(){
+                    localStorage.setItem(STORAGE_KEY, sidebarNav.scrollTop);
+                }, 100);
+            });
+            
+            // Save immediately before page unload
+            window.addEventListener('beforeunload', function(){
+                localStorage.setItem(STORAGE_KEY, sidebarNav.scrollTop);
+            });
+            
+            // Also save when clicking any link (before fade-out transition)
             document.addEventListener('click', function(e){
-                if(!dropdown.contains(e.target) && !btn.contains(e.target)){
-                    dropdown.classList.remove('show');
+                const link = e.target.closest('a');
+                if(link && link.href && link.hostname === window.location.hostname){
+                    localStorage.setItem(STORAGE_KEY, sidebarNav.scrollTop);
                 }
-            });
-        }
-        
-        if(markAllBtn){
-            markAllBtn.addEventListener('click', function(e){
-                e.preventDefault();
-                markAllNotificationsRead();
-            });
-        }
-        
-        function loadNotifications(){
-            const list = document.getElementById('notificationList');
-            if(!list) return;
-            
-            fetch('<?php echo BASE_URL; ?>actions/notification_api.php?action=list')
-                .then(r => r.json())
-                .then(data => {
-                    if(data.success && data.notifications.length > 0){
-                        list.innerHTML = data.notifications.map(n => `
-                            <div class="notification-item ${n.is_read ? '' : 'unread'}" data-id="${n.notification_id}">
-                                <div class="notification-icon ${n.type}">${getNotificationIcon(n.type)}</div>
-                                <div class="notification-content">
-                                    <div class="notification-text">${escapeHtml(n.title)}</div>
-                                    <div class="notification-time">${formatTimeAgo(n.created_at)}</div>
-                                </div>
-                            </div>
-                        `).join('');
-                    } else {
-                        list.innerHTML = '<div class="notification-item" style="text-align:center;padding:32px;"><span style="color:var(--text-muted);"><?php echo __('notifications.no_notifications'); ?></span></div>';
-                    }
-                })
-                .catch(err => {
-                    console.error('Error loading notifications:', err);
-                    list.innerHTML = '<div class="notification-item" style="text-align:center;padding:32px;"><span style="color:var(--text-muted);"><?php echo __('notifications.no_notifications'); ?></span></div>';
-                });
-        }
-        
-        function markAllNotificationsRead(){
-            fetch('<?php echo BASE_URL; ?>actions/notification_api.php?action=mark_all_read', {method: 'POST'})
-                .then(r => r.json())
-                .then(data => {
-                    if(data.success){
-                        const badge = document.querySelector('.topnav-action-badge');
-                        if(badge) badge.remove();
-                        document.querySelectorAll('.notification-item.unread').forEach(el => el.classList.remove('unread'));
-                    }
-                });
-        }
-        
-        function getNotificationIcon(type){
-            const icons = {
-                'info': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
-                'success': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
-                'warning': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-                'alert': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
-            };
-            return icons[type] || icons['info'];
-        }
-        
-        function formatTimeAgo(dateStr){
-            const date = new Date(dateStr);
-            const now = new Date();
-            const seconds = Math.floor((now - date) / 1000);
-            
-            if(seconds < 60) return '<?php echo __('time.just_now'); ?>';
-            if(seconds < 3600) return Math.floor(seconds/60) + ' <?php echo __('time.minutes_ago'); ?>';
-            if(seconds < 86400) return Math.floor(seconds/3600) + ' <?php echo __('time.hours_ago'); ?>';
-            return Math.floor(seconds/86400) + ' <?php echo __('time.days_ago'); ?>';
-        }
-        
-        function escapeHtml(text){
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+            }, true); // Capture phase to run before navigation
         }
     })();
     </script>
@@ -240,5 +180,232 @@
         </div>
     </div>
 
+    <!-- Page Transition Script -->
+    <script>
+    (function() {
+        // Fade in the page when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('page-loaded');
+        });
+        
+        // Fallback: fade in after a short delay in case DOMContentLoaded already fired
+        setTimeout(function() {
+            document.body.classList.add('page-loaded');
+        }, 50);
+        
+        // Fade out when navigating to a new page
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a');
+            if (link && 
+                link.href && 
+                !link.href.startsWith('#') && 
+                !link.href.startsWith('javascript:') &&
+                !link.target && 
+                !e.ctrlKey && 
+                !e.metaKey && 
+                !e.shiftKey &&
+                link.hostname === window.location.hostname) {
+                e.preventDefault();
+                document.body.classList.add('page-leaving');
+                document.body.classList.remove('page-loaded');
+                setTimeout(function() {
+                    window.location.href = link.href;
+                }, 150);
+            }
+        });
+        
+        // Handle form submissions with fade out
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            if (form.method !== 'get' || !form.action.startsWith('javascript:')) {
+                document.body.classList.add('page-leaving');
+                document.body.classList.remove('page-loaded');
+            }
+        });
+    })();
+    </script>
+
+    <!-- Tour Restart Button -->
+    <button id="tour-restart-btn" onclick="startAdminTour()" aria-label="Restart Tour" title="Restart Admin Tour">
+        <i class="fas fa-question"></i>
+    </button>
+
+    <style>
+    /* Floating Tour Button */
+    #tour-restart-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 100px; /* Moved beside Gabby */
+        left: auto;   /* Remove left positioning */
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: rgba(32, 201, 151, 0.2);
+        border: 1px solid rgba(32, 201, 151, 0.5);
+        color: var(--primary);
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    #tour-restart-btn:hover {
+        background: var(--primary);
+        color: white;
+        transform: scale(1.1) rotate(10deg);
+        box-shadow: 0 0 20px rgba(32, 201, 151, 0.6);
+    }
+
+    /* Driver.js Glassmorphism Theme */
+    .driver-popover.driverjs-theme {
+        background: rgba(15, 23, 42, 0.95);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-radius: 16px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        padding: 20px;
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 10px;
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-description {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-footer button {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+        text-shadow: none;
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-footer button:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+    
+    .driver-popover.driverjs-theme .driver-popover-arrow-side-left.driver-popover-arrow { border-left-color: rgba(15, 23, 42, 0.95); }
+    .driver-popover.driverjs-theme .driver-popover-arrow-side-right.driver-popover-arrow { border-right-color: rgba(15, 23, 42, 0.95); }
+    .driver-popover.driverjs-theme .driver-popover-arrow-side-top.driver-popover-arrow { border-top-color: rgba(15, 23, 42, 0.95); }
+    .driver-popover.driverjs-theme .driver-popover-arrow-side-bottom.driver-popover-arrow { border-bottom-color: rgba(15, 23, 42, 0.95); }
+    
+    /* Highlight Path styling */
+    .driver-overlay path {
+        fill: rgba(0, 0, 0, 0.85) !important;
+    }
+    </style>
+
+    <script>
+    function startAdminTour() {
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            allowClose: true,
+            overlayClickNext: false,
+            popoverClass: 'driverjs-theme',
+            steps: [
+                { 
+                    element: '#admin-sidebar', 
+                    popover: { 
+                        title: 'Dashboard Navigation', 
+                        description: 'This is your command center. Use this sidebar to access all management tools.', 
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.sidebar-nav-link[href*="admin-dashboard"]', 
+                    popover: { 
+                        title: 'Overview', 
+                        description: 'Click here to see real-time statistics and recent activity.', 
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '.sidebar-nav-link[href*="admin-patients"]', 
+                    popover: { 
+                        title: 'Manage Patients', 
+                        description: 'View, add, and update resident health records here.', 
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '.sidebar-nav-link[href*="admin-messages"]', 
+                    popover: { 
+                        title: 'Messages', 
+                        description: 'Communicate directly with residents via SMS or in-app chat.', 
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '.sidebar-nav-link[href*="admin-reports"]', 
+                    popover: { 
+                        title: 'Reports & Analytics', 
+                        description: 'Generate comprehensive health reports and visualize data trends.', 
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '#admin-top-nav', 
+                    popover: { 
+                        title: 'Quick Settings', 
+                        description: 'Toggle the theme, switch languages, or view your profile from the top bar.', 
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#tour-restart-btn', 
+                    popover: { 
+                        title: 'Tour Guide', 
+                        description: 'Click this button anytime if you need a refresher on these features.', 
+                        side: "left", 
+                        align: 'end' 
+                    } 
+                }
+            ],
+            onDestroyed: () => {
+                localStorage.setItem('ebhm_admin_tour_seen', 'true');
+            }
+        });
+
+        driverObj.drive();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!localStorage.getItem('ebhm_admin_tour_seen')) {
+            setTimeout(() => {
+                startAdminTour();
+            }, 1000);
+        }
+    });
+    </script>
 </body>
 </html>

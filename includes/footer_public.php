@@ -45,8 +45,15 @@
 
             </div>
             
-            <div class="footer-bottom">
-                <p style="margin: 0; color: var(--gray-500);">© 2025 E-BHM Connect. All Rights Reserved. Developed for Barangay Bacong, Dumangas.</p>
+            <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <p style="margin: 0; color: var(--gray-500);">
+                    <span style="color: var(--primary); font-weight: 600;">E-BHM Connect</span> &copy; 2025. All Rights Reserved.
+                </p>
+                <div class="footer-legal-links">
+                    <a href="<?php echo BASE_URL; ?>?page=about" style="color: #0d6efd; text-decoration: none; margin-left: 1rem; font-weight: 500;">About</a>
+                    <a href="<?php echo BASE_URL; ?>?page=privacy" style="color: #0d6efd; text-decoration: none; margin-left: 1rem; font-weight: 500;">Privacy</a>
+                    <a href="<?php echo BASE_URL; ?>?page=help" style="color: #0d6efd; text-decoration: none; margin-left: 1rem; font-weight: 500;">Help</a>
+                </div>
             </div>
         </div>
     </footer>
@@ -56,6 +63,16 @@
 
     <!-- AOS JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS animations
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 600,
+                once: true,
+                offset: 50
+            });
+        }
+    </script>
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
@@ -97,5 +114,185 @@
         </div>
     </div>
 
+    <!-- Tour Restart Button -->
+    <button id="tour-restart-btn" onclick="startGlobalTour()" aria-label="Restart Tour" title="Restart Site Tour">
+        <i class="fas fa-question"></i>
+    </button>
+
+    <style>
+    /* Floating Tour Button */
+    #tour-restart-btn {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: rgba(32, 201, 151, 0.2);
+        border: 1px solid rgba(32, 201, 151, 0.5);
+        color: var(--primary);
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    #tour-restart-btn:hover {
+        background: var(--primary);
+        color: white;
+        transform: scale(1.1) rotate(10deg);
+        box-shadow: 0 0 20px rgba(32, 201, 151, 0.6);
+    }
+
+    /* Driver.js Glassmorphism Theme */
+    .driver-popover.driverjs-theme {
+        background: rgba(15, 23, 42, 0.95);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-radius: 16px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        padding: 20px;
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 10px;
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-description {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-footer button {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+        text-shadow: none;
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-footer button:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-arrow-side-left.driver-popover-arrow {
+        border-left-color: rgba(15, 23, 42, 0.95);
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-arrow-side-right.driver-popover-arrow {
+        border-right-color: rgba(15, 23, 42, 0.95);
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-arrow-side-top.driver-popover-arrow {
+        border-top-color: rgba(15, 23, 42, 0.95);
+    }
+
+    .driver-popover.driverjs-theme .driver-popover-arrow-side-bottom.driver-popover-arrow {
+        border-bottom-color: rgba(15, 23, 42, 0.95);
+    }
+    
+    /* Highlight Path styling */
+    .driver-overlay {
+        path {
+            fill: rgba(0, 0, 0, 0.85) !important;
+        }
+    }
+    </style>
+
+    <script>
+    // Global Tour Logic
+    function startGlobalTour() {
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            popoverClass: 'driverjs-theme',
+            steps: [
+                { 
+                    element: '.brand', 
+                    popover: { 
+                        title: 'Welcome to E-BHM Connect', 
+                        description: 'Your digital gateway to community health services in Barangay Bacong.', 
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.nav-links', 
+                    popover: { 
+                        title: 'Easy Navigation', 
+                        description: 'Browse news, services, and community updates from the main menu.', 
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.nav-actions', 
+                    popover: { 
+                        title: 'Secure Access', 
+                        description: 'Log in to your personalized dashboard to view records or manage tasks.', 
+                        side: "bottom", 
+                        align: 'end' 
+                    } 
+                },
+                { 
+                    element: '#chat-bubble', 
+                    popover: { 
+                        title: 'Ask Gabby', 
+                        description: 'Need help? Click the chat icon anytime for instant assistance.', 
+                        side: "top", 
+                        align: 'end' 
+                    } 
+                },
+                { 
+                    element: '#tour-restart-btn', 
+                    popover: { 
+                        title: 'Tour Replay', 
+                        description: 'Click this button anytime if you want to see this tour again.', 
+                        side: "right", 
+                        align: 'end' 
+                    } 
+                }
+            ],
+            allowClose: true,
+            overlayClickNext: false,
+            onDestroyed: () => {
+                // Set localStorage so it doesn't run automatically again
+                localStorage.setItem('ebhm_tour_seen', 'true');
+            }
+        });
+
+        driverObj.drive();
+    }
+
+    // Auto-start on first visit
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!localStorage.getItem('ebhm_tour_seen')) {
+            // Short delay to ensure elements are rendered
+            setTimeout(() => {
+                startGlobalTour();
+            }, 1000);
+        }
+    });
+    </script>
 </body>
 </html>

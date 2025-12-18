@@ -17,7 +17,9 @@ function is_superadmin(): bool
         return false;
     }
     
-    return isset($_SESSION['role']) && strtolower($_SESSION['role']) === 'superadmin';
+    // Check both possible session keys for backward compatibility
+    $role = $_SESSION['role'] ?? $_SESSION['bhw_role'] ?? '';
+    return strtolower($role) === 'superadmin';
 }
 
 /**
@@ -30,7 +32,8 @@ function is_admin(): bool
         return false;
     }
     
-    $role = strtolower($_SESSION['role'] ?? '');
+    // Check both possible session keys for backward compatibility
+    $role = strtolower($_SESSION['role'] ?? $_SESSION['bhw_role'] ?? '');
     return in_array($role, ['admin', 'superadmin']);
 }
 
@@ -729,12 +732,15 @@ function init_user_session(): void
  */
 function get_role_display_name(): string
 {
-    if (!isset($_SESSION['role'])) {
+    // Check both possible session keys for backward compatibility
+    $role = $_SESSION['role'] ?? $_SESSION['bhw_role'] ?? null;
+    
+    if (!$role) {
         return __('roles.guest') ?: 'Guest';
     }
     
-    $roleKey = 'roles.' . strtolower($_SESSION['role']);
+    $roleKey = 'roles.' . strtolower($role);
     $translated = __($roleKey);
     
-    return $translated ?: ucfirst($_SESSION['role']);
+    return $translated ?: ucfirst($role);
 }

@@ -10,6 +10,13 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/auth_helpers.php';
+
+// Log logout before destroying session
+$userId = $_SESSION['bhw_id'] ?? null;
+if ($userId) {
+    log_audit('logout', 'bhw', $userId);
+}
 
 $_SESSION = array();
 

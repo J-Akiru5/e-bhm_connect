@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
-
+require_once __DIR__ . '/../includes/auth_helpers.php';
 
 // Router bootstraps session and $pdo and BASE_URL
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -80,6 +80,7 @@ try {
     $sql = 'UPDATE medication_inventory SET ' . implode(', ', $setParts) . ' WHERE item_id = :item_id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+    log_audit('update_inventory', 'inventory', $item_id, ['item_name' => $item_name]);
 
     $_SESSION['form_success'] = 'Inventory item updated.';
 } catch (Throwable $e) {

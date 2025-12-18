@@ -4,49 +4,6 @@ include_once __DIR__ . '/../../includes/header_admin.php';
 require_once __DIR__ . '/../../includes/pagination_helper.php';
 ?>
 <style>
-/* Copy all glassmorphism styles inline */
-.glass-card { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); transition: transform 0.25s ease, box-shadow 0.25s ease; }
-.glass-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16); }
-.page-header { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
-@media (min-width: 768px) { .page-header { flex-direction: row; justify-content: space-between; align-items: center; } }
-.page-title { font-size: 1.75rem; font-weight: 700; color: #ffffff; margin: 0; }
-.page-subtitle { color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; margin-top: 4px; }
-.stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
-@media (min-width: 768px) { .stats-row { grid-template-columns: repeat(3, 1fr); } }
-.stat-card { padding: 20px; text-align: center; }
-.stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 1.25rem; }
-.stat-icon.primary { background: rgba(32, 201, 151, 0.2); color: #20c997; }
-.stat-icon.info { background: rgba(99, 102, 241, 0.2); color: #6366f1; }
-.stat-icon.warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-.stat-value { font-size: 1.75rem; font-weight: 700; color: #ffffff; line-height: 1; }
-.stat-label { color: rgba(255, 255, 255, 0.6); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
-.filter-bar { padding: 20px; margin-bottom: 24px; }
-.filter-row { display: flex; flex-direction: column; gap: 12px; }
-@media (min-width: 768px) { .filter-row { flex-direction: row; align-items: center; } }
-.glass-input { width: 100%; padding: 12px 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; color: #ffffff; font-size: 1rem; transition: all 0.25s ease; }
-.glass-input:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.25); }
-.glass-input:focus { outline: none; background: rgba(255, 255, 255, 0.15); border: 2px solid #20c997; box-shadow: 0 0 0 4px rgba(32, 201, 151, 0.15); }
-.glass-input::placeholder { color: rgba(255, 255, 255, 0.4); }
-.btn-primary-glass { padding: 12px 24px; background: linear-gradient(135deg, #20c997, #0f5132); border: none; border-radius: 12px; color: #ffffff; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 4px 16px rgba(32, 201, 151, 0.35); display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
-.btn-primary-glass:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(32, 201, 151, 0.45); color: #ffffff; }
-.btn-secondary-glass { padding: 12px 24px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; color: #ffffff; font-weight: 500; cursor: pointer; transition: all 0.25s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-.btn-secondary-glass:hover { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.25); color: #ffffff; }
-.btn-sm-glass { padding: 8px 16px; font-size: 0.75rem; border-radius: 8px; }
-.table-container { padding: 0; overflow: hidden; }
-.glass-table { width: 100%; border-collapse: collapse; }
-.glass-table thead th { padding: 16px 20px; text-align: left; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255, 255, 255, 0.7); background: rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-.glass-table tbody td { padding: 16px 20px; color: #ffffff; border-bottom: 1px solid rgba(255, 255, 255, 0.05); vertical-align: middle; }
-.glass-table tbody tr { transition: background 0.15s ease; }
-.glass-table tbody tr:hover { background: rgba(255, 255, 255, 0.05); }
-.glass-table tbody tr:last-child td { border-bottom: none; }
-.actions-cell { display: flex; gap: 8px; flex-wrap: wrap; }
-.empty-state { text-align: center; padding: 48px 24px; color: rgba(255, 255, 255, 0.5); }
-.empty-state-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.5; }
-.pagination-container { padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
-.status-badge { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; text-transform: capitalize; }
-.status-badge.active { background: rgba(32, 201, 151, 0.2); color: #20c997; }
-.status-badge.planned { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-@media (max-width: 767px) { .glass-table thead { display: none; } .glass-table tbody tr { display: block; padding: 16px; margin-bottom: 12px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; } .glass-table tbody td { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); } .glass-table tbody td::before { content: attr(data-label); font-weight: 600; color: rgba(255, 255, 255, 0.6); font-size: 0.75rem; text-transform: uppercase; } .glass-table tbody td:last-child { border-bottom: none; } .actions-cell { justify-content: flex-end; } }
 </style>
 <?php
 
@@ -89,8 +46,8 @@ try {
     $current_page = isset($_GET['pg']) ? max(1, (int) $_GET['pg']) : 1;
     $pagination = paginate($total_records, $per_page, $current_page);
 
-    // Base SQL
-    $sql = 'SELECT bhw_id, full_name, username, bhw_unique_id, assigned_area, email_verified FROM bhw_users';
+    // Base SQL - include account_status for approval workflow
+    $sql = 'SELECT bhw_id, full_name, username, bhw_unique_id, assigned_area, email_verified, account_status FROM bhw_users';
     $params = [];
 
     if (!empty($_GET['search'])) {
@@ -199,15 +156,29 @@ try {
                                 <td data-label="BHW ID"><?php echo htmlspecialchars($bhw['bhw_unique_id'] ?? ''); ?></td>
                                 <td data-label="Assigned Area"><?php echo htmlspecialchars($bhw['assigned_area'] ?? ''); ?></td>
                                 <td data-label="Status">
-                                    <?php if ($bhw['email_verified'] == 1): ?>
-                                        <span class="status-badge active">Verified</span>
+                                    <?php 
+                                    $accountStatus = $bhw['account_status'] ?? 'pending';
+                                    if ($accountStatus === 'approved'): 
+                                    ?>
+                                        <span class="status-badge active">Approved</span>
+                                    <?php elseif ($accountStatus === 'verified'): ?>
+                                        <span class="status-badge info">Verified</span>
                                     <?php else: ?>
                                         <span class="status-badge planned">Pending</span>
                                     <?php endif; ?>
                                 </td>
                                 <td data-label="Actions">
                                     <div class="actions-cell">
-                                        <a href="<?php echo BASE_URL; ?>admin-bhw-edit?id=<?php echo $bhw['bhw_id']; ?>" class="btn-secondary-glass btn-sm-glass">
+                                        <?php if ($accountStatus !== 'approved'): ?>
+                                        <form method="POST" action="<?php echo BASE_URL; ?>?action=approve-bhw" class="d-inline approve-form" style="display: inline;" data-username="<?php echo htmlspecialchars($bhw['full_name']); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?? ''; ?>">
+                                            <input type="hidden" name="user_id" value="<?php echo $bhw['bhw_id']; ?>">
+                                            <button type="submit" class="btn-success-glass btn-sm-glass" title="Approve User">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+                                        <?php endif; ?>
+                                        <a href="<?php echo BASE_URL; ?>admin-bhw-edit?id=<?php echo $bhw['bhw_id']; ?>" class="btn-secondary-glass btn-sm-glass" title="Edit User">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                     </div>
@@ -227,5 +198,51 @@ try {
         <?php endif; ?>
     </div>
 </div>
+
+<script>
+// SweetAlert for Approve Confirmation
+document.querySelectorAll('.approve-form').forEach(function(form) {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const userName = form.dataset.username;
+        
+        Swal.fire({
+            title: 'Approve User?',
+            html: `Are you sure you want to approve <strong>${userName}</strong>?<br><br>They will be able to log in to the system.`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Yes, Approve',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+});
+
+// Show flash messages with SweetAlert
+<?php if (isset($_SESSION['flash_success'])): ?>
+Swal.fire({
+    title: 'Success!',
+    text: <?php echo json_encode($_SESSION['flash_success']); ?>,
+    icon: 'success',
+    confirmButtonColor: '#10b981'
+});
+<?php unset($_SESSION['flash_success']); ?>
+<?php endif; ?>
+
+<?php if (isset($_SESSION['flash_error'])): ?>
+Swal.fire({
+    title: 'Error!',
+    text: <?php echo json_encode($_SESSION['flash_error']); ?>,
+    icon: 'error',
+    confirmButtonColor: '#ef4444'
+});
+<?php unset($_SESSION['flash_error']); ?>
+<?php endif; ?>
+</script>
 
 <?php include_once __DIR__ . '/../../includes/footer_admin.php'; ?>

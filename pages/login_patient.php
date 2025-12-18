@@ -5,6 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../includes/security_helper.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -326,6 +327,7 @@ if (isset($_SESSION['register_success'])) {
 
         <!-- Login Form -->
         <form method="post" action="?action=login-patient">
+            <?= csrf_input() ?>
             <div class="form-group">
                 <label for="email" class="form-label">Email Address</label>
                 <input 

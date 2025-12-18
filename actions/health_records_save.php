@@ -4,10 +4,16 @@
  * E-BHM Connect
  * 
  * Handles all health record CRUD save operations.
+ * Includes CSRF protection for all operations.
  */
 
 require_once __DIR__ . '/../includes/auth_bhw.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/security_helper.php';
+require_once __DIR__ . '/../includes/auth_helpers.php';
+
+// Validate CSRF token for all health record saves
+require_csrf();
 
 // Get the action type from the URL
 $action = $_GET['action'] ?? '';
@@ -76,6 +82,7 @@ function savePregnancyTracking($pdo) {
                 $data['gravida'], $data['para'], $data['is_nhts'], $data['philhealth_number'],
                 $data['delivery_date'], $data['delivery_outcome'], $data['patient_id'], $data['bhw_id'], $id
             ]);
+            log_audit('update_health_record', 'pregnancy', $id, ['type' => 'pregnancy', 'name' => $data['mother_name']]);
             $_SESSION['success'] = 'Pregnancy record updated successfully.';
         } else {
             $sql = "INSERT INTO pregnancy_tracking 
@@ -88,6 +95,8 @@ function savePregnancyTracking($pdo) {
                 $data['gravida'], $data['para'], $data['is_nhts'], $data['philhealth_number'],
                 $data['delivery_date'], $data['delivery_outcome'], $data['patient_id'], $data['bhw_id']
             ]);
+            $newId = $pdo->lastInsertId();
+            log_audit('create_health_record', 'pregnancy', (int)$newId, ['type' => 'pregnancy', 'name' => $data['mother_name']]);
             $_SESSION['success'] = 'Pregnancy record added successfully.';
         }
     } catch (PDOException $e) {

@@ -122,7 +122,7 @@ try {
                 </p>
             </div>
             <div class="d-flex gap-2">
-                <a href="<?php echo BASE_URL; ?>admin-patients" class="btn btn-primary"><?php echo __('dashboard.quick_actions'); ?></a>
+                <a href="#quick-actions-panel" class="btn btn-primary"><?php echo __('dashboard.quick_actions'); ?></a>
             </div>
         </div>
     </div>
@@ -417,21 +417,55 @@ try {
     </div>
 
     <!-- Quick Actions -->
-    <div class="row g-3">
+    <div id="quick-actions-panel" class="row g-3">
         <div class="col-12">
             <div class="glass-card">
+                <div class="glass-card-header d-flex justify-content-between align-items-center">
+                    <h5 class="glass-card-title mb-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2" style="vertical-align: -4px;">
+                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        <?php echo __('dashboard.quick_actions'); ?>
+                    </h5>
+                </div>
                 <div class="glass-card-body">
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                        <div>
-                            <h5 class="mb-1"><?php echo __('dashboard.quick_actions'); ?></h5>
-                            <p class="text-secondary mb-0 small">Frequently used admin shortcuts</p>
-                        </div>
-                        <div class="d-flex flex-wrap gap-2">
-                            <a href="<?php echo BASE_URL; ?>admin-patient-form" class="btn btn-primary"><?php echo __('patients.add_patient'); ?></a>
-                            <a href="<?php echo BASE_URL; ?>admin-announcement-edit" class="btn btn-secondary"><?php echo __('announcements.create_announcement'); ?></a>
-                            <a href="<?php echo BASE_URL; ?>admin-inventory" class="btn btn-glass"><?php echo __('nav.inventory'); ?></a>
-                            <a href="<?php echo BASE_URL; ?>admin-reports" class="btn btn-glass"><?php echo __('nav.reports'); ?></a>
-                        </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="<?php echo BASE_URL; ?>admin-patient-form" class="btn btn-glass">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Add Patient
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>admin-announcement-edit" class="btn btn-glass">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            New Announcement
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>admin-inventory" class="btn btn-glass">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Add Inventory
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>admin-health-records" class="btn btn-glass">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Health Records
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>admin-messages" class="btn btn-glass">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            New Message
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>admin-reports" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                            </svg>
+                            Generate Reports
+                        </a>
                     </div>
                 </div>
             </div>
@@ -456,7 +490,7 @@ function getChartColors() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     return {
         primary: '#20c997',
-        secondary: '#6366f1',
+        secondary: '#0f5132',
         text: isDark ? '#f8fafc' : '#1e293b',
         textMuted: isDark ? '#94a3b8' : '#64748b',
         grid: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',

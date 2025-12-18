@@ -10,11 +10,15 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/email_helper.php';
+require_once __DIR__ . '/../includes/security_helper.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . BASE_URL . 'register-bhw');
     exit();
 }
+
+// Validate CSRF token
+require_csrf();
 
 $full_name = isset($_POST['full_name']) ? trim($_POST['full_name']) : '';
 $username = isset($_POST['username']) ? trim($_POST['username']) : '';

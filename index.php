@@ -1,6 +1,15 @@
 <?php
+// Include security helper first (for session configuration)
+require_once 'includes/security_helper.php';
+
+// Configure secure session settings before starting
+configure_secure_session();
+
 // Start the session ONCE for all requests
 session_start();
+
+// Set security headers for all responses
+set_security_headers();
 
 // Include the Global Config (BASE_URL)
 require_once 'config/config.php';
@@ -9,104 +18,114 @@ require_once 'config/config.php';
 require_once 'config/database.php';
 
 // --- Check for an "action" request (e.g., form submission) ---
+// Define action whitelist first
+$actionPath = __DIR__ . '/actions/';
+$allowedActions = [
+    // Auth (BHW)
+    'login-bhw' => $actionPath . 'login_bhw_action.php',
+    'register-bhw' => $actionPath . 'register_bhw_action.php',
+    'logout' => $actionPath . 'logout.php',
+    'bhw-profile-save' => $actionPath . 'bhw_profile_save.php',
+
+    // Patient management
+    'save-patient' => $actionPath . 'patient_save.php',
+    'delete-patient' => $actionPath . 'patient_delete.php',
+
+    // Inventory
+    'save-inventory-item' => $actionPath . 'inventory_save.php',
+    'delete-inventory-item' => $actionPath . 'inventory_delete.php',
+    'update-inventory-item' => $actionPath . 'inventory_update.php',
+    // Inventory categories
+    'save-inventory-category' => $actionPath . 'inventory_category_save.php',
+    'delete-inventory-category' => $actionPath . 'inventory_category_delete.php',
+
+    // Vitals & Visits
+    'save-vital' => $actionPath . 'vital_save.php',
+    'save-visit' => $actionPath . 'visit_save.php',
+    // Medicine dispensing
+    'medicine-dispense-save' => $actionPath . 'medicine_dispense_save.php',
+
+    // Programs
+    'save-program' => $actionPath . 'program_save.php',
+    'update-program' => $actionPath . 'program_update.php',
+    'delete-program' => $actionPath . 'program_delete.php',
+
+    // Announcements
+    'save-announcement' => $actionPath . 'announcement_save.php',
+    'update-announcement' => $actionPath . 'announcement_update.php',
+    'delete-announcement' => $actionPath . 'announcement_delete.php',
+
+    // Chatbot APIs
+    'chatbot-api' => $actionPath . 'chatbot_api.php',
+    'chatbot-portal-api' => $actionPath . 'chatbot_portal_api.php',
+    // SMS Actions (manual triggers)
+    'send-broadcast' => $actionPath . 'sms_actions.php',
+    'resend-sms' => $actionPath . 'sms_actions.php',
+
+    // Email verification
+    'verify-bhw-email' => $actionPath . 'verify_bhw_email.php',
+
+    // Reports
+    'report-patient-list' => $actionPath . 'report_patient_list.php',
+    'report-inventory-stock' => $actionPath . 'report_inventory.php',
+    'report-chronic-disease' => $actionPath . 'report_chronic.php',
+    'report-my-record' => $actionPath . 'report_my_record.php',
+    'report-bhw-record' => $actionPath . 'report_bhw_record.php',
+    'report-health-records' => $actionPath . 'report_health_records.php',
+
+    // Patient portal auth/actions
+    'register-patient' => $actionPath . 'register_patient_action.php',
+    'login-patient' => $actionPath . 'login_patient_action.php',
+    'logout-patient' => $actionPath . 'logout_patient.php',
+
+    // Admin profile & BHW management
+    'update-profile' => $actionPath . 'update_profile.php',
+    'change-password' => $actionPath . 'change_password.php',
+    'update-bhw' => $actionPath . 'bhw_update.php',
+    'approve-bhw' => $actionPath . 'bhw_approve.php',
+
+    // Dashboard/chart data
+    'get-chart-data' => $actionPath . 'chart_data.php',
+    
+    // Preferences and notifications
+    'save-preferences' => $actionPath . 'save_preferences.php',
+    'notification-api' => $actionPath . 'notification_api.php',
+
+    // Health Records Actions
+    'save-pregnancy-tracking' => $actionPath . 'health_records_save.php',
+    'delete-pregnancy-tracking' => $actionPath . 'health_records_delete.php',
+    'save-childcare-record' => $actionPath . 'health_records_save.php',
+    'delete-childcare-record' => $actionPath . 'health_records_delete.php',
+    'save-natality-record' => $actionPath . 'health_records_save.php',
+    'delete-natality-record' => $actionPath . 'health_records_delete.php',
+    'save-mortality-record' => $actionPath . 'health_records_save.php',
+    'delete-mortality-record' => $actionPath . 'health_records_delete.php',
+    'save-chronic-disease' => $actionPath . 'health_records_save.php',
+    'delete-chronic-disease' => $actionPath . 'health_records_delete.php',
+    'save-ntp-client' => $actionPath . 'health_records_save.php',
+    'delete-ntp-client' => $actionPath . 'health_records_delete.php',
+    'save-wra-tracking' => $actionPath . 'health_records_save.php',
+    'delete-wra-tracking' => $actionPath . 'health_records_delete.php',
+
+    // Patient Portal Actions
+    'patient-profile-save' => $actionPath . 'patient_profile_save.php',
+];
+
+// Process action if it's in the whitelist (regardless of whether page param exists)
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
-    $actionPath = __DIR__ . '/actions/';
-
-    // Whitelist of allowed action files (all in one array)
-    $allowedActions = [
-        // Auth (BHW)
-        'login-bhw' => $actionPath . 'login_bhw_action.php',
-        'register-bhw' => $actionPath . 'register_bhw_action.php',
-        'logout' => $actionPath . 'logout.php',
-
-        // Patient management
-        'save-patient' => $actionPath . 'patient_save.php',
-        'delete-patient' => $actionPath . 'patient_delete.php',
-
-        // Inventory
-        'save-inventory-item' => $actionPath . 'inventory_save.php',
-        'delete-inventory-item' => $actionPath . 'inventory_delete.php',
-        'update-inventory-item' => $actionPath . 'inventory_update.php',
-        // Inventory categories
-        'save-inventory-category' => $actionPath . 'inventory_category_save.php',
-        'delete-inventory-category' => $actionPath . 'inventory_category_delete.php',
-
-        // Vitals & Visits
-        'save-vital' => $actionPath . 'vital_save.php',
-        'save-visit' => $actionPath . 'visit_save.php',
-        // Medicine dispensing
-        'medicine-dispense-save' => $actionPath . 'medicine_dispense_save.php',
-
-        // Programs
-        'save-program' => $actionPath . 'program_save.php',
-        'update-program' => $actionPath . 'program_update.php',
-        'delete-program' => $actionPath . 'program_delete.php',
-
-        // Announcements
-        'save-announcement' => $actionPath . 'announcement_save.php',
-        'update-announcement' => $actionPath . 'announcement_update.php',
-        'delete-announcement' => $actionPath . 'announcement_delete.php',
-
-        // Chatbot APIs
-        'chatbot-api' => $actionPath . 'chatbot_api.php',
-        'chatbot-portal-api' => $actionPath . 'chatbot_portal_api.php',
-        // SMS Actions (manual triggers)
-        'send-broadcast' => $actionPath . 'sms_actions.php',
-        'resend-sms' => $actionPath . 'sms_actions.php',
-
-        // Email verification
-        'verify-bhw-email' => $actionPath . 'verify_bhw_email.php',
-
-        // Reports
-        'report-patient-list' => $actionPath . 'report_patient_list.php',
-        'report-inventory-stock' => $actionPath . 'report_inventory.php',
-        'report-chronic-disease' => $actionPath . 'report_chronic.php',
-        'report-my-record' => $actionPath . 'report_my_record.php',
-        'report-bhw-record' => $actionPath . 'report_bhw_record.php',
-        'report-health-records' => $actionPath . 'report_health_records.php',
-
-        // Patient portal auth/actions
-        'register-patient' => $actionPath . 'register_patient_action.php',
-        'login-patient' => $actionPath . 'login_patient_action.php',
-        'logout-patient' => $actionPath . 'logout_patient.php',
-
-        // Admin profile & BHW management
-        'update-profile' => $actionPath . 'update_profile.php',
-        'change-password' => $actionPath . 'change_password.php',
-        'update-bhw' => $actionPath . 'bhw_update.php',
-
-        // Dashboard/chart data
-        'get-chart-data' => $actionPath . 'chart_data.php',
-        
-        // Preferences and notifications
-        'save-preferences' => $actionPath . 'save_preferences.php',
-        'notification-api' => $actionPath . 'notification_api.php',
-
-        // Health Records Actions
-        'save-pregnancy-tracking' => $actionPath . 'health_records_save.php',
-        'delete-pregnancy-tracking' => $actionPath . 'health_records_delete.php',
-        'save-childcare-record' => $actionPath . 'health_records_save.php',
-        'delete-childcare-record' => $actionPath . 'health_records_delete.php',
-        'save-natality-record' => $actionPath . 'health_records_save.php',
-        'delete-natality-record' => $actionPath . 'health_records_delete.php',
-        'save-mortality-record' => $actionPath . 'health_records_save.php',
-        'delete-mortality-record' => $actionPath . 'health_records_delete.php',
-        'save-chronic-disease' => $actionPath . 'health_records_save.php',
-        'delete-chronic-disease' => $actionPath . 'health_records_delete.php',
-        'save-ntp-client' => $actionPath . 'health_records_save.php',
-        'delete-ntp-client' => $actionPath . 'health_records_delete.php',
-        'save-wra-tracking' => $actionPath . 'health_records_save.php',
-        'delete-wra-tracking' => $actionPath . 'health_records_delete.php',
-    ];
-
+    
+    // Only process if action is whitelisted
     if (array_key_exists($action, $allowedActions) && file_exists($allowedActions[$action])) {
-        require $allowedActions[$action]; // All actions run here
-    } else {
-        // Handle unknown action
+        require $allowedActions[$action];
+        exit(); // Stop script after action is performed
+    }
+    
+    // If action is not whitelisted but no page param, show error
+    if (!isset($_GET['page'])) {
         die('Invalid action request.');
     }
-    exit(); // Stop script after action is performed
+    // Otherwise fall through to page routing (action is ignored, used as page parameter)
 }
 
 // --- Regular "page" request (if no action) ---
@@ -151,7 +170,9 @@ $allowedPages = [
     'admin-profile' => ['file' => $basePath . 'admin/profile.php', 'secure' => true],
     'admin-account-settings' => ['file' => $basePath . 'admin/account_settings.php', 'secure' => true],
     'admin-app-settings' => ['file' => $basePath . 'admin/app_settings.php', 'secure' => 'superadmin'],
-    'admin-audit-logs' => ['file' => $basePath . 'admin/audit_logs.php', 'secure' => 'admin'],
+    'admin-audit-logs' => ['file' => $basePath . 'admin/audit_logs.php', 'secure' => 'superadmin'],
+    'admin-db-backup' => ['file' => $basePath . 'admin/db_backup.php', 'secure' => 'superadmin'],
+    'admin-user-roles' => ['file' => $basePath . 'admin/user_roles.php', 'secure' => 'superadmin'],
 
     // Health Records Module
     'admin-health-records' => ['file' => $basePath . 'admin/health_records/index.php', 'secure' => true],
@@ -166,6 +187,7 @@ $allowedPages = [
     // Patient Portal
     'portal-dashboard' => ['file' => $basePath . 'portal/portal_dashboard.php', 'secure' => 'patient'], // Example for patient auth
     'portal-chatbot' => ['file' => $basePath . 'portal/portal_chatbot.php', 'secure' => 'patient'],
+    'portal-profile' => ['file' => $basePath . 'portal/portal_profile.php', 'secure' => 'patient'],
 
     // Error
     '404' => ['file' => $basePath . 'public/404.php', 'secure' => false]

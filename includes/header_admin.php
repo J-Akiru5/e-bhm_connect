@@ -70,7 +70,13 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/admin.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/glass-components.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/chatbot.css" media="print" onload="this.media='all'">
+    
+    <!-- Driver.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+    <!-- Driver.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
     
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -79,9 +85,16 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
     <!-- Prevent FOUC (Flash of Unstyled Content) -->
     <script>
         (function() {
-            const savedTheme = localStorage.getItem('theme') || '<?php echo $currentTheme; ?>';
-            if (savedTheme === 'dark' || (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            // Immediately apply theme from localStorage before any paint
+            const savedTheme = localStorage.getItem('theme');
+            const serverTheme = '<?php echo $currentTheme; ?>';
+            const effectiveTheme = savedTheme || serverTheme;
+
+            if (effectiveTheme === 'dark' ||
+                (effectiveTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
             }
         })();
     </script>
@@ -113,7 +126,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
         </a>
 
         <!-- User Info -->
-        <div class="sidebar-user">
+        <a href="<?php echo BASE_URL; ?>admin-account-settings" class="sidebar-user" style="text-decoration: none; display: flex;">
             <img src="<?php echo BASE_URL; ?>assets/images/gabby_avatar.png" alt="<?php echo htmlspecialchars($currentUserName); ?>" class="sidebar-user-avatar">
             <div class="sidebar-user-info">
                 <div class="sidebar-user-name"><?php echo htmlspecialchars($currentUserName); ?></div>
@@ -121,7 +134,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                     <?php echo get_role_display_name(); ?>
                 </div>
             </div>
-        </div>
+        </a>
 
         <!-- Navigation -->
         <nav class="sidebar-nav">
@@ -279,6 +292,30 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                             <?php echo __('nav.app_settings'); ?>
                         </a>
                     </li>
+                    <li>
+                        <a href="<?php echo BASE_URL; ?>admin-db-backup" class="sidebar-nav-link <?php echo ($page === 'admin-db-backup') ? 'active' : ''; ?>">
+                            <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                            </svg>
+                            <?php echo __('nav.db_backup') ?: 'DB Backup'; ?>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo BASE_URL; ?>admin-audit-logs" class="sidebar-nav-link <?php echo ($page === 'admin-audit-logs') ? 'active' : ''; ?>">
+                            <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                            </svg>
+                            <?php echo __('nav.audit_logs') ?: 'Audit Logs'; ?>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo BASE_URL; ?>admin-user-roles" class="sidebar-nav-link <?php echo ($page === 'admin-user-roles') ? 'active' : ''; ?>">
+                            <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <?php echo __('nav.user_roles') ?: 'User Roles'; ?>
+                        </a>
+                    </li>
                     <?php endif; ?>
                 </ul>
             </div>
@@ -316,49 +353,28 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                 <!-- Language Selector -->
                 <button class="lang-selector" id="langSelector" title="<?php echo __('settings.language'); ?>">
                     <span class="lang-selector-flag"><?php echo $currentLang === 'tl' ? '🇵🇭' : '🇺🇸'; ?></span>
-                    <span><?php echo strtoupper($currentLang); ?></span>
+                    <span><?php echo $currentLang === 'tl' ? 'Filipino' : 'English'; ?></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto; opacity:0.5;">
+                        <path d="m6 9 6 6 6-6" />
+                    </svg>
                 </button>
 
-                <!-- Theme Toggle -->
-                <button class="theme-toggle" data-theme-cycle title="<?php echo __('settings.theme'); ?>">
-                    <span class="theme-toggle-icon <?php echo $currentTheme === 'light' ? 'active' : ''; ?>" data-theme="light">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Theme Toggle Switch -->
+                <div class="theme-switch-wrapper" id="themeToggle" title="<?php echo __('settings.theme'); ?>">
+                    <div class="theme-toggle-slider"></div>
+                    <button class="theme-toggle-btn <?php echo $currentTheme === 'light' ? 'active' : ''; ?>" data-theme-val="light">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                         </svg>
-                    </span>
-                    <span class="theme-toggle-icon <?php echo $currentTheme === 'dark' ? 'active' : ''; ?>" data-theme="dark">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    </button>
+                    <button class="theme-toggle-btn <?php echo $currentTheme === 'dark' ? 'active' : ''; ?>" data-theme-val="dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                         </svg>
-                    </span>
-                </button>
-
-                <!-- Notifications -->
-                <div style="position: relative;">
-                    <button class="topnav-action" id="notificationBtn" title="<?php echo __('notifications.title'); ?>">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                        </svg>
-                        <?php if ($unreadNotifications > 0): ?>
-                        <span class="topnav-action-badge"><?php echo $unreadNotifications > 99 ? '99+' : $unreadNotifications; ?></span>
-                        <?php endif; ?>
                     </button>
-                    
-                    <!-- Notification Dropdown -->
-                    <div class="notification-dropdown" id="notificationDropdown">
-                        <div class="notification-header">
-                            <span class="notification-title"><?php echo __('notifications.title'); ?></span>
-                            <a href="#" id="markAllRead" style="font-size: 0.75rem; color: var(--primary);"><?php echo __('notifications.mark_all_read'); ?></a>
-                        </div>
-                        <div class="notification-list" id="notificationList">
-                            <div class="notification-item" style="text-align: center; padding: 32px;">
-                                <span style="color: var(--text-muted);"><?php echo __('notifications.loading'); ?></span>
-                            </div>
-                        </div>
-                        <div class="notification-footer">
-                            <a href="<?php echo BASE_URL; ?>admin-notifications"><?php echo __('notifications.view_all'); ?></a>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- View Public Site -->

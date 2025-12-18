@@ -9,6 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/auth_helpers.php';
 
 // Only allow POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -88,6 +89,7 @@ try {
 
     // 6. Commit
     $pdo->commit();
+    log_audit('dispense_medicine', 'inventory', $medicine_id, ['patient_id' => $patient_id, 'quantity' => $quantity]);
 
     $_SESSION['form_success'] = 'Success: Medicine dispensed.';
     header('Location: ' . $redirect_url);

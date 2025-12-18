@@ -10,6 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/auth_helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . BASE_URL . 'admin-announcements');
@@ -27,6 +28,7 @@ if ($announcement_id <= 0) {
 try {
     $stmt = $pdo->prepare('DELETE FROM announcements WHERE announcement_id = ?');
     $stmt->execute([$announcement_id]);
+    log_audit('delete_announcement', 'announcement', $announcement_id);
     $_SESSION['form_success'] = 'Announcement deleted.';
 } catch (Throwable $e) {
     error_log('Announcement delete error: ' . $e->getMessage());

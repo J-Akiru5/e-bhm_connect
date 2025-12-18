@@ -1,6 +1,9 @@
 <?php
 // pages/admin/announcement_edit.php
-include_once __DIR__ . '/../../includes/header_admin.php';
+
+// Include config and auth checks first (no output)
+include_once __DIR__ . '/../../includes/config.php';
+include_once __DIR__ . '/../../includes/auth_check.php';
 
 $announcement_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $announcement = null;
@@ -17,6 +20,9 @@ if (!$announcement) {
     header('Location: ' . BASE_URL . 'admin-announcements');
     exit();
 }
+
+// Now include header (which outputs HTML)
+include_once __DIR__ . '/../../includes/header_admin.php';
 ?>
 
 <div class="container">

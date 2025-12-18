@@ -58,6 +58,16 @@ return [
     'no_results' => 'No results found',
     
     // ========================
+    // User Roles
+    // ========================
+    'roles' => [
+        'guest' => 'Guest',
+        'bhw' => 'Health Worker',
+        'admin' => 'Administrator',
+        'superadmin' => 'Super Admin',
+    ],
+    
+    // ========================
     // Navigation
     // ========================
     'nav' => [
@@ -86,6 +96,9 @@ return [
         'administration' => 'Administration',
         'toggle_sidebar' => 'Toggle Sidebar',
         'view_public_site' => 'View Public Site',
+        'db_backup' => 'DB Backup',
+        'audit_logs' => 'Audit Logs',
+        'user_roles' => 'User Roles',
     ],
     
     // ========================
@@ -207,6 +220,7 @@ return [
     'announcements' => [
         'title' => 'Announcements',
         'add_announcement' => 'Add Announcement',
+        'create_announcement' => 'New Announcement',
         'edit_announcement' => 'Edit Announcement',
         'announcement_title' => 'Title',
         'content' => 'Content',
@@ -343,6 +357,7 @@ return [
         'send' => 'Send',
         'typing' => 'Gabby is typing...',
         'welcome' => 'Hi! I\'m Gabby, your health assistant. How can I help you today?',
+        'greeting' => 'Hi! I\'m Gabby, your health assistant. How can I help you today?',
         'error' => 'Sorry, I encountered an error. Please try again.',
     ],
     
@@ -441,8 +456,33 @@ return [
     // ========================
     // Chatbot
     // ========================
-    'chatbot' => [
-        'greeting' => 'Hi! I\'m Gabby. How can I help you today?',
-        'placeholder' => 'Ask a question...',
+    // Chatbot settings merged into main chatbot key above
+    // 'chatbot' => [
+    //     'greeting' => 'Hi! I\'m Gabby. How can I help you today?',
+    //     'placeholder' => 'Ask a question...',
+    // ],
+    
+    // ========================
+    // Database Backup
+    // ========================
+    'backup' => [
+        'title' => 'Database Backup & Restore',
+        'description' => 'Create and manage database backups',
+        'create_backup' => 'Create Backup',
+        'restore_backup' => 'Restore from Backup',
+        'restore_now' => 'Restore Now',
+        'download_backup' => 'Download',
+        'delete_backup' => 'Delete',
+        'existing_backups' => 'Existing Backups',
+        'filename' => 'Filename',
+        'size' => 'Size',
+        'created_at' => 'Created',
+        'select_file' => 'Select SQL Backup File',
+        'file_hint' => 'Only .sql files are accepted',
+        'no_backups' => 'No backups found. Create your first backup!',
+        'backup_created' => 'Backup created successfully!',
+        'restore_success' => 'Database restored successfully!',
+        'confirm_restore' => 'WARNING: This will overwrite all current data! Are you sure you want to restore from this backup?',
+        'confirm_delete' => 'Are you sure you want to delete this backup?',
     ],
 ];

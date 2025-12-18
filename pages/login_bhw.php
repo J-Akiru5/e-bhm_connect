@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../includes/security_helper.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -274,7 +275,7 @@ require_once __DIR__ . '/../config/config.php';
         
         .info-alert svg {
             flex-shrink: 0;
-            color: #6366f1;
+            color: #20c997;
         }
         
         .info-alert p {
@@ -379,6 +380,7 @@ if (isset($_SESSION['verify_success'])) {
 
         <!-- Login Form -->
         <form method="post" action="?action=login-bhw">
+            <?= csrf_input() ?>
             <div class="form-group">
                 <label for="username" class="form-label">Username</label>
                 <input 

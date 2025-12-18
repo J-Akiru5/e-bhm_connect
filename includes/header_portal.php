@@ -24,12 +24,84 @@
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
+
+    <!-- Driver.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+    <!-- Driver.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
     
     <style>
         /* Portal-specific overrides */
         body {
             background: var(--gray-100);
             min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --gray-100: #1a1a2e;
+            --gray-50: #16213e;
+            --gray-200: #2a2a4a;
+            --gray-300: #3a3a5a;
+            --gray-400: #6a6a8a;
+            --gray-500: #8a8aaa;
+            --gray-600: #a0a0c0;
+            --gray-700: #c0c0d0;
+            --gray-800: #e0e0f0;
+            --gray-900: #f0f0ff;
+            --white: #1e1e3f;
+            background: #1a1a2e;
+            color: #e0e0f0;
+        }
+        
+        body.dark-mode .portal-card,
+        body.dark-mode .dashboard-card,
+        body.dark-mode .profile-section,
+        body.dark-mode .chat-card,
+        body.dark-mode .stat-card {
+            background: #1e1e3f;
+            border-color: #2a2a4a;
+        }
+        
+        body.dark-mode .portal-card-body,
+        body.dark-mode .dashboard-card-body,
+        body.dark-mode .profile-section-body {
+            color: #c0c0d0;
+        }
+        
+        body.dark-mode .form-control {
+            background: #16213e;
+            border-color: #3a3a5a;
+            color: #e0e0f0;
+        }
+        
+        body.dark-mode .form-control:focus {
+            background: #1e1e3f;
+            border-color: var(--primary);
+        }
+        
+        body.dark-mode .text-muted {
+            color: #8a8aaa !important;
+        }
+        
+        body.dark-mode .table {
+            color: #c0c0d0;
+        }
+        
+        body.dark-mode .table thead th {
+            background: #16213e;
+            border-color: #2a2a4a;
+        }
+        
+        body.dark-mode .chat-messages {
+            background: #16213e;
+        }
+        
+        body.dark-mode .chat-bubble {
+            background: #1e1e3f;
+            border-color: #2a2a4a;
+            color: #e0e0f0;
         }
         
         .portal-navbar {
@@ -199,9 +271,31 @@
                         Chat with Gabby
                     </a>
                 </li>
+                <li>
+                    <a class="nav-link <?php echo ($page === 'portal-profile') ? 'active' : ''; ?>" href="<?php echo BASE_URL; ?>portal-profile">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px; vertical-align: middle;">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        My Profile
+                    </a>
+                </li>
             </ul>
             
             <div class="nav-actions">
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="btn btn-sm" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 6px 10px; margin-right: 8px;" title="Toggle Dark Mode">
+                    <svg id="sunIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg id="moonIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                
                 <span style="color: rgba(255,255,255,0.85); font-size: var(--font-size-sm); margin-right: var(--space-2);">
                     <?php echo htmlspecialchars($_SESSION['patient_full_name'] ?? 'User'); ?>
                 </span>
@@ -229,4 +323,31 @@
 document.getElementById('portalMenuToggle')?.addEventListener('click', function() {
     document.getElementById('portalNav').classList.toggle('menu-open');
 });
+
+// Theme toggle functionality
+(function() {
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+    
+    // Check for saved theme preference or default to light
+    const savedTheme = localStorage.getItem('portalTheme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+    }
+    
+    themeToggle?.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        
+        // Toggle icons
+        sunIcon.style.display = isDark ? 'block' : 'none';
+        moonIcon.style.display = isDark ? 'none' : 'block';
+        
+        // Save preference
+        localStorage.setItem('portalTheme', isDark ? 'dark' : 'light');
+    });
+})();
 </script>

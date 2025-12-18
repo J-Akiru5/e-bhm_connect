@@ -138,6 +138,40 @@
     font-style: italic;
 }
 
+/* Light Mode Overrides - Force Application */
+html[data-theme="light"] #chat-window,
+body.light-mode #chat-window {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+html[data-theme="light"] #chat-header,
+body.light-mode #chat-header {
+    background: #537EA9 !important;
+    color: white !important;
+}
+
+html[data-theme="light"] .chat-message.user,
+body.light-mode .chat-message.user {
+    background-color: #e9ecef !important;
+    /* Clearly light gray */
+    color: #1a1a1a !important;
+    /* Almost black text */
+    border: 1px solid #dee2e6 !important;
+}
+
+html[data-theme="light"] #chat-input,
+body.light-mode #chat-input {
+    background: #f8f9fa !important;
+    color: #1a1a1a !important;
+    border-color: #ced4da !important;
+}
+
+html[data-theme="light"] #chat-input::placeholder,
+body.light-mode #chat-input::placeholder {
+    color: #6c757d !important;
+}
 #chat-input-area {
     display: flex;
     border-top: 1px solid rgba(255, 255, 255, 0.04);
