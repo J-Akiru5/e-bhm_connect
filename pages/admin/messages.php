@@ -86,7 +86,7 @@ try {
         <div class="table-responsive">
             <table class="glass-table">
                 <thead>
-                    <tr>
+                    <tr>    
                         <th>Date</th>
                         <th>Phone</th>
                         <th>Message</th>

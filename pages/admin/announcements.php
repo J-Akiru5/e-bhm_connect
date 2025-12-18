@@ -43,10 +43,12 @@ try {
             <h1 class="page-title">Announcements</h1>
             <p class="page-subtitle">Post and manage community announcements</p>
         </div>
+        <?php if (has_permission('manage_announcements')): ?>
         <button class="btn-primary-glass" onclick="openModal()">
             <i class="fas fa-bullhorn"></i>
             New Announcement
         </button>
+        <?php endif; ?>
     </div>
 
     <!-- Stats Row -->
@@ -82,7 +84,9 @@ try {
                                         <i class="fas fa-bullhorn"></i>
                                     </div>
                                     <p>No announcements found</p>
+                                    <?php if (has_permission('manage_announcements')): ?>
                                     <button class="btn-primary-glass" onclick="openModal()">Create First Announcement</button>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
@@ -96,17 +100,22 @@ try {
                                 <td data-label="Posted By"><?php echo htmlspecialchars($a['full_name'] ?? 'Admin'); ?></td>
                                 <td data-label="Date Posted"><?php echo isset($a['created_at']) ? date('M d, Y', strtotime($a['created_at'])) : '-'; ?></td>
                                 <td data-label="Actions">
+                                    <?php if (has_permission('manage_announcements')): ?>
                                     <div class="actions-cell">
                                         <a href="<?php echo BASE_URL; ?>admin-announcement-edit?id=<?php echo $a['announcement_id']; ?>" class="btn-secondary-glass btn-sm-glass">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <form action="<?php echo BASE_URL; ?>?action=delete-announcement" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
+                                            <?php echo csrf_input(); ?>
                                             <input type="hidden" name="announcement_id" value="<?php echo htmlspecialchars($a['announcement_id'] ?? ''); ?>">
                                             <button type="submit" class="btn-danger-glass btn-sm-glass">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
                                     </div>
+                                    <?php else: ?>
+                                    <span class="text-muted">View Only</span>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

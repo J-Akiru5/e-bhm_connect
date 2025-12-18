@@ -928,6 +928,7 @@ body {
 
 .btn-secondary {
   background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
     color: var(--text-primary);

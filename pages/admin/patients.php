@@ -88,10 +88,12 @@ try {
             <h1 class="page-title">Patient Records</h1>
             <p class="page-subtitle">Manage patient information and medical records</p>
         </div>
+        <?php if (has_permission('manage_patients')): ?>
         <a href="<?php echo BASE_URL; ?>admin-patient-form" class="btn-primary-glass">
             <i class="fas fa-user-plus"></i>
             Add New Patient
         </a>
+        <?php endif; ?>
     </div>
 
     <!-- Stats Row -->
@@ -174,7 +176,9 @@ try {
                                         <i class="fas fa-user-friends"></i>
                                     </div>
                                     <p>No patients found</p>
+                                    <?php if (has_permission('manage_patients')): ?>
                                     <a href="<?php echo BASE_URL; ?>admin-patient-form" class="btn-primary-glass">Add First Patient</a>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
@@ -191,6 +195,7 @@ try {
                                         <a href="<?php echo BASE_URL; ?>admin-patient-view?id=<?php echo urlencode($patient['patient_id'] ?? ''); ?>" class="btn-info-glass btn-sm-glass">
                                             <i class="fas fa-eye"></i>
                                         </a>
+                                        <?php if (has_permission('manage_patients')): ?>
                                         <a href="<?php echo BASE_URL; ?>admin-patient-form?id=<?php echo urlencode($patient['patient_id'] ?? ''); ?>" class="btn-secondary-glass btn-sm-glass">
                                             <i class="fas fa-edit"></i>
                                         </a>
@@ -201,6 +206,7 @@ try {
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                             </tr>

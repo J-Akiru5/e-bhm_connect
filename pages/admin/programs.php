@@ -75,10 +75,12 @@ try {
             <h1 class="page-title">Health Programs</h1>
             <p class="page-subtitle">Monitor and manage health program initiatives</p>
         </div>
+        <?php if (has_permission('manage_programs')): ?>
         <button class="btn-primary-glass" onclick="openModal()">
             <i class="fas fa-plus"></i>
             Add New Program
         </button>
+        <?php endif; ?>
     </div>
 
     <!-- Stats Row -->
@@ -146,7 +148,9 @@ try {
                                         <i class="fas fa-clipboard-list"></i>
                                     </div>
                                     <p>No health programs found</p>
+                                    <?php if (has_permission('manage_programs')): ?>
                                     <button class="btn-primary-glass" onclick="openModal()">Create First Program</button>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
@@ -176,17 +180,22 @@ try {
                                     </span>
                                 </td>
                                 <td data-label="Actions">
+                                    <?php if (has_permission('manage_programs')): ?>
                                     <div class="actions-cell">
                                         <a href="<?php echo BASE_URL; ?>admin-program-edit?id=<?php echo $p['program_id']; ?>" class="btn-secondary-glass btn-sm-glass">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <form action="<?php echo BASE_URL; ?>?action=delete-program" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
+                                            <?php echo csrf_input(); ?>
                                             <input type="hidden" name="program_id" value="<?php echo htmlspecialchars($p['program_id'] ?? ''); ?>">
                                             <button type="submit" class="btn-danger-glass btn-sm-glass">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
                                     </div>
+                                    <?php else: ?>
+                                    <span class="text-muted">View Only</span>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -218,6 +227,7 @@ try {
         </div>
         <form method="post" action="<?php echo BASE_URL; ?>?action=save-program">
             <div class="modal-body">
+                <?php echo csrf_input(); ?>
                 <div class="form-group">
                     <label class="form-label">Program Name *</label>
                     <input type="text" name="program_name" class="glass-input" required placeholder="Enter program name">

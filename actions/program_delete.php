@@ -17,6 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
+// Security & Auth
+require_once __DIR__ . '/../includes/security_helper.php';
+require_once __DIR__ . '/../includes/auth_helpers.php';
+
+require_csrf();
+require_permission('manage_programs');
+
 $program_id = isset($_POST['program_id']) ? (int) $_POST['program_id'] : 0;
 
 if ($program_id <= 0) {

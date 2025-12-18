@@ -83,61 +83,28 @@ function has_permission(string $permission): bool
     if (is_superadmin()) {
         return true;
     }
-    
-    // Define permission groups
-    $permissions = [
-        // Patient management
-        'patients.view' => ['admin', 'bhw'],
-        'patients.create' => ['admin', 'bhw'],
-        'patients.edit' => ['admin', 'bhw'],
-        'patients.delete' => ['admin'],
-        
-        // Inventory management
-        'inventory.view' => ['admin', 'bhw'],
-        'inventory.create' => ['admin'],
-        'inventory.edit' => ['admin'],
-        'inventory.delete' => ['admin'],
-        'inventory.dispense' => ['admin', 'bhw'],
-        
-        // BHW management
-        'bhw.view' => ['admin'],
-        'bhw.create' => ['superadmin'],
-        'bhw.edit' => ['superadmin'],
-        'bhw.delete' => ['superadmin'],
-        
-        // Reports
-        'reports.view' => ['admin', 'bhw'],
-        'reports.export' => ['admin'],
-        
-        // Settings
-        'settings.view' => ['admin'],
-        'settings.edit' => ['superadmin'],
-        
-        // Announcements
-        'announcements.view' => ['admin', 'bhw'],
-        'announcements.create' => ['admin'],
-        'announcements.edit' => ['admin'],
-        'announcements.delete' => ['admin'],
-        
-        // Programs
-        'programs.view' => ['admin', 'bhw'],
-        'programs.create' => ['admin'],
-        'programs.edit' => ['admin'],
-        'programs.delete' => ['admin'],
-        
-        // Audit logs
-        'audit.view' => ['admin'],
-        
-        // Notifications
-        'notifications.manage' => ['admin'],
-    ];
-    
-    if (!isset($permissions[$permission])) {
-        return false;
+
+    // Check dynamic permissions fetched in header (or set elsewhere)
+    if (isset($_SESSION['access_permissions']) && is_array($_SESSION['access_permissions'])) {
+        return in_array($permission, $_SESSION['access_permissions']);
     }
     
-    $role = strtolower($_SESSION['role'] ?? 'bhw');
-    return in_array($role, $permissions[$permission]);
+    // Define permission groups (FALLBACK for legacy support or if session is empty)
+    // Note: If dynamic permissions are strictly used, fallback might not be needed.
+    // But keeping it for safety for now, or just returning false if we want strict mode.
+    // Given user's request: "only view pages that they have access into", let's prioritize the dynamic check.
+    // If session permissions are NOT set (e.g. migration didn't happen to this user), maybe it's safest to return false?
+    // However, existing users might lose access. But migration added the column.
+    
+    return false;
+
+    // Legacy manual map (commented out for reference or potential fallback if needed)
+    /*
+    $permissions = [
+        'patients.view' => ['admin', 'bhw'],
+        // ... (rest of old logic)
+    ];
+    */
 }
 
 /**

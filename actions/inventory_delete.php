@@ -19,7 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Validate CSRF token
+// Validate CSRF token
 require_csrf();
+
+// Require 'manage_inventory' permission
+require_permission('manage_inventory');
 
 if (!isset($_POST['item_id']) || trim($_POST['item_id']) === '') {
     $_SESSION['form_error'] = 'No inventory item specified for deletion.';

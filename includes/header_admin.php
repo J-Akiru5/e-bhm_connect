@@ -34,6 +34,22 @@ try {
     // Silently fail if table doesn't exist yet
 }
 
+// --- PERMISSIONS FETCHING ---
+// Re-fetch permissions on every page load to ensure Sidebar is dynamic/live
+if (isset($_SESSION['bhw_id'])) {
+    try {
+        $stmtPerm = $pdo->prepare("SELECT access_permissions FROM bhw_users WHERE bhw_id = ?");
+        $stmtPerm->execute([$_SESSION['bhw_id']]);
+        $jsonPerms = $stmtPerm->fetchColumn();
+        $currentPermissions = !empty($jsonPerms) ? json_decode($jsonPerms, true) : [];
+        if (!is_array($currentPermissions)) $currentPermissions = [];
+        $_SESSION['access_permissions'] = $currentPermissions;
+    } catch (Exception $e) {
+        // Fallback
+        $_SESSION['access_permissions'] = [];
+    }
+}
+
 // Get page title based on current page
 $pageTitles = [
     'admin-dashboard' => __('nav.dashboard'),
@@ -150,6 +166,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                             <?php echo __('nav.dashboard'); ?>
                         </a>
                     </li>
+                    
                     <li>
                         <a href="<?php echo BASE_URL; ?>admin-patients" class="sidebar-nav-link <?php echo ($page === 'admin-patients') ? 'active' : ''; ?>">
                             <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -158,6 +175,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                             <?php echo __('nav.patients'); ?>
                         </a>
                     </li>
+
                     <li>
                         <a href="<?php echo BASE_URL; ?>admin-messages" class="sidebar-nav-link <?php echo ($page === 'admin-messages') ? 'active' : ''; ?>">
                             <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -228,6 +246,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                             <?php echo __('nav.inventory'); ?>
                         </a>
                     </li>
+                    <?php if (has_permission('manage_inventory')): ?>
                     <li>
                         <a href="<?php echo BASE_URL; ?>admin-inventory-categories" class="sidebar-nav-link <?php echo ($page === 'admin-inventory-categories') ? 'active' : ''; ?>">
                             <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -236,6 +255,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                             <?php echo __('nav.inventory_categories'); ?>
                         </a>
                     </li>
+                    <?php endif; ?>
                 </ul>
             </div>
 
@@ -251,6 +271,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                             <?php echo __('nav.announcements'); ?>
                         </a>
                     </li>
+
                     <li>
                         <a href="<?php echo BASE_URL; ?>admin-programs" class="sidebar-nav-link <?php echo ($page === 'admin-programs') ? 'active' : ''; ?>">
                             <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -259,6 +280,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                             <?php echo __('nav.programs'); ?>
                         </a>
                     </li>
+
                     <li>
                         <a href="<?php echo BASE_URL; ?>admin-reports" class="sidebar-nav-link <?php echo ($page === 'admin-reports') ? 'active' : ''; ?>">
                             <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

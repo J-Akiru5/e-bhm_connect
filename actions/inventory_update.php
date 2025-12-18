@@ -17,6 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
+// Security Checks
+require_once __DIR__ . '/../includes/security_helper.php'; // Ensure helper is available
+require_csrf();
+require_permission('manage_inventory');
+
 $item_id = isset($_POST['item_id']) ? trim($_POST['item_id']) : '';
 $item_name = isset($_POST['item_name']) ? trim($_POST['item_name']) : '';
 $description = isset($_POST['description']) ? trim($_POST['description']) : '';

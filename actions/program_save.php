@@ -19,7 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Validate CSRF token
+// Validate CSRF token
 require_csrf();
+
+// Require permission
+require_permission('manage_programs');
 
 $program_name = isset($_POST['program_name']) ? trim($_POST['program_name']) : '';
 $description = isset($_POST['description']) ? trim($_POST['description']) : '';

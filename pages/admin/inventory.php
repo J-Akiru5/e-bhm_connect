@@ -93,14 +93,17 @@ try {
             <h1 class="page-title">Inventory Management</h1>
             <p class="page-subtitle">Manage medication and supplies stock</p>
         </div>
+        <?php if (has_permission('manage_inventory')): ?>
         <button class="btn-primary-glass" onclick="openModal()">
             <i class="fas fa-plus"></i>
             Add New Item
         </button>
+        <?php endif; ?>
     </div>
 
     <!-- Stats Row -->
     <div class="stats-row">
+        <!-- ... stats ... -->
         <div class="glass-card stat-card">
             <div class="stat-icon primary">
                 <i class="fas fa-boxes"></i>
@@ -133,6 +136,7 @@ try {
 
     <!-- Search & Filter Bar -->
     <div class="glass-card filter-bar">
+        <!-- ... form ... -->
         <form method="GET" action="">
             <div class="filter-row">
                 <input type="text" name="search" class="glass-input" style="flex: 1;" placeholder="Search items by name..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
@@ -168,19 +172,23 @@ try {
                         <th>Unit</th>
                         <th>Batch</th>
                         <th>Expiry</th>
+                        <?php if (has_permission('manage_inventory')): ?>
                         <th>Actions</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($inventory_items)): ?>
                         <tr>
-                            <td colspan="7">
+                            <td colspan="<?php echo has_permission('manage_inventory') ? '7' : '6'; ?>">
                                 <div class="empty-state">
                                     <div class="empty-state-icon">
                                         <i class="fas fa-box-open"></i>
                                     </div>
                                     <p>No inventory items found</p>
+                                    <?php if (has_permission('manage_inventory')): ?>
                                     <button class="btn-primary-glass" onclick="openModal()">Add First Item</button>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
@@ -212,12 +220,14 @@ try {
                                 <td data-label="Unit"><?php echo htmlspecialchars($item['unit'] ?? '-'); ?></td>
                                 <td data-label="Batch"><?php echo htmlspecialchars($item['batch_number'] ?? '-'); ?></td>
                                 <td data-label="Expiry"><?php echo htmlspecialchars($item['expiry_date'] ?? '-'); ?></td>
+                                <?php if (has_permission('manage_inventory')): ?>
                                 <td data-label="Actions">
                                     <div class="actions-cell">
                                         <a href="<?php echo BASE_URL; ?>admin-inventory-edit?id=<?php echo $item['item_id']; ?>" class="btn-secondary-glass btn-sm-glass">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <form action="<?php echo BASE_URL; ?>?action=delete-inventory-item" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
+                                            <?php echo csrf_input(); ?>
                                             <input type="hidden" name="item_id" value="<?php echo htmlspecialchars($item['item_id'] ?? ''); ?>">
                                             <button type="submit" class="btn-danger-glass btn-sm-glass">
                                                 <i class="fas fa-trash"></i>
@@ -225,6 +235,7 @@ try {
                                         </form>
                                     </div>
                                 </td>
+                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -255,6 +266,7 @@ try {
         </div>
         <form method="post" action="?action=save-inventory-item">
             <div class="modal-body">
+                <?php echo csrf_input(); ?>
                 <div class="form-group">
                     <label class="form-label">Item Name *</label>
                     <input type="text" name="item_name" class="glass-input" required placeholder="Enter item name">

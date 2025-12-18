@@ -21,6 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Validate CSRF token
 require_csrf();
 
+// Require 'manage_inventory' permission
+require_permission('manage_inventory');
+
 $item_name = isset($_POST['item_name']) ? trim($_POST['item_name']) : '';
 $description = isset($_POST['description']) ? trim($_POST['description']) : '';
 $quantity_in_stock = isset($_POST['quantity_in_stock']) ? trim($_POST['quantity_in_stock']) : '';
