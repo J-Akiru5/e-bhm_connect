@@ -47,10 +47,12 @@ try {
             <h1 class="page-title">SMS Management</h1>
             <p class="page-subtitle">Send broadcast messages and view SMS status</p>
         </div>
+        <?php if (has_permission('use_messages')): ?>
         <button class="btn-primary-glass" onclick="openModal()">
             <i class="fas fa-sms"></i>
             Send Broadcast
         </button>
+        <?php endif; ?>
     </div>
 
     <!-- Stats Row -->
@@ -112,13 +114,18 @@ try {
                                 <td data-label="Phone"><?php echo htmlspecialchars($r['phone_number'] ?? ''); ?></td>
                                 <td data-label="Message"><?php echo htmlspecialchars($r['message'] ?? ''); ?></td>
                                 <td data-label="Action">
+                                    <?php if (has_permission('use_messages')): ?>
                                     <form action="?action=retry-sms" method="POST" class="d-inline">
+                                        <?php echo csrf_input(); ?>
                                         <input type="hidden" name="sms_id" value="<?php echo $r['id']; ?>">
                                         <button type="submit" class="btn-primary-glass btn-sm-glass">
                                             <i class="fas fa-redo"></i>
                                             Retry
                                         </button>
                                     </form>
+                                    <?php else: ?>
+                                    <span class="text-muted">View Only</span>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

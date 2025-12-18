@@ -118,14 +118,18 @@ try {
         </div>
         <?php if ($action === 'list'): ?>
         <div class="d-flex gap-2">
+            <?php if (has_permission('view_reports')): ?>
             <a href="<?php echo BASE_URL; ?>?action=report-health-records&report=natality" class="btn btn-glass">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 Export PDF
             </a>
+            <?php endif; ?>
+            <?php if (has_permission('manage_patients')): ?>
             <a href="<?php echo BASE_URL; ?>admin-health-records-natality?action=add" class="btn btn-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 Register Birth
             </a>
+            <?php endif; ?>
         </div>
         <?php else: ?>
         <a href="<?php echo BASE_URL; ?>admin-health-records-natality" class="btn btn-glass">
@@ -217,12 +221,14 @@ try {
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-natality?action=view&id=<?php echo $rec['natality_id']; ?>" class="btn btn-sm btn-glass" title="View">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                     </a>
+                                    <?php if (has_permission('manage_patients')): ?>
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-natality?action=edit&id=<?php echo $rec['natality_id']; ?>" class="btn btn-sm btn-glass" title="Edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                     </a>
                                     <button type="button" class="btn btn-sm btn-glass text-danger" onclick="confirmDelete(<?php echo $rec['natality_id']; ?>)">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                                     </button>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
@@ -353,9 +359,11 @@ try {
     <div class="glass-card">
         <div class="glass-card-header d-flex justify-content-between align-items-center">
             <h5 class="glass-card-title mb-0">Birth Record Details</h5>
+            <?php if (has_permission('manage_patients')): ?>
             <div class="d-flex gap-2">
                 <a href="<?php echo BASE_URL; ?>admin-health-records-natality?action=edit&id=<?php echo $record['natality_id']; ?>" class="btn btn-sm btn-primary">Edit</a>
             </div>
+            <?php endif; ?>
         </div>
         <div class="glass-card-body">
             <div class="row g-4">

@@ -281,6 +281,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                         </a>
                     </li>
 
+                    <?php if (has_permission('view_reports')): ?>
                     <li>
                         <a href="<?php echo BASE_URL; ?>admin-reports" class="sidebar-nav-link <?php echo ($page === 'admin-reports') ? 'active' : ''; ?>">
                             <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -289,6 +290,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                             <?php echo __('nav.reports'); ?>
                         </a>
                     </li>
+                    <?php endif; ?>
                 </ul>
             </div>
 

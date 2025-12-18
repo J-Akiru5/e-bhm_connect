@@ -1,6 +1,24 @@
 <?php
 // Modern Report Generation Page with Glassmorphism
 include_once __DIR__ . '/../../includes/header_admin.php';
+
+// Check permission - if user doesn't have view_reports, show access denied
+if (!has_permission('view_reports')):
+?>
+<div class="container" style="padding: 24px;">
+    <div class="glass-card text-center py-5">
+        <div class="empty-state-icon mb-4">
+            <i class="fas fa-lock" style="font-size: 48px; color: var(--text-muted);"></i>
+        </div>
+        <h3>Access Restricted</h3>
+        <p class="text-muted">You do not have permission to access Reports. Please contact your administrator.</p>
+        <a href="<?php echo BASE_URL; ?>admin-dashboard" class="btn-primary-glass">Return to Dashboard</a>
+    </div>
+</div>
+<?php
+include_once __DIR__ . '/../../includes/footer_admin.php';
+exit;
+endif;
 ?>
 
 <div class="container" style="padding: 24px;">

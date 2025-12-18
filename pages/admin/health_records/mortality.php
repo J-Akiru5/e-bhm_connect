@@ -125,14 +125,18 @@ try {
         </div>
         <?php if ($action === 'list'): ?>
         <div class="d-flex gap-2">
+            <?php if (has_permission('view_reports')): ?>
             <a href="<?php echo BASE_URL; ?>?action=report-health-records&report=mortality&year=<?php echo $filterYear ?: date('Y'); ?>" class="btn btn-glass">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 Export PDF
             </a>
+            <?php endif; ?>
+            <?php if (has_permission('manage_patients')): ?>
             <a href="<?php echo BASE_URL; ?>admin-health-records-mortality?action=add" class="btn btn-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 Add Record
             </a>
+            <?php endif; ?>
         </div>
         <?php else: ?>
         <a href="<?php echo BASE_URL; ?>admin-health-records-mortality" class="btn btn-glass">← Back to List</a>
@@ -247,7 +251,9 @@ try {
                             <td>
                                 <div class="d-flex gap-1">
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-mortality?action=view&id=<?php echo $rec['mortality_id']; ?>" class="btn btn-sm btn-glass">View</a>
+                                    <?php if (has_permission('manage_patients')): ?>
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-mortality?action=edit&id=<?php echo $rec['mortality_id']; ?>" class="btn btn-sm btn-glass">Edit</a>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
@@ -264,7 +270,9 @@ try {
     <div class="glass-card">
         <div class="glass-card-header d-flex justify-content-between align-items-center">
             <h5 class="glass-card-title mb-0">Death Record Details</h5>
+            <?php if (has_permission('manage_patients')): ?>
             <a href="<?php echo BASE_URL; ?>admin-health-records-mortality?action=edit&id=<?php echo $record['mortality_id']; ?>" class="btn btn-sm btn-primary">Edit</a>
+            <?php endif; ?>
         </div>
         <div class="glass-card-body">
             <div class="row g-4">
