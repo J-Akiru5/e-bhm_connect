@@ -6,6 +6,11 @@
  * Handles create, download, restore, and delete backup operations
  */
 
+// Ensure session is started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../includes/auth_helpers.php';
 require_once __DIR__ . '/../includes/security_helper.php';
@@ -184,6 +189,7 @@ function downloadBackup(): void
 
 /**
  * Restore database from backup
+ * Uses a robust SQL parser that respects quoted strings
  */
 function restoreBackup(): void
 {
@@ -227,47 +233,206 @@ function restoreBackup(): void
             throw new Exception('Backup file is empty.');
         }
         
-        // Create a backup before restore
-        $preRestoreBackup = "pre_restore_" . date('Y-m-d_H-i-s') . ".sql";
+        // Create a pre-restore backup for safety
+        createPreRestoreBackup();
         
         // Execute restore
         $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
         
-        // Split SQL into statements
-        $statements = array_filter(
-            array_map('trim', explode(';', $sql)),
-            fn($s) => !empty($s) && !str_starts_with($s, '--')
-        );
+        // Disable foreign key checks first (critical for restore)
+        $pdo->exec("SET FOREIGN_KEY_CHECKS=0");
         
-        $pdo->beginTransaction();
+        // Parse SQL into statements using a robust parser
+        $statements = parseSqlStatements($sql);
+        
+        $executedCount = 0;
+        $errors = [];
+        
+        // Note: We don't use a transaction because DDL statements (CREATE TABLE, DROP TABLE)
+        // cause implicit commits in MySQL and cannot be rolled back
         
         foreach ($statements as $statement) {
-            if (!empty(trim($statement))) {
+            $statement = trim($statement);
+            if (empty($statement)) {
+                continue;
+            }
+            
+            try {
+                // Convert CREATE TABLE to CREATE TABLE IF NOT EXISTS for safety
+                if (preg_match('/^CREATE\s+TABLE\s+(?!IF\s+NOT\s+EXISTS)/i', $statement)) {
+                    $statement = preg_replace(
+                        '/^CREATE\s+TABLE\s+/i',
+                        'CREATE TABLE IF NOT EXISTS ',
+                        $statement
+                    );
+                }
+                
                 $pdo->exec($statement);
+                $executedCount++;
+            } catch (PDOException $e) {
+                // Log error but continue with other statements
+                $shortStatement = substr($statement, 0, 100);
+                $errors[] = "Statement failed: {$shortStatement}... - " . $e->getMessage();
+                error_log("Restore statement error: " . $e->getMessage());
             }
         }
         
-        $pdo->commit();
+        // Re-enable foreign key checks
+        $pdo->exec("SET FOREIGN_KEY_CHECKS=1");
         
         // Log the action
         log_audit('backup_restore', 'database', null, [
             'filename' => $uploadedFile['name'],
             'size' => $uploadedFile['size'],
-            'statements' => count($statements)
+            'statements' => $executedCount,
+            'errors' => count($errors)
         ]);
         
-        $_SESSION['flash_success'] = 'Database restored successfully from ' . $uploadedFile['name'];
+        if (empty($errors)) {
+            $_SESSION['flash_success'] = "Database restored successfully from {$uploadedFile['name']}. Executed {$executedCount} statements.";
+        } else {
+            $_SESSION['flash_success'] = "Database restored with {$executedCount} statements. " . count($errors) . " statements had errors (check logs).";
+        }
         
     } catch (Throwable $e) {
-        if ($pdo->inTransaction()) {
-            $pdo->rollBack();
-        }
+        // Re-enable foreign key checks even on error
+        try { $pdo->exec("SET FOREIGN_KEY_CHECKS=1"); } catch (Exception $ex) {}
+        
         error_log('Database restore error: ' . $e->getMessage());
         $_SESSION['flash_error'] = 'Failed to restore database: ' . $e->getMessage();
     }
     
     header('Location: ' . BASE_URL . 'admin-db-backup');
     exit;
+}
+
+/**
+ * Parse SQL into individual statements, respecting quoted strings
+ * This prevents breaking on semicolons inside text values
+ * 
+ * @param string $sql The full SQL content
+ * @return array Array of individual SQL statements
+ */
+function parseSqlStatements(string $sql): array
+{
+    $statements = [];
+    $currentStatement = '';
+    $inString = false;
+    $stringChar = '';
+    $length = strlen($sql);
+    
+    for ($i = 0; $i < $length; $i++) {
+        $char = $sql[$i];
+        $prevChar = $i > 0 ? $sql[$i - 1] : '';
+        
+        // Handle string delimiters (single and double quotes)
+        if (($char === "'" || $char === '"') && $prevChar !== '\\') {
+            if (!$inString) {
+                $inString = true;
+                $stringChar = $char;
+            } elseif ($char === $stringChar) {
+                // Check for escaped quote ('' or "")
+                $nextChar = $i + 1 < $length ? $sql[$i + 1] : '';
+                if ($nextChar === $char) {
+                    // Escaped quote, add both and skip next
+                    $currentStatement .= $char . $nextChar;
+                    $i++;
+                    continue;
+                }
+                $inString = false;
+                $stringChar = '';
+            }
+        }
+        
+        // Check for statement terminator (semicolon outside quotes)
+        if ($char === ';' && !$inString) {
+            $trimmed = trim($currentStatement);
+            // Skip comments and empty statements
+            if (!empty($trimmed) && !preg_match('/^--/', $trimmed) && !preg_match('/^\/\*/', $trimmed)) {
+                $statements[] = $trimmed;
+            }
+            $currentStatement = '';
+            continue;
+        }
+        
+        $currentStatement .= $char;
+    }
+    
+    // Add final statement if exists
+    $trimmed = trim($currentStatement);
+    if (!empty($trimmed) && !preg_match('/^--/', $trimmed) && !preg_match('/^\/\*/', $trimmed)) {
+        $statements[] = $trimmed;
+    }
+    
+    return $statements;
+}
+
+/**
+ * Create a backup before restoring (safety net)
+ */
+function createPreRestoreBackup(): void
+{
+    global $pdo, $backupDir;
+    
+    try {
+        $dbname = $_ENV['DB_NAME'] ?? 'ebhm_connect';
+        $timestamp = date('Y-m-d_H-i-s');
+        $filename = "pre_restore_{$dbname}_{$timestamp}.sql";
+        $filepath = $backupDir . '/' . $filename;
+        
+        // Get all tables
+        $tables = [];
+        $stmt = $pdo->query("SHOW TABLES");
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $tables[] = $row[0];
+        }
+        
+        // Build SQL backup
+        $sql = "-- E-BHM Connect Pre-Restore Backup\n";
+        $sql .= "-- Generated: " . date('Y-m-d H:i:s') . "\n";
+        $sql .= "-- Database: {$dbname}\n\n";
+        $sql .= "SET FOREIGN_KEY_CHECKS=0;\n\n";
+        
+        foreach ($tables as $table) {
+            // Get table structure
+            $stmt = $pdo->query("SHOW CREATE TABLE `{$table}`");
+            $row = $stmt->fetch(PDO::FETCH_NUM);
+            
+            $sql .= "-- Table: {$table}\n";
+            $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
+            $sql .= $row[1] . ";\n\n";
+            
+            // Get table data
+            $stmt = $pdo->query("SELECT * FROM `{$table}`");
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($rows)) {
+                $columns = array_keys($rows[0]);
+                $columnList = '`' . implode('`, `', $columns) . '`';
+                
+                foreach ($rows as $row) {
+                    $values = array_map(function($value) use ($pdo) {
+                        if ($value === null) {
+                            return 'NULL';
+                        }
+                        return $pdo->quote($value);
+                    }, array_values($row));
+                    
+                    $sql .= "INSERT INTO `{$table}` ({$columnList}) VALUES (" . implode(', ', $values) . ");\n";
+                }
+                $sql .= "\n";
+            }
+        }
+        
+        $sql .= "SET FOREIGN_KEY_CHECKS=1;\n";
+        
+        // Write to file
+        file_put_contents($filepath, $sql);
+        
+    } catch (Throwable $e) {
+        error_log('Pre-restore backup failed: ' . $e->getMessage());
+        // Don't throw - this is a safety feature, not critical
+    }
 }
 
 /**

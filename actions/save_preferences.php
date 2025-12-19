@@ -13,6 +13,7 @@ if (!isset($_SESSION['bhw_id']) && !isset($_SESSION['patient_id'])) {
     exit;
 }
 
+require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth_helpers.php';
 
@@ -28,7 +29,7 @@ if (!$input) {
 }
 
 // Get current user info
-$userId = $_SESSION['bhw_id'] ?? $_SESSION['patient_id'];
+$userId = isset($_SESSION['bhw_id']) ? (int)$_SESSION['bhw_id'] : (int)$_SESSION['patient_id'];
 $userType = isset($_SESSION['bhw_id']) ? 'bhw' : 'patient';
 
 // Get current preferences
@@ -43,13 +44,14 @@ $newPrefs = [
     'dashboard_widgets' => $input['dashboard_widgets'] ?? $currentPrefs['dashboard_widgets'],
 ];
 
-// Save preferences
+// Save preferences (correct parameter order: preferences array, userId, userType)
 $success = save_user_preferences($newPrefs, $userId, $userType);
 
 if ($success) {
-    // Update session
+    // Update session - sync all language-related session vars
     $_SESSION['theme'] = $newPrefs['theme'];
     $_SESSION['language'] = $newPrefs['language'];
+    $_SESSION['user_language'] = $newPrefs['language']; // Required by translation_helper
     
     echo json_encode([
         'success' => true,

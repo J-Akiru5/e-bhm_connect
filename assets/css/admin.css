@@ -78,8 +78,10 @@ body.page-leaving {
       --body-bg: var(--gray-100);
       --content-bg: var(--white);
       --text-primary: var(--gray-900);
-      --text-secondary: var(--gray-600);
-      --text-muted: var(--gray-500);
+      --text-secondary: var(--gray-700);
+        /* Improved contrast: was gray-600 */
+        --text-muted: var(--gray-600);
+        /* Improved contrast: was gray-500 */
       --border-color: var(--gray-200);
       --border-light: var(--gray-100);
     

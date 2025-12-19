@@ -57,8 +57,8 @@ $totalRecords = array_sum($counts);
 $categories = [
     [
         'id' => 'pregnancy',
-        'title' => 'Pregnancy Tracking',
-        'description' => 'Monitor pregnant women from identification to delivery outcome',
+        'title' => __('health_records.pregnancy_tracking'),
+        'description' => __('health_records.pregnancy_desc'),
         'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/><path d="M12 13v8"/></svg>',
         'color' => '#ec4899',
         'link' => BASE_URL . 'admin-health-records-pregnancy',
@@ -66,8 +66,8 @@ $categories = [
     ],
     [
         'id' => 'child_care',
-        'title' => 'Child Care (12-59 Months)',
-        'description' => 'Track child immunization and supplementation records',
+        'title' => __('health_records.child_care'),
+        'description' => __('health_records.child_care_desc'),
         'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></svg>',
         'color' => '#f59e0b',
         'link' => BASE_URL . 'admin-health-records-childcare',
@@ -134,14 +134,14 @@ $categories = [
                         <line x1="16" y1="17" x2="8" y2="17"/>
                         <polyline points="10 9 9 9 8 9"/>
                     </svg>
-                    Health Records Dashboard
+                    <?php echo __('health_records.title'); ?>
                 </h1>
-                <p class="text-secondary mb-0">Comprehensive health tracking for barangay residents</p>
+                <p class="text-secondary mb-0"><?php echo __('health_records.subtitle'); ?></p>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <div class="text-end">
                     <div class="h4 mb-0 fw-bold" style="color: var(--primary);"><?php echo number_format($totalRecords); ?></div>
-                    <small class="text-secondary">Total Records</small>
+                    <small class="text-secondary"><?php echo __('health_records.total_records'); ?></small>
                 </div>
             </div>
         </div>
@@ -153,7 +153,7 @@ $categories = [
             <div class="stat-card h-100">
                 <div class="stat-card-content text-center">
                     <div class="stat-card-value" style="color: #ec4899;"><?php echo number_format($counts['pregnancy']); ?></div>
-                    <div class="stat-card-label small">Pregnancies</div>
+                    <div class="stat-card-label small"><?php echo __('health_records.pregnancies'); ?></div>
                 </div>
             </div>
         </div>
@@ -161,7 +161,7 @@ $categories = [
             <div class="stat-card h-100">
                 <div class="stat-card-content text-center">
                     <div class="stat-card-value" style="color: #10b981;"><?php echo number_format($counts['natality']); ?></div>
-                    <div class="stat-card-label small">Births</div>
+                    <div class="stat-card-label small"><?php echo __('health_records.births'); ?></div>
                 </div>
             </div>
         </div>
@@ -169,7 +169,7 @@ $categories = [
             <div class="stat-card h-100">
                 <div class="stat-card-content text-center">
                     <div class="stat-card-value" style="color: #6b7280;"><?php echo number_format($counts['mortality']); ?></div>
-                    <div class="stat-card-label small">Deaths</div>
+                    <div class="stat-card-label small"><?php echo __('health_records.deaths'); ?></div>
                 </div>
             </div>
         </div>
@@ -177,7 +177,7 @@ $categories = [
             <div class="stat-card h-100">
                 <div class="stat-card-content text-center">
                     <div class="stat-card-value" style="color: #ef4444;"><?php echo number_format($counts['chronic']); ?></div>
-                    <div class="stat-card-label small">Chronic</div>
+                    <div class="stat-card-label small"><?php echo __('health_records.chronic'); ?></div>
                 </div>
             </div>
         </div>
@@ -185,7 +185,7 @@ $categories = [
             <div class="stat-card h-100">
                 <div class="stat-card-content text-center">
                     <div class="stat-card-value" style="color: #8b5cf6;"><?php echo number_format($counts['ntp']); ?></div>
-                    <div class="stat-card-label small">TB Cases</div>
+                    <div class="stat-card-label small"><?php echo __('health_records.tb_cases'); ?></div>
                 </div>
             </div>
         </div>

@@ -228,18 +228,39 @@
     (function(){
         const selector = document.getElementById('langSelector');
         if(selector){
-            selector.addEventListener('click', function(){
-                const currentLang = '<?php echo $currentLang; ?>';
+            selector.addEventListener('click', function(e){
+                e.preventDefault();
+                
+                // Get current language from session
+                const currentLang = '<?php echo $_SESSION["user_language"] ?? $_SESSION["language"] ?? "en"; ?>';
                 const newLang = currentLang === 'en' ? 'tl' : 'en';
+                
+                console.log('Switching language from', currentLang, 'to', newLang);
                 
                 // Save preference via AJAX
                 fetch('<?php echo BASE_URL; ?>actions/save_preferences.php', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({language: newLang})
-                }).then(() => {
-                    // Reload page to apply
-                    window.location.reload();
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Preferences saved:', data);
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        console.error('Failed to save:', data.message);
+                        alert('Failed to change language: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error saving preferences:', error);
+                    alert('Error changing language. Check console for details.');
                 });
             });
         }

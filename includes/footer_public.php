@@ -80,8 +80,19 @@
     <!-- Marked.js for Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <!-- Chatbot Styles and Scripts -->
+    <?php
+    // Include auth helpers to get app settings if not already included
+    require_once __DIR__ . '/auth_helpers.php';
+    
+    // Check if chatbot is enabled
+    $chatbotEnabled = get_app_setting('enable_chatbot', true);
+    ?>
+
+    <!-- Shared Components (Footer, Tour, etc) -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/shared-components.css">
+
+    <?php if ($chatbotEnabled): ?>
+    <!-- Chatbot Styles and Scripts -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/chatbot.css">
     <script src="<?php echo BASE_URL; ?>assets/js/chatbot.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/resizable.js"></script>
@@ -114,6 +125,7 @@
             </button>
         </div>
     </div>
+    <?php endif; ?>
 
     <!-- Tour Restart Button -->
     <button id="tour-restart-btn" onclick="startGlobalTour()" aria-label="Restart Tour" title="Restart Site Tour">
@@ -156,6 +168,7 @@
                         align: 'end' 
                     } 
                 },
+                <?php if ($chatbotEnabled): ?>
                 { 
                     element: '#chat-bubble', 
                     popover: { 
@@ -165,6 +178,7 @@
                         align: 'end' 
                     } 
                 },
+                <?php endif; ?>
                 { 
                     element: '#tour-restart-btn', 
                     popover: { 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 19, 2025 at 03:06 AM
+-- Generation Time: Dec 19, 2025 at 07:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -77,14 +77,19 @@ INSERT INTO `app_settings` (`setting_id`, `setting_key`, `setting_value`, `setti
 (8, 'health_center_email', 'healthcenter@bacong.gov', 'string', 'general', 'Health center email', 1, NULL, '2025-12-16 12:40:30'),
 (9, 'enable_sms_notifications', 'true', 'boolean', 'features', 'Enable SMS notifications', 0, NULL, '2025-12-16 12:40:30'),
 (10, 'enable_email_notifications', 'true', 'boolean', 'features', 'Enable email notifications', 0, NULL, '2025-12-16 12:40:30'),
-(11, 'enable_chatbot', 'true', 'boolean', 'features', 'Enable AI chatbot (Gabby)', 0, NULL, '2025-12-16 12:40:30'),
-(12, 'enable_patient_portal', 'true', 'boolean', 'features', 'Enable patient portal registration', 0, NULL, '2025-12-16 12:40:30'),
+(11, 'enable_chatbot', '1', 'string', 'features', 'Enable AI chatbot (Gabby)', 0, NULL, '2025-12-19 05:46:05'),
+(12, 'enable_patient_portal', '1', 'string', 'features', 'Enable patient portal registration', 0, NULL, '2025-12-19 05:46:05'),
 (13, 'require_bhw_approval', 'true', 'boolean', 'features', 'Require superadmin approval for BHW accounts', 0, NULL, '2025-12-16 12:40:30'),
 (14, 'maintenance_mode', 'false', 'boolean', 'maintenance', 'Enable maintenance mode', 0, NULL, '2025-12-16 12:40:30'),
 (15, 'maintenance_message', 'The system is currently under maintenance. Please try again later.', 'string', 'maintenance', 'Maintenance mode message', 1, NULL, '2025-12-16 12:40:30'),
 (16, 'audit_retention_days', '90', 'number', 'audit', 'Days to retain audit logs (0 = forever)', 0, NULL, '2025-12-16 12:40:30'),
 (17, 'log_login_attempts', 'true', 'boolean', 'audit', 'Log login attempts', 0, NULL, '2025-12-16 12:40:30'),
-(18, 'log_data_changes', 'true', 'boolean', 'audit', 'Log data create/update/delete', 0, NULL, '2025-12-16 12:40:30');
+(18, 'log_data_changes', 'true', 'boolean', 'audit', 'Log data create/update/delete', 0, NULL, '2025-12-16 12:40:30'),
+(21, 'enable_sms', '1', 'string', 'general', NULL, 0, NULL, '2025-12-19 05:46:05'),
+(24, 'enable_email_verification', '1', 'string', 'general', NULL, 0, NULL, '2025-12-19 05:46:05'),
+(25, 'default_language', 'tl', 'string', 'general', NULL, 0, NULL, '2025-12-19 05:46:05'),
+(26, 'default_theme', 'dark', 'string', 'general', NULL, 0, NULL, '2025-12-19 05:46:05'),
+(85, 'portal_registration_mode', 'open', 'string', 'general', NULL, 0, NULL, '2025-12-19 05:46:05');
 
 -- --------------------------------------------------------
 
@@ -147,7 +152,38 @@ INSERT INTO `audit_logs` (`log_id`, `user_id`, `user_type`, `action`, `entity_ty
 (33, 1, 'bhw', 'login_success', 'bhw', 1, NULL, NULL, '{\"username\":\"TestUser-1\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-18 15:54:14'),
 (34, 1, 'bhw', 'login_success', 'bhw', 1, NULL, NULL, '{\"username\":\"TestUser-1\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 00:11:51'),
 (35, 1, 'bhw', 'login_success', 'bhw', 1, NULL, NULL, '{\"username\":\"TestUser-1\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0', '2025-12-19 00:26:42'),
-(36, 3, 'bhw', 'login_success', 'bhw', 3, NULL, NULL, '{\"username\":\"superadmin\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 01:13:41');
+(36, 3, 'bhw', 'login_success', 'bhw', 3, NULL, NULL, '{\"username\":\"superadmin\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 01:13:41'),
+(37, 1, 'bhw', 'dispense_medicine', 'inventory', 12, NULL, NULL, '{\"patient_id\":87,\"quantity\":4}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 02:09:58'),
+(38, 1, 'bhw', 'dispense_medicine', 'inventory', 20, NULL, NULL, '{\"patient_id\":3,\"quantity\":6}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 02:11:06'),
+(39, 1, 'bhw', 'logout', 'bhw', 1, NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 02:21:36'),
+(40, 1, 'bhw', 'login_success', 'bhw', 1, NULL, NULL, '{\"username\":\"TestUser-1\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 02:21:43'),
+(41, 3, 'bhw', 'login_success', 'bhw', 3, NULL, NULL, '{\"username\":\"superadmin\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 02:29:58'),
+(42, 1, 'bhw', 'upload_photo', 'patient', 3, NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 02:31:51'),
+(43, 3, 'bhw', 'update_inventory', 'inventory', 13, NULL, NULL, '{\"item_name\":\"Amoxicillin 500mg #169\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 02:49:34'),
+(44, 3, 'bhw', 'update_inventory', 'inventory', 10, NULL, NULL, '{\"item_name\":\"Betadine #223\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 03:11:53'),
+(45, 3, 'bhw', 'logout', 'bhw', 3, NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:04:53'),
+(46, 3, 'bhw', 'login_success', 'bhw', 3, NULL, NULL, '{\"username\":\"superadmin\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:05:03'),
+(47, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:28:33'),
+(48, 3, 'bhw', 'update_general_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"site_name\",\"site_tagline\",\"contact_email\",\"contact_phone\",\"barangay_name\",\"municipality\",\"province\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:31:03'),
+(49, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:31:10'),
+(50, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:36:45'),
+(51, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:36:54'),
+(52, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:37:03'),
+(53, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:37:29'),
+(54, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:37:33'),
+(55, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:37:41'),
+(56, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:40:59'),
+(57, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:41:16'),
+(58, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 04:50:37'),
+(59, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 05:18:54'),
+(60, 1, 'bhw', 'login_success', 'bhw', 1, NULL, NULL, '{\"username\":\"TestUser-1\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 05:22:12'),
+(61, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"portal_registration_mode\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 05:32:49'),
+(62, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"portal_registration_mode\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 05:37:15'),
+(63, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"portal_registration_mode\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 05:37:36'),
+(64, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"portal_registration_mode\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 05:37:49'),
+(65, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"portal_registration_mode\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 05:45:56'),
+(66, 3, 'bhw', 'update_feature_settings', 'app_settings', NULL, NULL, NULL, '{\"changes\":[\"enable_sms\",\"enable_chatbot\",\"enable_patient_portal\",\"enable_email_verification\",\"portal_registration_mode\",\"default_language\",\"default_theme\"]}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2025-12-19 05:46:05'),
+(67, 1, 'bhw', 'login_success', 'bhw', 1, NULL, NULL, '{\"username\":\"TestUser-1\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0', '2025-12-19 05:56:31');
 
 -- --------------------------------------------------------
 
@@ -232,7 +268,10 @@ INSERT INTO `chatbot_history` (`history_id`, `user_id`, `prompt_text`, `response
 (20, NULL, 'What\'s up?', 'Kumusta po! Gabby here, your AI assistant for Barangay Bacong.\n\nEverything\'s running smoothly on my end, ready to assist our dedicated BHWs like you.\n\nIs there anything specific you need help with today? Whether it\'s general health information, a refresher on a first-aid procedure, details about the Health Center (like our hours, 8 AM-5 PM, Monday to Friday, or contact number, (033) 123-4567), or just a quick chat about resources, just let me know. I\'m here to support you in your vital work for our community.', '2025-12-19 00:27:29'),
 (21, NULL, 'Ehh what\'s up?', 'Hello there! Everything\'s good here, ready to assist.\n\nAs Gabby, your AI assistant for Barangay Bacong, I\'m here to help you, our dedicated BHWs, with any information you might need.\n\nSo, what\'s on your mind today? Do you have any questions about general health information, first-aid procedures, or perhaps you need details about our Barangay Health Center? Just let me know how I can assist!', '2025-12-19 00:29:47'),
 (22, NULL, 'Hi gabby', 'Hello there! It\'s great to hear from you.\n\nHow can I help you today? Whether you have a question about health information, a first-aid procedure, or need details about our Barangay Health Center, just let me know. I\'m here to support our BHWs in Barangay Bacong.', '2025-12-19 01:05:35'),
-(23, NULL, 'What is the weather today', 'Kumusta po! Maraming salamat sa tanong.\n\nBilang isang AI assistant para sa Barangay Bacong, wala po akong kakayahang magbigay ng real-time na impormasyon tungkol sa kasalukuyang panahon o weather. Ang aking mga impormasyon ay nakatuon sa kalusugan at serbisyo ng ating Health Center.\n\nPara po sa weather updates, maaari kayong sumangguni sa mga lokal na news channel, weather apps, o sa official website ng PAGASA (Philippine Atmospheric, Geophysical and Astronomical Services Administration) para sa pinakatumpak na impormasyon.\n\nKung mayroon po kayong katanungan tungkol sa kalusugan, first-aid, o sa ating Health Center (bukas po kami 8 AM-5 PM, Lunes hanggang Biyernes; contact: (033) 123-4567), handa po akong tumulong!', '2025-12-19 01:05:57');
+(23, NULL, 'What is the weather today', 'Kumusta po! Maraming salamat sa tanong.\n\nBilang isang AI assistant para sa Barangay Bacong, wala po akong kakayahang magbigay ng real-time na impormasyon tungkol sa kasalukuyang panahon o weather. Ang aking mga impormasyon ay nakatuon sa kalusugan at serbisyo ng ating Health Center.\n\nPara po sa weather updates, maaari kayong sumangguni sa mga lokal na news channel, weather apps, o sa official website ng PAGASA (Philippine Atmospheric, Geophysical and Astronomical Services Administration) para sa pinakatumpak na impormasyon.\n\nKung mayroon po kayong katanungan tungkol sa kalusugan, first-aid, o sa ating Health Center (bukas po kami 8 AM-5 PM, Lunes hanggang Biyernes; contact: (033) 123-4567), handa po akong tumulong!', '2025-12-19 01:05:57'),
+(24, NULL, 'Hello', 'Hello there! I\'m Gabby, your health assistant for Barangay Bacong. How can I help you today? Feel free to ask me general health questions or about our Bacong Barangay Health Center.', '2025-12-19 04:41:26'),
+(25, NULL, 'Hello', 'Kumusta! Ako si Gabby, ang inyong helpful health assistant para sa Barangay Bacong.\n\nPaano po ako makakatulong sa inyo ngayong araw? May tanong po ba kayo tungkol sa pangkalahatang kalusugan o sa ating Bacong Barangay Health Center?', '2025-12-19 05:18:26'),
+(26, NULL, 'Konnichiwa', 'Mabuhay! Ako po si Gabby, ang inyong helpful health assistant para sa Barangay Bacong. Ano po ang maitutulong ko sa inyo ngayon?', '2025-12-19 05:18:37');
 
 -- --------------------------------------------------------
 
@@ -763,17 +802,17 @@ INSERT INTO `medication_inventory` (`item_id`, `item_name`, `description`, `cate
 (7, 'Cough Syrup #303', 'Auto-generated inventory item for testing.', 'Vitamins', 'BATCH-6C61EC', '2026-03-06', 65, 10, 'bottles', '2025-09-27', NULL),
 (8, 'Lisinopril #83', 'Auto-generated inventory item for testing.', 'Vitamins', 'BATCH-6AA4D7', '2026-09-02', 96, 10, 'boxes', '2025-11-30', NULL),
 (9, 'Metformin #479', 'Auto-generated inventory item for testing.', 'Pain Relief', 'BATCH-E90B5F', '2026-08-19', 38, 10, 'tablets', '2025-11-03', NULL),
-(10, 'Betadine #223', 'Auto-generated inventory item for testing.', 'Vitamins', 'BATCH-67107F', '2025-10-18', 57, 10, 'vials', '2025-09-11', NULL),
+(10, 'Betadine #223', 'Auto-generated inventory item for testing.', NULL, 'BATCH-67107F', '2025-10-18', 60, 10, 'vials', '2025-09-11', NULL),
 (11, 'Aspirin 81mg #803', 'Auto-generated inventory item for testing.', 'Maintenance', 'BATCH-B4C89E', '2026-11-29', 5, 10, 'packs', '2025-12-02', NULL),
-(12, 'Aspirin 81mg #380', 'Auto-generated inventory item for testing.', NULL, 'BATCH-F8D836', '2025-12-31', 74, 10, 'packs', '2025-11-06', 1),
-(13, 'Amoxicillin 500mg #169', 'Auto-generated inventory item for testing.', NULL, 'BATCH-69C137', '2025-09-28', 95, 10, 'sachets', '2025-09-15', 1),
+(12, 'Aspirin 81mg #380', 'Auto-generated inventory item for testing.', NULL, 'BATCH-F8D836', '2025-12-31', 70, 10, 'packs', '2025-11-06', 1),
+(13, 'Amoxicillin 500mg #169', 'Auto-generated inventory item for testing.', NULL, 'BATCH-69C137', '2025-09-28', 99, 10, 'sachets', '2025-09-15', 1),
 (14, 'Multivitamin Tablets #843', 'Auto-generated inventory item for testing.', 'Vitamins', 'BATCH-2D0E2E', '2026-11-05', 100, 10, 'tablets', '2025-10-08', NULL),
 (15, 'Multivitamin Tablets #78', 'Auto-generated inventory item for testing.', 'Vitamins', 'BATCH-C91E04', '2026-05-21', 8, 10, 'packs', '2025-10-19', NULL),
 (16, 'Multivitamin Tablets #540', 'Auto-generated inventory item for testing.', 'Vitamins', 'BATCH-26DE08', '2025-11-22', 77, 10, 'tablets', '2025-10-05', NULL),
 (17, 'Metformin #374', 'Auto-generated inventory item for testing.', NULL, 'BATCH-CDAC7C', '2025-06-27', 34, 10, 'sachets', '2025-10-17', 3),
 (18, 'Iron Syrup #988', 'Auto-generated inventory item for testing.', 'Maintenance', 'BATCH-7A70F4', '2026-11-30', 4, 10, 'bottles', '2025-09-14', NULL),
 (19, 'Metformin #83', 'Auto-generated inventory item for testing.', 'Maintenance', 'BATCH-56A4B0', '2026-04-08', 58, 10, 'boxes', '2025-11-05', NULL),
-(20, 'Ibuprofen 200mg #888', 'Auto-generated inventory item for testing.', 'Pain Relief', 'BATCH-5D0690', '2025-12-11', 46, 10, 'packs', '2025-11-10', NULL),
+(20, 'Ibuprofen 200mg #888', 'Auto-generated inventory item for testing.', 'Pain Relief', 'BATCH-5D0690', '2025-12-11', 40, 10, 'packs', '2025-11-10', NULL),
 (21, 'Vitamin C 1000mg #602', 'Auto-generated inventory item for testing.', 'Maintenance', 'BATCH-0DC75E', '2026-07-13', 80, 10, 'vials', '2025-10-01', NULL);
 
 -- --------------------------------------------------------
@@ -792,6 +831,14 @@ CREATE TABLE `medicine_dispensing_log` (
   `notes` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `medicine_dispensing_log`
+--
+
+INSERT INTO `medicine_dispensing_log` (`id`, `resident_id`, `item_id`, `quantity`, `bhw_id`, `dispensed_at`, `notes`, `created_at`) VALUES
+(1, 87, 12, 4, 1, '2025-12-19 10:09:58', 'To be taken every after lunch', '2025-12-19 02:09:58'),
+(2, 3, 20, 6, 1, '2025-12-19 10:11:06', 'Take twice a day after meal', '2025-12-19 02:11:06');
 
 -- --------------------------------------------------------
 
@@ -1049,7 +1096,7 @@ CREATE TABLE `patients` (
 
 INSERT INTO `patients` (`patient_id`, `full_name`, `address`, `birthdate`, `sex`, `contact`, `created_at`, `profile_photo`) VALUES
 (2, 'Juan Dela Cruz', 'Barangay Bacong, Dumangas, Iloilo', '1999-01-01', 'Male', '09983860315', '2025-11-15 10:29:47', NULL),
-(3, 'Anna Santos', 'Barangay Bacong, Dumangas, Iloilo', '2000-02-02', 'Male', '09649394968', '2025-11-16 23:53:05', 'patient_3_1766069252.png'),
+(3, 'Anna Santos', 'Barangay Bacong, Dumangas, Iloilo', '2000-02-02', 'Male', '09649394968', '2025-11-16 23:53:05', 'patient_3_1766111511.jpg'),
 (4, 'Victor Delrosario', 'Purok Mabini, Barangay Bacong', '1940-06-08', 'Male', '09573941394', '2025-11-13 19:13:54', NULL),
 (5, 'Mark Paredes', 'Purok 4, Barangay Bacong', '1988-03-14', 'Female', '09240238390', '2025-11-13 19:13:54', NULL),
 (6, 'Rene Fernandez', 'Purok 2, Barangay Bacong', '1951-11-27', 'Female', '09998458931', '2025-07-21 19:13:54', NULL),
@@ -1202,7 +1249,7 @@ CREATE TABLE `patient_users` (
 
 INSERT INTO `patient_users` (`user_id`, `patient_id`, `email`, `password_hash`, `avatar`, `last_login`, `created_at`) VALUES
 (1, 2, 'juandelacruz@gmail.com', '$2y$10$PTVEpZzepgQ9mUTt/03gHeH5j0I6qTwAEeSs1YeyRCiHwm3PDQp66', NULL, '2025-12-03 15:22:40', '2025-11-16 07:52:34'),
-(2, 3, 'ana@gmail.com', '$2y$10$95iXHREMGyoeuHWYfZh68.EvM2AuWSErP/OFudVIUq8PQvLxj0T.i', NULL, '2025-12-18 15:12:28', '2025-11-16 23:55:28'),
+(2, 3, 'ana@gmail.com', '$2y$10$95iXHREMGyoeuHWYfZh68.EvM2AuWSErP/OFudVIUq8PQvLxj0T.i', NULL, '2025-12-19 02:29:15', '2025-11-16 23:55:28'),
 (3, 104, 'mariaclara@gmail.com', '$2y$10$ZYdRI.O9W196df/R9QIiGOPUNjBUPwKU/LwtNQAshzeTjWBq1zBhG', NULL, '2025-12-14 07:15:37', '2025-12-14 07:15:21');
 
 -- --------------------------------------------------------
@@ -1528,6 +1575,14 @@ CREATE TABLE `user_preferences` (
   `email_notifications` tinyint(1) NOT NULL DEFAULT 1,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_preferences`
+--
+
+INSERT INTO `user_preferences` (`pref_id`, `user_id`, `user_type`, `theme`, `language`, `sidebar_collapsed`, `dashboard_widgets`, `notifications_enabled`, `email_notifications`, `updated_at`) VALUES
+(1, 1, 'bhw', 'dark', 'tl', 0, '[\"stats\",\"chart\",\"recent_visits\",\"audit_log\"]', 1, 1, '2025-12-19 06:11:25'),
+(13, 3, 'bhw', 'dark', 'tl', 0, '[\"stats\",\"chart\",\"recent_visits\",\"audit_log\"]', 1, 1, '2025-12-19 06:11:56');
 
 -- --------------------------------------------------------
 
@@ -1864,13 +1919,13 @@ ALTER TABLE `announcements`
 -- AUTO_INCREMENT for table `app_settings`
 --
 ALTER TABLE `app_settings`
-  MODIFY `setting_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `setting_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `bhw_users`
@@ -1882,7 +1937,7 @@ ALTER TABLE `bhw_users`
 -- AUTO_INCREMENT for table `chatbot_history`
 --
 ALTER TABLE `chatbot_history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `child_care_records`
@@ -1930,7 +1985,7 @@ ALTER TABLE `medication_inventory`
 -- AUTO_INCREMENT for table `medicine_dispensing_log`
 --
 ALTER TABLE `medicine_dispensing_log`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `mortality_records`
@@ -2002,7 +2057,7 @@ ALTER TABLE `sms_queue`
 -- AUTO_INCREMENT for table `user_preferences`
 --
 ALTER TABLE `user_preferences`
-  MODIFY `pref_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pref_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `wra_tracking`

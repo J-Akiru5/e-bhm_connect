@@ -72,7 +72,7 @@ $total_pages = max(1, ceil($total_logs / $per_page));
 // Get audit logs
 $logs = [];
 try {
-    $logs = get_audit_logs($filters, $per_page, $offset);
+    $logs = get_audit_logs($per_page, $offset, $filters);
 } catch (Throwable $e) {
     error_log('Audit logs fetch error: ' . $e->getMessage());
 }
@@ -97,6 +97,43 @@ try {
     $bhwUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $e) {
     // Handle error
+}
+
+/**
+ * Format audit log details from JSON to readable text
+ */
+function format_audit_details($details) {
+    if (empty($details)) {
+        return '-';
+    }
+    
+    // Try to decode JSON
+    $decoded = json_decode($details, true);
+    
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        // Not JSON, return as-is
+        return htmlspecialchars($details);
+    }
+    
+    // Format as readable key-value pairs
+    $output = [];
+    foreach ($decoded as $key => $value) {
+        // Format the key to be more readable
+        $readableKey = ucwords(str_replace(['_', '-'], ' ', $key));
+        
+        // Format the value
+        if (is_array($value)) {
+            $value = implode(', ', $value);
+        } elseif (is_bool($value)) {
+            $value = $value ? 'Yes' : 'No';
+        } elseif ($value === null) {
+            $value = '-';
+        }
+        
+        $output[] = '<span class="detail-label">' . htmlspecialchars($readableKey) . ':</span> <span class="detail-value">' . htmlspecialchars($value) . '</span>';
+    }
+    
+    return implode('<br>', $output);
 }
 ?>
 
@@ -234,14 +271,8 @@ try {
                                     <span class="text-muted">-</span>
                                     <?php endif; ?>
                                 </td>
-                                <td>
-                                    <?php if (!empty($log['details'])): ?>
-                                    <span class="text-truncate d-inline-block" style="max-width:200px;" title="<?php echo htmlspecialchars($log['details']); ?>">
-                                        <?php echo htmlspecialchars($log['details']); ?>
-                                    </span>
-                                    <?php else: ?>
-                                    <span class="text-muted">-</span>
-                                    <?php endif; ?>
+                                <td class="details-cell">
+                                    <?php echo format_audit_details($log['details']); ?>
                                 </td>
                                 <td>
                                     <code class="small"><?php echo htmlspecialchars($log['ip_address'] ?? '-'); ?></code>
@@ -317,6 +348,32 @@ try {
     background: var(--primary);
     border-color: var(--primary);
     color: #fff;
+}
+/* Audit details formatting */
+.details-cell {
+    font-size: 0.85rem;
+    max-width: 280px;
+}
+.details-cell .detail-label {
+    color: #64748b;
+    font-weight: 600;
+}
+.details-cell .detail-value {
+    color: #1e293b;
+}
+/* Light mode styles */
+[data-theme="light"] .details-cell .detail-label {
+    color: #64748b;
+}
+[data-theme="light"] .details-cell .detail-value {
+    color: #1e293b;
+}
+/* Dark mode styles */
+[data-theme="dark"] .details-cell .detail-label {
+    color: #94a3b8;
+}
+[data-theme="dark"] .details-cell .detail-value {
+    color: #e2e8f0;
 }
 </style>
 

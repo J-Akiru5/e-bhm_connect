@@ -76,6 +76,7 @@ $allowedActions = [
     // Patient portal auth/actions
     'register-patient' => $actionPath . 'register_patient_action.php',
     'login-patient' => $actionPath . 'login_patient_action.php',
+    'verify-patient-email' => $actionPath . 'verify_patient_email.php',
     'logout-patient' => $actionPath . 'logout_patient.php',
 
     // Admin profile & BHW management

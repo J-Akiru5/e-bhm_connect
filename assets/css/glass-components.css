@@ -216,7 +216,8 @@
 
 .btn-info-glass {
     background: rgba(var(--secondary-rgb), 0.2);
-    border: 1px solid rgba(var(--secondary-rgb), 0.3);
+    border: 1px solid rgba(var(--secondary-rgb), 0.5);
+        /* Increased border opacity */
     color: var(--secondary);
     padding: 8px 16px;
     border-radius: 8px;
@@ -226,6 +227,7 @@
 
 .btn-info-glass:hover {
     background: rgba(var(--secondary-rgb), 0.3);
+    border-color: rgba(var(--secondary-rgb), 0.8);
 }
 
 .btn-sm-glass {

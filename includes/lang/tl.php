@@ -86,6 +86,9 @@ return [
         'administration' => 'Administrasyon',
         'toggle_sidebar' => 'I-toggle ang Sidebar',
         'view_public_site' => 'Tingnan ang Public Site',
+        'db_backup' => 'Backup ng Database',
+        'audit_logs' => 'Mga Audit Log',
+        'user_roles' => 'Mga Role ng User',
     ],
     
     // ========================
@@ -394,9 +397,6 @@ return [
         'today' => 'Ngayon',
         'yesterday' => 'Kahapon',
         'tomorrow' => 'Bukas',
-        'minutes_ago' => 'minuto ang nakakaraan',
-        'hours_ago' => 'oras ang nakakaraan',
-        'days_ago' => 'araw ang nakakaraan',
     ],
     
     // ========================
@@ -442,10 +442,66 @@ return [
     ],
     
     // ========================
-    // Chatbot
+    // Database Backup
     // ========================
-    'chatbot' => [
-        'greeting' => 'Kumusta! Ako si Gabby. Paano kita matutulungan ngayon?',
-        'placeholder' => 'Magtanong...',
+    'backup' => [
+        'title' => 'Backup at Restore ng Database',
+        'description' => 'Gumawa at pamahalaan ang mga backup ng database',
+        'create_backup' => 'Gumawa ng Backup',
+        'restore_backup' => 'I-restore mula sa Backup',
+        'restore_now' => 'I-restore Ngayon',
+        'download_backup' => 'I-download',
+        'delete_backup' => 'Tanggalin',
+        'existing_backups' => 'Mga Kasalukuyang Backup',
+        'filename' => 'Pangalan ng File',
+        'size' => 'Sukat',
+        'created_at' => 'Petsa',
+        'select_file' => 'Pumili ng SQL Backup File',
+        'file_hint' => 'Mga .sql file lamang ang tinatanggap',
+        'no_backups' => 'Walang backup na nahanap. Gumawa ng iyong unang backup!',
+        'backup_created' => 'Matagumpay na nagawa ang backup!',
+        'restore_success' => 'Matagumpay na na-restore ang database!',
+        'confirm_restore' => 'BABALA: Ito ay magpapalitan ng lahat ng kasalukuyang datos! Sigurado ka bang gusto mong i-restore mula sa backup na ito?',
+        'confirm_delete' => 'Sigurado ka bang gusto mong tanggalin ang backup na ito?',
+    ],
+    
+    // ========================
+    // Health Records
+    // ========================
+    'health_records' => [
+        'title' => 'Dashboard ng Health Records',
+        'subtitle' => 'Komprehensibong health tracking para sa mga residente ng barangay',
+        'total_records' => 'Kabuuang Records',
+        'pregnancies' => 'Mga Pagbubuntis',
+        'births' => 'Mga Kapanganakan',
+        'deaths' => 'Mga Pagkamatay',
+        'chronic' => 'Chronic',
+        'tb_cases' => 'Mga Kaso ng TB',
+        'wra' => 'WRA',
+        'view_all' => 'Tingnan Lahat',
+        'records' => 'Mga Records',
+        
+        // Record Types
+        'pregnancy_tracking' => 'Pag-track ng Pagbubuntis',
+        'pregnancy_desc' => 'Subaybayan ang mga buntis mula sa pagtukoy hanggang sa panganganak',
+        'child_care' => 'Pangangalaga ng Bata (12-59 Buwan)',
+        'child_care_desc' => 'I-track ang immunization at supplementation ng bata',
+        'natality' => 'Mga Record ng Kapanganakan',
+        'natality_desc' => 'Irehistro at i-track ang lahat ng record ng kapanganakan sa barangay',
+        'mortality' => 'Mga Record ng Pagkamatay',
+        'mortality_desc' => 'I-dokumento at i-track ang mga record ng pagkamatay kasama ang cause analysis',
+        'chronic_diseases' => 'Mga Chronic na Sakit',
+        'chronic_desc' => 'Listahan ng mga pasyente na may chronic na kondisyon at gamot',
+        'ntp_tracking' => 'NTP Client Monitoring',
+        'ntp_desc' => 'Pag-track ng programa ng tuberculosis kasama ang progreso ng paggamot',
+        'wra_tracking' => 'WRA Tracking',
+        'wra_desc' => 'Pag-track ng Women of Reproductive Age kasama ang family planning',
+        
+        // Quick Actions
+        'quick_actions' => 'Mabilis na Aksyon',
+        'add_pregnancy' => 'Idagdag ang Pagbubuntis',
+        'add_child' => 'Idagdag ang Bata',
+        'add_birth' => 'Irehistro ang Kapanganakan',
+        'add_mortality' => 'I-record ang Pagkamatay',
     ],
 ];

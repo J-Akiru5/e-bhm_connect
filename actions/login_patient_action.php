@@ -42,11 +42,31 @@ if (!$rateLimitCheck['allowed']) {
 }
 
 try {
-    $stmt = $pdo->prepare('SELECT user_id, patient_id, email, password_hash FROM patient_users WHERE email = :email LIMIT 1');
+    $stmt = $pdo->prepare('SELECT user_id, patient_id, email, password_hash, email_verified, status FROM patient_users WHERE email = :email LIMIT 1');
     $stmt->execute([':email' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && isset($user['password_hash']) && password_verify($password, $user['password_hash'])) {
+        // Check email verification
+        if (isset($user['email_verified']) && !$user['email_verified']) {
+            $_SESSION['login_error'] = 'Please verify your email before logging in. Check your inbox for the verification link.';
+            header('Location: ' . BASE_URL . 'login-patient');
+            exit();
+        }
+
+        // Check account status
+        $status = $user['status'] ?? 'active';
+        if ($status === 'pending') {
+            $_SESSION['login_error'] = 'Your account is pending activation. Please verify your email or contact your BHW.';
+            header('Location: ' . BASE_URL . 'login-patient');
+            exit();
+        }
+        if ($status === 'suspended') {
+            $_SESSION['login_error'] = 'Your account has been suspended. Please contact your Barangay Health Worker.';
+            header('Location: ' . BASE_URL . 'login-patient');
+            exit();
+        }
+
         // Clear rate limit on successful login
         clear_rate_limit('login_patient', $clientIp);
 

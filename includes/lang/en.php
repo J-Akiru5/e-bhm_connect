@@ -485,4 +485,44 @@ return [
         'confirm_restore' => 'WARNING: This will overwrite all current data! Are you sure you want to restore from this backup?',
         'confirm_delete' => 'Are you sure you want to delete this backup?',
     ],
+    
+    // ========================
+    // Health Records
+    // ========================
+    'health_records' => [
+        'title' => 'Health Records Dashboard',
+        'subtitle' => 'Comprehensive health tracking for barangay residents',
+        'total_records' => 'Total Records',
+        'pregnancies' => 'Pregnancies',
+        'births' => 'Births',
+        'deaths' => 'Deaths',
+        'chronic' => 'Chronic',
+        'tb_cases' => 'TB Cases',
+        'wra' => 'WRA',
+        'view_all' => 'View All',
+        'records' => 'Records',
+        
+        // Record Types
+        'pregnancy_tracking' => 'Pregnancy Tracking',
+        'pregnancy_desc' => 'Monitor pregnant women from identification to delivery outcome',
+        'child_care' => 'Child Care (12-59 Months)',
+        'child_care_desc' => 'Track child immunization and supplementation records',
+        'natality' => 'Natality Records',
+        'natality_desc' => 'Register and track all birth records in the barangay',
+        'mortality' => 'Mortality Records',
+        'mortality_desc' => 'Document and track death records with cause analysis',
+        'chronic_diseases' => 'Hypertensive & Diabetic',
+        'chronic_desc' => 'Masterlist of patients with chronic conditions and medications',
+        'ntp_tracking' => 'NTP Client Monitoring',
+        'ntp_desc' => 'Tuberculosis program tracking with treatment progress',
+        'wra_tracking' => 'WRA Tracking',
+        'wra_desc' => 'Women of Reproductive Age tracking with family planning',
+        
+        // Quick Actions
+        'quick_actions' => 'Quick Actions',
+        'add_pregnancy' => 'Add Pregnancy',
+        'add_child' => 'Add Child',
+        'add_birth' => 'Register Birth',
+        'add_mortality' => 'Record Mortality',
+    ],
 ];

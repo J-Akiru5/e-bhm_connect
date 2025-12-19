@@ -203,7 +203,7 @@ try {
                     <a href="<?php echo BASE_URL; ?>admin-health-records-pregnancy" class="text-decoration-none">
                         <div class="p-3 rounded text-center" style="background: rgba(236, 72, 153, 0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                             <div class="fw-bold fs-4" style="color: #ec4899;"><?php echo number_format($healthStats['pregnancy']); ?></div>
-                            <div class="small text-muted">Pregnancy</div>
+                            <div class="small" style="color: #ec4899;">Pregnancy</div>
                         </div>
                     </a>
                 </div>
@@ -211,7 +211,7 @@ try {
                     <a href="<?php echo BASE_URL; ?>admin-health-records-childcare" class="text-decoration-none">
                         <div class="p-3 rounded text-center" style="background: rgba(245, 158, 11, 0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                             <div class="fw-bold fs-4" style="color: #f59e0b;"><?php echo number_format($healthStats['childcare']); ?></div>
-                            <div class="small text-muted">Child Care</div>
+                            <div class="small" style="color: #f59e0b;">Child Care</div>
                         </div>
                     </a>
                 </div>
@@ -219,7 +219,7 @@ try {
                     <a href="<?php echo BASE_URL; ?>admin-health-records-natality" class="text-decoration-none">
                         <div class="p-3 rounded text-center" style="background: rgba(16, 185, 129, 0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                             <div class="fw-bold fs-4" style="color: #10b981;"><?php echo number_format($healthStats['natality']); ?></div>
-                            <div class="small text-muted">Births</div>
+                            <div class="small" style="color: #10b981;">Births</div>
                         </div>
                     </a>
                 </div>
@@ -227,7 +227,7 @@ try {
                     <a href="<?php echo BASE_URL; ?>admin-health-records-mortality" class="text-decoration-none">
                         <div class="p-3 rounded text-center" style="background: rgba(107, 114, 128, 0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                             <div class="fw-bold fs-4" style="color: #6b7280;"><?php echo number_format($healthStats['mortality']); ?></div>
-                            <div class="small text-muted">Deaths</div>
+                            <div class="small" style="color: #6b7280;">Deaths</div>
                         </div>
                     </a>
                 </div>
@@ -235,7 +235,7 @@ try {
                     <a href="<?php echo BASE_URL; ?>admin-health-records-chronic" class="text-decoration-none">
                         <div class="p-3 rounded text-center" style="background: rgba(239, 68, 68, 0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                             <div class="fw-bold fs-4" style="color: #ef4444;"><?php echo number_format($healthStats['chronic']); ?></div>
-                            <div class="small text-muted">Chronic</div>
+                            <div class="small" style="color: #ef4444;">Chronic</div>
                         </div>
                     </a>
                 </div>
@@ -243,7 +243,7 @@ try {
                     <a href="<?php echo BASE_URL; ?>admin-health-records-ntp" class="text-decoration-none">
                         <div class="p-3 rounded text-center" style="background: rgba(139, 92, 246, 0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                             <div class="fw-bold fs-4" style="color: #8b5cf6;"><?php echo number_format($healthStats['ntp']); ?></div>
-                            <div class="small text-muted">NTP (TB)</div>
+                            <div class="small" style="color: #8b5cf6;">NTP (TB)</div>
                         </div>
                     </a>
                 </div>
@@ -251,7 +251,7 @@ try {
                     <a href="<?php echo BASE_URL; ?>admin-health-records-wra" class="text-decoration-none">
                         <div class="p-3 rounded text-center" style="background: rgba(59, 130, 246, 0.1); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                             <div class="fw-bold fs-4" style="color: #3b82f6;"><?php echo number_format($healthStats['wra']); ?></div>
-                            <div class="small text-muted">WRA</div>
+                            <div class="small" style="color: #3b82f6;">WRA</div>
                         </div>
                     </a>
                 </div>

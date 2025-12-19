@@ -211,9 +211,9 @@ if (!function_exists('get_recent_visits')) {
                     hv.visit_type,
                     hv.notes,
                     hv.created_at,
-                    CONCAT(p.first_name, ' ', p.last_name) as patient_name,
+                    p.full_name as patient_name,
                     p.patient_id,
-                    CONCAT(b.first_name, ' ', b.last_name) as bhw_name
+                    b.full_name as bhw_name
                 FROM health_visits hv
                 LEFT JOIN patients p ON hv.patient_id = p.patient_id
                 LEFT JOIN bhw_users b ON hv.bhw_id = b.bhw_id
@@ -249,8 +249,8 @@ if (!function_exists('get_recent_audit_logs')) {
                     al.created_at,
                     al.user_type,
                     CASE 
-                        WHEN al.user_type = 'bhw' THEN CONCAT(b.first_name, ' ', b.last_name)
-                        WHEN al.user_type = 'patient' THEN CONCAT(p.first_name, ' ', p.last_name)
+                        WHEN al.user_type = 'bhw' THEN b.full_name
+                        WHEN al.user_type = 'patient' THEN p.full_name
                         ELSE 'System'
                     END as user_name
                 FROM audit_logs al

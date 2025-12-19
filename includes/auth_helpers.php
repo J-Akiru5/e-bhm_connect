@@ -236,8 +236,8 @@ function get_audit_logs(int $limit = 50, int $offset = 0, array $filters = []): 
             SELECT 
                 al.*,
                 CASE 
-                    WHEN al.user_type = 'bhw' THEN CONCAT(b.first_name, ' ', b.last_name)
-                    WHEN al.user_type = 'patient' THEN CONCAT(p.first_name, ' ', p.last_name)
+                    WHEN al.user_type = 'bhw' THEN b.full_name
+                    WHEN al.user_type = 'patient' THEN p.full_name
                     ELSE 'System'
                 END as user_name,
                 CASE 
@@ -275,10 +275,14 @@ function get_user_preferences(?int $userId = null, string $userType = 'bhw'): ar
 {
     global $pdo;
     
+    // Get app-level defaults for theme and language
+    $appDefaultTheme = get_app_setting('default_theme') ?? 'dark';
+    $appDefaultLanguage = get_app_setting('default_language') ?? 'en';
+    
     // Default preferences
     $defaults = [
-        'theme' => 'light',
-        'language' => 'en',
+        'theme' => $appDefaultTheme,
+        'language' => $appDefaultLanguage,
         'notifications_enabled' => true,
         'email_notifications' => true,
         'dashboard_widgets' => ['stats', 'chart', 'recent_visits', 'audit_log']
@@ -390,7 +394,7 @@ function get_app_setting(string $key, $default = null)
     global $pdo;
     
     try {
-        $stmt = $pdo->prepare("SELECT setting_value, value_type FROM app_settings WHERE setting_key = ?");
+        $stmt = $pdo->prepare("SELECT setting_value, setting_type FROM app_settings WHERE setting_key = ?");
         $stmt->execute([$key]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
@@ -400,8 +404,8 @@ function get_app_setting(string $key, $default = null)
         
         $value = $row['setting_value'];
         
-        // Cast based on value_type
-        switch ($row['value_type']) {
+        // Cast based on setting_type
+        switch ($row['setting_type']) {
             case 'integer':
                 return (int)$value;
             case 'boolean':
@@ -442,11 +446,11 @@ function set_app_setting(string $key, $value, string $valueType = 'string', ?str
         }
         
         $stmt = $pdo->prepare("
-            INSERT INTO app_settings (setting_key, setting_value, value_type, description)
+            INSERT INTO app_settings (setting_key, setting_value, setting_type, description)
             VALUES (?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE
                 setting_value = VALUES(setting_value),
-                value_type = VALUES(value_type),
+                setting_type = VALUES(setting_type),
                 description = COALESCE(VALUES(description), description),
                 updated_at = CURRENT_TIMESTAMP
         ");
@@ -474,7 +478,7 @@ function get_all_app_settings(): array
         foreach ($rows as $row) {
             $value = $row['setting_value'];
             
-            switch ($row['value_type']) {
+            switch ($row['setting_type']) {
                 case 'integer':
                     $value = (int)$value;
                     break;
@@ -491,7 +495,7 @@ function get_all_app_settings(): array
             
             $settings[$row['setting_key']] = [
                 'value' => $value,
-                'type' => $row['value_type'],
+                'type' => $row['setting_type'],
                 'description' => $row['description']
             ];
         }

@@ -101,6 +101,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update session
             $_SESSION['theme'] = $theme;
             $_SESSION['language'] = $language;
+            $_SESSION['user_language'] = $language; // Sync for translation_helper
+            
+            // Reinitialize translations with new language
+            init_translations($language);
             
             $message = __('settings.preferences_saved');
         } catch (Throwable $e) {

@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 set_app_setting($key, $value, 'string');
             }
             
-            log_audit($_SESSION['bhw_id'], 'update', 'app_settings', null, 'Updated general settings');
+            log_audit('update_general_settings', 'app_settings', null, ['changes' => array_keys($settings)]);
             $message = __('settings.settings_saved');
         } catch (Throwable $e) {
             error_log('Settings save error: ' . $e->getMessage());
@@ -51,14 +51,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'enable_chatbot' => isset($_POST['enable_chatbot']) ? '1' : '0',
                 'enable_patient_portal' => isset($_POST['enable_patient_portal']) ? '1' : '0',
                 'enable_email_verification' => isset($_POST['enable_email_verification']) ? '1' : '0',
+                'portal_registration_mode' => $_POST['portal_registration_mode'] ?? 'linked_only',
                 'default_language' => $_POST['default_language'] ?? 'en',
+                'default_theme' => $_POST['default_theme'] ?? 'dark',
             ];
             
             foreach ($features as $key => $value) {
                 set_app_setting($key, $value, 'string');
             }
             
-            log_audit($_SESSION['bhw_id'], 'update', 'app_settings', null, 'Updated feature settings');
+            log_audit('update_feature_settings', 'app_settings', null, ['changes' => array_keys($features)]);
             $message = __('settings.settings_saved');
         } catch (Throwable $e) {
             error_log('Features save error: ' . $e->getMessage());
@@ -71,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             set_app_setting('maintenance_mode', isset($_POST['maintenance_mode']) ? '1' : '0', 'string');
             set_app_setting('maintenance_message', trim($_POST['maintenance_message'] ?? ''), 'string');
             
-            log_audit($_SESSION['bhw_id'], 'update', 'app_settings', null, 'Updated maintenance settings');
+            log_audit('update_maintenance_settings', 'app_settings', null, ['enabled' => isset($_POST['maintenance_mode'])]);
             $message = __('settings.settings_saved');
         } catch (Throwable $e) {
             error_log('Maintenance save error: ' . $e->getMessage());
@@ -106,6 +108,7 @@ $defaults = [
     'enable_patient_portal' => '1',
     'enable_email_verification' => '1',
     'default_language' => 'en',
+    'default_theme' => 'dark',
     'maintenance_mode' => '0',
     'maintenance_message' => 'We are currently performing maintenance. Please check back later.',
 ];
@@ -130,17 +133,31 @@ foreach ($defaults as $key => $default) {
     </div>
 
     <?php if ($message): ?>
-    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-        <?php echo htmlspecialchars($message); ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            title: 'Success!',
+            text: '<?php echo addslashes($message); ?>',
+            icon: 'success',
+            confirmButtonColor: 'var(--primary)',
+            timer: 3000,
+            timerProgressBar: true
+        });
+    });
+    </script>
     <?php endif; ?>
 
     <?php if ($error): ?>
-    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-        <?php echo htmlspecialchars($error); ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            title: 'Error',
+            text: '<?php echo addslashes($error); ?>',
+            icon: 'error',
+            confirmButtonColor: 'var(--primary)'
+        });
+    });
+    </script>
     <?php endif; ?>
 
     <div class="row g-4">
@@ -250,6 +267,17 @@ foreach ($defaults as $key => $default) {
                             
                             <div class="feature-toggle d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid var(--border-color);">
                                 <div>
+                                    <strong>Portal Registration Mode</strong>
+                                    <p class="text-secondary small mb-0">Controls how residents can register for portal access</p>
+                                </div>
+                                <select name="portal_registration_mode" class="form-select" style="width:auto;">
+                                    <option value="linked_only" <?php echo ($settings['portal_registration_mode'] ?? 'linked_only') === 'linked_only' ? 'selected' : ''; ?>>🔗 Existing Record Only</option>
+                                    <option value="open" <?php echo ($settings['portal_registration_mode'] ?? 'linked_only') === 'open' ? 'selected' : ''; ?>>🌐 Open Registration</option>
+                                </select>
+                            </div>
+                            
+                            <div class="feature-toggle d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid var(--border-color);">
+                                <div>
                                     <strong>Email Verification</strong>
                                     <p class="text-secondary small mb-0">Require email verification for new BHW accounts</p>
                                 </div>
@@ -258,7 +286,7 @@ foreach ($defaults as $key => $default) {
                                 </div>
                             </div>
                             
-                            <div class="feature-toggle d-flex justify-content-between align-items-center py-3">
+                            <div class="feature-toggle d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid var(--border-color);">
                                 <div>
                                     <strong>Default Language</strong>
                                     <p class="text-secondary small mb-0">Default language for new users</p>
@@ -266,6 +294,17 @@ foreach ($defaults as $key => $default) {
                                 <select name="default_language" class="form-select" style="width:auto;">
                                     <option value="en" <?php echo $settings['default_language'] === 'en' ? 'selected' : ''; ?>>English</option>
                                     <option value="tl" <?php echo $settings['default_language'] === 'tl' ? 'selected' : ''; ?>>Tagalog</option>
+                                </select>
+                            </div>
+                            
+                            <div class="feature-toggle d-flex justify-content-between align-items-center py-3">
+                                <div>
+                                    <strong>Default Theme</strong>
+                                    <p class="text-secondary small mb-0">Default color theme for new users</p>
+                                </div>
+                                <select name="default_theme" class="form-select" style="width:auto;">
+                                    <option value="dark" <?php echo ($settings['default_theme'] ?? 'dark') === 'dark' ? 'selected' : ''; ?>>🌙 Dark</option>
+                                    <option value="light" <?php echo ($settings['default_theme'] ?? 'dark') === 'light' ? 'selected' : ''; ?>>☀️ Light</option>
                                 </select>
                             </div>
                         </div>

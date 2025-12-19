@@ -810,6 +810,7 @@ include_once __DIR__ . '/../../includes/header_public.php';
             </p>
             
             <div class="hero-actions">
+                <?php if ($patientPortalEnabled): ?>
                 <a href="<?php echo BASE_URL; ?>login-patient" class="btn-glow">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -817,6 +818,7 @@ include_once __DIR__ . '/../../includes/header_public.php';
                     </svg>
                     Resident Portal
                 </a>
+                <?php endif; ?>
                 <a href="<?php echo BASE_URL; ?>login-bhw" class="btn-outline-light">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -936,6 +938,7 @@ include_once __DIR__ . '/../../includes/header_public.php';
     </div>
 </section>
 
+<?php if ($patientPortalEnabled): ?>
 <!-- CTA Section -->
 <section class="cta-section">
     <div class="cta-content" data-aos="zoom-in">
@@ -954,6 +957,7 @@ include_once __DIR__ . '/../../includes/header_public.php';
         </a>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- About Section -->
 <section class="about-section" id="about">

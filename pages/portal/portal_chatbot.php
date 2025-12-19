@@ -137,6 +137,82 @@ foreach ($chat_history_raw as $row) {
     border-top-right-radius: var(--radius-sm);
 }
 
+/* Markdown content styling inside chat bubbles */
+.chat-bubble h1, .chat-bubble h2, .chat-bubble h3 {
+    margin: 0 0 var(--space-2);
+    font-weight: 700;
+    color: var(--gray-800);
+    line-height: 1.3;
+}
+.chat-bubble h1 { font-size: 1.15rem; }
+.chat-bubble h2 { font-size: 1.05rem; }
+.chat-bubble h3 { font-size: 0.95rem; }
+
+.chat-bubble p { margin: 0 0 var(--space-3); }
+.chat-bubble p:last-child { margin-bottom: 0; }
+
+.chat-bubble ul, .chat-bubble ol {
+    margin: var(--space-2) 0 var(--space-3);
+    padding-left: var(--space-5);
+}
+.chat-bubble li {
+    margin-bottom: var(--space-1);
+    line-height: 1.5;
+}
+.chat-bubble li::marker { color: var(--primary); }
+
+.chat-bubble strong { font-weight: 600; color: var(--gray-800); }
+.chat-bubble em { font-style: italic; }
+
+.chat-bubble code {
+    background: rgba(32, 201, 151, 0.1);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    color: var(--primary-dark);
+}
+
+.chat-bubble pre {
+    background: var(--gray-100);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin: var(--space-3) 0;
+}
+.chat-bubble pre code {
+    background: none;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+.chat-bubble blockquote {
+    border-left: 3px solid var(--primary);
+    padding-left: var(--space-3);
+    margin: var(--space-3) 0;
+    color: var(--gray-600);
+    font-style: italic;
+}
+
+.chat-bubble hr {
+    border: none;
+    border-top: 1px solid var(--gray-200);
+    margin: var(--space-3) 0;
+}
+
+.chat-bubble a {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+/* Dark mode markdown */
+[data-theme="dark"] .chat-bubble h1,
+[data-theme="dark"] .chat-bubble h2,
+[data-theme="dark"] .chat-bubble h3,
+[data-theme="dark"] .chat-bubble strong { color: var(--text-primary); }
+[data-theme="dark"] .chat-bubble pre { background: rgba(0,0,0,0.2); }
+[data-theme="dark"] .chat-bubble code { background: rgba(32, 201, 151, 0.15); }
+
 .chat-timestamp {
     font-size: var(--font-size-xs);
     color: var(--gray-400);
@@ -253,7 +329,7 @@ foreach ($chat_history_raw as $row) {
 <div class="chat-container">
     <!-- Chat Hero -->
     <div class="chat-hero">
-        <img src="<?php echo BASE_URL; ?>assets/images/gabby_avatar.png" alt="Gabby" class="gabby-avatar-large">
+        <img src="<?php echo BASE_URL; ?>assets/images/gabby-head.png" alt="Gabby" class="gabby-avatar-large">
         <div class="chat-hero-info">
             <h1>Chat with Gabby</h1>
             <p>Your friendly health assistant. Ask me anything about general health topics!</p>
@@ -265,7 +341,7 @@ foreach ($chat_history_raw as $row) {
         <div id="chat-messages" class="chat-messages">
             <!-- Welcome message -->
             <div class="chat-message bot">
-                <img src="<?php echo BASE_URL; ?>assets/images/gabby_avatar.png" alt="Gabby" class="chat-avatar">
+                <img src="<?php echo BASE_URL; ?>assets/images/gabby-head.png" alt="Gabby" class="chat-avatar">
                 <div>
                     <div class="chat-bubble">
                         Hi <?php echo htmlspecialchars($patient_name); ?>! 👋 I'm Gabby, your health assistant. How can I help you today?
@@ -280,7 +356,7 @@ foreach ($chat_history_raw as $row) {
 
             <!-- Typing indicator -->
             <div class="chat-message bot">
-                <img src="<?php echo BASE_URL; ?>assets/images/gabby_avatar.png" alt="Gabby" class="chat-avatar">
+                <img src="<?php echo BASE_URL; ?>assets/images/gabby-head.png" alt="Gabby" class="chat-avatar">
                 <div class="typing-indicator" id="typing-indicator">
                     <div class="typing-dot"></div>
                     <div class="typing-dot"></div>
@@ -306,8 +382,68 @@ const chatMessages = document.getElementById('chat-messages');
 const chatInput = document.getElementById('chat-input');
 const sendBtn = document.getElementById('chat-send-btn');
 const typingIndicator = document.getElementById('typing-indicator');
-const gabbyAvatar = '<?php echo BASE_URL; ?>assets/images/gabby_avatar.png';
+const gabbyAvatar = '<?php echo BASE_URL; ?>assets/images/gabby-head.png';
 const baseUrl = '<?php echo BASE_URL; ?>';
+
+// Simple markdown parser for chat messages
+function parseMarkdown(text) {
+    if (!text) return '';
+    
+    // Escape HTML first
+    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    
+    // Headers (## and ###)
+    text = text.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+    text = text.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+    text = text.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+    
+    // Bold and Italic
+    text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    
+    // Inline code
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+    
+    // Unordered lists (- or *)
+    text = text.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
+    text = text.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+    
+    // Numbered lists
+    text = text.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+    
+    // Group consecutive <li> elements into <ul>
+    text = text.replace(/(<li>[\s\S]*?<\/li>)(?=\s*<li>)/g, '$1');
+    text = text.replace(/((?:<li>[\s\S]*?<\/li>\s*)+)/g, '<ul>$1</ul>');
+    
+    // Blockquotes
+    text = text.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+    
+    // Horizontal rules
+    text = text.replace(/^---$/gm, '<hr>');
+    
+    // Line breaks - convert double newlines to paragraphs
+    text = text.replace(/\n\n+/g, '</p><p>');
+    text = text.replace(/\n/g, '<br>');
+    
+    // Wrap in paragraph if not already wrapped
+    if (!text.startsWith('<h') && !text.startsWith('<ul') && !text.startsWith('<ol') && !text.startsWith('<blockquote')) {
+        text = '<p>' + text + '</p>';
+    }
+    
+    // Clean up empty paragraphs
+    text = text.replace(/<p><\/p>/g, '');
+    text = text.replace(/<p>(<h[123]>)/g, '$1');
+    text = text.replace(/(<\/h[123]>)<\/p>/g, '$1');
+    text = text.replace(/<p>(<ul>)/g, '$1');
+    text = text.replace(/(<\/ul>)<\/p>/g, '$1');
+    text = text.replace(/<p>(<blockquote>)/g, '$1');
+    text = text.replace(/(<\/blockquote>)<\/p>/g, '$1');
+    text = text.replace(/<p><br>/g, '<p>');
+    text = text.replace(/<br><\/p>/g, '</p>');
+    
+    return text;
+}
 
 // Load existing chat history
 const chatHistory = <?php echo json_encode($chat_history); ?>;
@@ -324,17 +460,20 @@ function addMessage(text, sender, animate = true) {
     const div = document.createElement('div');
     div.className = `chat-message ${sender}`;
     
+    // Parse markdown for bot messages only
+    const displayText = sender === 'bot' ? parseMarkdown(text) : text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    
     if (sender === 'bot') {
         div.innerHTML = `
             <img src="${gabbyAvatar}" alt="Gabby" class="chat-avatar">
             <div>
-                <div class="chat-bubble">${text}</div>
+                <div class="chat-bubble">${displayText}</div>
             </div>
         `;
     } else {
         div.innerHTML = `
             <div>
-                <div class="chat-bubble">${text}</div>
+                <div class="chat-bubble">${displayText}</div>
             </div>
         `;
     }

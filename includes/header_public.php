@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/auth_helpers.php';
+$patientPortalEnabled = get_app_setting('enable_patient_portal', true);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,11 +51,13 @@
             </ul>
             
             <div class="nav-actions">
+                <?php if ($patientPortalEnabled): ?>
                 <!-- Check for Patient Session -->
                 <?php if (isset($_SESSION['patient_id'])): ?>
                     <a href="<?php echo BASE_URL; ?>?page=portal-dashboard" class="btn btn-glass btn-sm">My Portal</a>
                 <?php else: ?>
                     <a href="<?php echo BASE_URL; ?>?page=login-patient" class="btn btn-glass btn-sm">Resident Portal</a>
+                <?php endif; ?>
                 <?php endif; ?>
 
                 <!-- Check for BHW Session -->

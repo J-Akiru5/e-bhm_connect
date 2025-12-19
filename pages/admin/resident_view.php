@@ -34,7 +34,7 @@ try {
     $resident = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Medical history - health_visits
-    $sqlVisits = "SELECT hv.*, b.first_name as bhw_first, b.last_name as bhw_last FROM health_visits hv LEFT JOIN bhw_users b ON hv.bhw_id = b.bhw_id WHERE hv.patient_id = :id ORDER BY hv.visit_date DESC";
+    $sqlVisits = "SELECT hv.*, b.full_name as bhw_name FROM health_visits hv LEFT JOIN bhw_users b ON hv.bhw_id = b.bhw_id WHERE hv.patient_id = :id ORDER BY hv.visit_date DESC";
     $stmt2 = $pdo->prepare($sqlVisits);
     $stmt2->execute([':id' => $resident_id]);
     $medical_history = $stmt2->fetchAll(PDO::FETCH_ASSOC);
@@ -178,7 +178,7 @@ foreach ($vitals as $r) {
                                     <td><?php echo htmlspecialchars($h['visit_date'] ?? $h['created_at'] ?? ''); ?></td>
                                     <td><?php echo htmlspecialchars($h['visit_reason'] ?? $h['reason'] ?? ''); ?></td>
                                     <td><?php echo htmlspecialchars($h['diagnosis'] ?? $h['impression'] ?? ''); ?></td>
-                                    <td><?php echo htmlspecialchars((($h['bhw_first'] ?? '') . ' ' . ($h['bhw_last'] ?? ''))); ?></td>
+                                    <td><?php echo htmlspecialchars($h['bhw_name'] ?? ''); ?></td>
                                     <td><?php echo htmlspecialchars($h['notes'] ?? ''); ?></td>
                                 </tr>
                             <?php endforeach; ?>
