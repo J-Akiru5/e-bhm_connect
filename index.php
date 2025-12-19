@@ -72,6 +72,9 @@ $allowedActions = [
     'report-my-record' => $actionPath . 'report_my_record.php',
     'report-bhw-record' => $actionPath . 'report_bhw_record.php',
     'report-health-records' => $actionPath . 'report_health_records.php',
+    'report-patient-record' => $actionPath . 'report_patient_record.php',
+    'report-visit-records' => $actionPath . 'report_visit_records.php',
+    'report-bhw-activity' => $actionPath . 'report_bhw_activity.php',
 
     // Patient portal auth/actions
     'register-patient' => $actionPath . 'register_patient_action.php',

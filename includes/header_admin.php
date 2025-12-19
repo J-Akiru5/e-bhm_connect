@@ -37,11 +37,15 @@ try {
 
 // --- PERMISSIONS FETCHING ---
 // Re-fetch permissions on every page load to ensure Sidebar is dynamic/live
+// Also fetch profile photo for sidebar display
+$currentUserPhoto = null;
 if (isset($_SESSION['bhw_id'])) {
     try {
-        $stmtPerm = $pdo->prepare("SELECT access_permissions FROM bhw_users WHERE bhw_id = ?");
+        $stmtPerm = $pdo->prepare("SELECT access_permissions, profile_photo FROM bhw_users WHERE bhw_id = ?");
         $stmtPerm->execute([$_SESSION['bhw_id']]);
-        $jsonPerms = $stmtPerm->fetchColumn();
+        $userData = $stmtPerm->fetch(PDO::FETCH_ASSOC);
+        $jsonPerms = $userData['access_permissions'] ?? '';
+        $currentUserPhoto = $userData['profile_photo'] ?? null;
         $currentPermissions = !empty($jsonPerms) ? json_decode($jsonPerms, true) : [];
         if (!is_array($currentPermissions)) $currentPermissions = [];
         $_SESSION['access_permissions'] = $currentPermissions;
@@ -50,6 +54,12 @@ if (isset($_SESSION['bhw_id'])) {
         $_SESSION['access_permissions'] = [];
     }
 }
+
+// Determine profile photo path for sidebar
+$sidebarPhotoPath = $currentUserPhoto 
+    ? BASE_URL . 'uploads/profiles/' . $currentUserPhoto 
+    : BASE_URL . 'assets/images/default-avatar.png';
+
 
 // Get page title based on current page
 $pageTitles = [
@@ -89,6 +99,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/admin.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/glass-components.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/shared-components.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/mobile-utils.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/chatbot.css" media="print" onload="this.media='all'">
     
     <!-- Driver.js CSS -->
@@ -147,7 +158,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
 
         <!-- User Info -->
         <a href="<?php echo BASE_URL; ?>admin-account-settings" class="sidebar-user" style="text-decoration: none; display: flex;">
-            <img src="<?php echo BASE_URL; ?>assets/images/gabby_avatar.png" alt="<?php echo htmlspecialchars($currentUserName); ?>" class="sidebar-user-avatar">
+            <img src="<?php echo htmlspecialchars($sidebarPhotoPath); ?>" alt="<?php echo htmlspecialchars($currentUserName); ?>" class="sidebar-user-avatar">
             <div class="sidebar-user-info">
                 <div class="sidebar-user-name"><?php echo htmlspecialchars($currentUserName); ?></div>
                 <div class="sidebar-user-role <?php echo $currentUserRole === 'superadmin' ? 'superadmin' : ''; ?>">

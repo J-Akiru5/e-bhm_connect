@@ -24,6 +24,7 @@
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/mobile-utils.css">
 
     <!-- Driver.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>

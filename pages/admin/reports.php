@@ -89,7 +89,7 @@ endif;
             <h3 class="report-title">BHW Activity Report</h3>
             <p class="report-description">Community health worker activities and patient visit summaries</p>
             <div class="report-actions">
-                <a href="<?php echo BASE_URL; ?>?action=report-bhw-record" target="_blank" class="btn-report-glass primary" onclick="event.stopPropagation();">
+                <a href="<?php echo BASE_URL; ?>?action=report-bhw-activity" target="_blank" class="btn-report-glass primary" onclick="event.stopPropagation();">
                     <i class="fas fa-file-pdf"></i> Generate PDF
                 </a>
                 <button class="btn-report-glass" onclick="openCustomizeModal('bhw'); event.stopPropagation();">
@@ -106,7 +106,7 @@ endif;
             <h3 class="report-title">Visit Records Report</h3>
             <p class="report-description">Detailed log of all patient visits and consultations</p>
             <div class="report-actions">
-                <a href="<?php echo BASE_URL; ?>?action=report-patient-record" target="_blank" class="btn-report-glass primary" onclick="event.stopPropagation();">
+                <a href="<?php echo BASE_URL; ?>?action=report-visit-records" target="_blank" class="btn-report-glass primary" onclick="event.stopPropagation();">
                     <i class="fas fa-file-pdf"></i> Generate PDF
                 </a>
                 <button class="btn-report-glass" onclick="openCustomizeModal('visits'); event.stopPropagation();">
@@ -274,10 +274,10 @@ function generateCustomReport(event) {
             url += 'action=report-chronic-disease';
             break;
         case 'bhw':
-            url += 'action=report-bhw-record';
+            url += 'action=report-bhw-activity';
             break;
         case 'visits':
-            url += 'action=report-patient-record';
+            url += 'action=report-visit-records';
             break;
         default:
             alert('This report is not yet available.');
