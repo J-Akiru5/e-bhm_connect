@@ -8,6 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/auth_helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . BASE_URL . 'admin-inventory-categories');
@@ -28,7 +29,8 @@ try {
 
     $d = $pdo->prepare('DELETE FROM inventory_categories WHERE category_id = :id');
     $d->execute([':id' => $id]);
-
+    
+    log_audit('delete_category', 'inventory_category', $id, ['deleted_id' => $id]);
     $_SESSION['form_success'] = 'Category deleted.';
 } catch (Throwable $e) {
     error_log('Category delete error: ' . $e->getMessage());

@@ -173,6 +173,7 @@ $allowedPages = [
     'admin-audit-logs' => ['file' => $basePath . 'admin/audit_logs.php', 'secure' => 'superadmin'],
     'admin-db-backup' => ['file' => $basePath . 'admin/db_backup.php', 'secure' => 'superadmin'],
     'admin-user-roles' => ['file' => $basePath . 'admin/user_roles.php', 'secure' => 'superadmin'],
+    'admin-dispensation-history' => ['file' => $basePath . 'admin/dispensation_history.php', 'secure' => true],
 
     // Health Records Module
     'admin-health-records' => ['file' => $basePath . 'admin/health_records/index.php', 'secure' => true],

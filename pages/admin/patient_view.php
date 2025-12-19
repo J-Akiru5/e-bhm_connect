@@ -44,8 +44,8 @@ try {
     $stmt5->execute([':id' => $patient_id]);
     $family = $stmt5->fetchAll(PDO::FETCH_ASSOC);
 
-    // Available medication inventory (items with stock > 0)
-    $stmtInv = $pdo->prepare('SELECT * FROM medication_inventory WHERE quantity_in_stock > 0 ORDER BY item_name ASC');
+    // Available medication inventory (show all, will disable out-of-stock in dropdown)
+    $stmtInv = $pdo->prepare('SELECT * FROM medication_inventory ORDER BY item_name ASC');
     $stmtInv->execute();
     $inventory = $stmtInv->fetchAll(PDO::FETCH_ASSOC);
 
@@ -280,8 +280,6 @@ try {
 
 </div>
 
-<?php include_once __DIR__ . '/../../includes/footer_admin.php'; ?>
- 
 <!-- Dispense Medicine Modal -->
 <div class="modal fade" id="dispenseModal" tabindex="-1" aria-labelledby="dispenseModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -290,7 +288,7 @@ try {
                 <h5 class="modal-title" id="dispenseModalLabel">Dispense Medicine</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="<?php echo BASE_URL; ?>actions/medicine_dispense_save.php">
+            <form method="post" action="<?php echo BASE_URL; ?>?action=medicine-dispense-save">
                 <div class="modal-body">
                     <input type="hidden" name="patient_id" value="<?php echo $patient_id; ?>">
 
@@ -298,12 +296,28 @@ try {
                         <label for="medicine_id" class="form-label">Medicine</label>
                         <select id="medicine_id" name="medicine_id" class="form-select" required>
                             <option value="">-- Select medicine --</option>
-                            <?php if (!empty($inventory)): foreach ($inventory as $item): ?>
-                                <option value="<?php echo (int)$item['item_id']; ?>"><?php echo htmlspecialchars($item['item_name']); ?> (Stock: <?php echo (int)$item['quantity_in_stock']; ?>)</option>
-                            <?php endforeach; else: ?>
-                                <option value="">No medicines available</option>
+                            <?php if (!empty($inventory)): 
+                                $hasStock = false;
+                                foreach ($inventory as $item): 
+                                    $stock = (int)$item['quantity_in_stock'];
+                                    $disabled = $stock <= 0 ? 'disabled' : '';
+                                    if ($stock > 0) $hasStock = true;
+                            ?>
+                                <option value="<?php echo (int)$item['item_id']; ?>" <?php echo $disabled; ?>>
+                                    <?php echo htmlspecialchars($item['item_name']); ?> 
+                                    (Stock: <?php echo $stock; ?>)<?php echo $stock <= 0 ? ' - OUT OF STOCK' : ''; ?>
+                                </option>
+                            <?php endforeach; 
+                                if (!$hasStock): ?>
+                                <option value="" disabled>⚠️ All medicines are out of stock</option>
+                            <?php endif; ?>
+                            <?php else: ?>
+                                <option value="" disabled>No medicines in inventory</option>
                             <?php endif; ?>
                         </select>
+                        <?php if (!empty($inventory) && isset($hasStock) && !$hasStock): ?>
+                            <small class="text-warning">Please restock medicines in the Inventory section.</small>
+                        <?php endif; ?>
                     </div>
 
                     <div class="mb-3">
@@ -324,9 +338,29 @@ try {
         </div>
     </div>
 </div>
-<?php
-// Admin: View single patient (placeholder)
-require_once __DIR__ . '/../../includes/header_admin.php';
-?>
 
-<?php require_once __DIR__ . '/../../includes/footer_admin.php';
+<script>
+// Fix Bootstrap modal stacking context issue in admin layout
+// Move modal to body when opened, return when closed
+document.addEventListener('DOMContentLoaded', function() {
+    const dispenseModal = document.getElementById('dispenseModal');
+    if (dispenseModal) {
+        // Store original parent
+        const originalParent = dispenseModal.parentNode;
+        
+        // Move to body when showing
+        dispenseModal.addEventListener('show.bs.modal', function() {
+            document.body.appendChild(dispenseModal);
+        });
+        
+        // Move back when hidden (to maintain form data)
+        dispenseModal.addEventListener('hidden.bs.modal', function() {
+            if (originalParent) {
+                originalParent.appendChild(dispenseModal);
+            }
+        });
+    }
+});
+</script>
+
+<?php include_once __DIR__ . '/../../includes/footer_admin.php'; ?>

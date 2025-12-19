@@ -43,6 +43,7 @@ try {
         <div class="card-header">Edit Inventory Item</div>
         <div class="card-body">
             <form method="post" action="?action=update-inventory-item">
+                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                 <input type="hidden" name="item_id" value="<?php echo htmlspecialchars($item['item_id']); ?>">
 
                 <div class="mb-3">

@@ -192,7 +192,7 @@ foreach ($vitals as $r) {
         <div class="tab-pane fade" id="medicine" role="tabpanel">
             <div class="mb-3">
                 <form method="post" action="<?php echo BASE_URL; ?>?action=medicine-dispense-save" class="row g-2 align-items-end">
-                    <input type="hidden" name="resident_id" value="<?php echo (int)$resident_id; ?>" />
+                    <input type="hidden" name="patient_id" value="<?php echo (int)$resident_id; ?>" />
                     <div class="col-md-5">
                         <label class="form-label">Medicine</label>
                         <select name="item_id" class="form-select">

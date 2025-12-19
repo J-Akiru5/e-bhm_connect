@@ -31,12 +31,12 @@
                     <h4>Connect With Us</h4>
                     <p><strong>Barangay Hall:</strong> (033) 987-6543</p>
                     <p><strong>Email:</strong> barangaybacong@gmail.com</p>
-                    <div style="margin-top: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                        <a href="https://www.facebook.com/barangay.bacong.2025" target="_blank" class="btn btn-sm btn-glass" style="padding: 0.5rem 1rem;">
+                <div class="social-links">
+                        <a href="https://www.facebook.com/barangay.bacong.2025" target="_blank" class="btn btn-sm btn-glass">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
                             Facebook
                         </a>
-                        <a href="https://www.google.com/maps/search/?api=1&query=Barangay+Bacong+Dumangas+Iloilo" target="_blank" class="btn btn-sm btn-glass" style="padding: 0.5rem 1rem;">
+                        <a href="https://www.google.com/maps/search/?api=1&query=Barangay+Bacong+Dumangas+Iloilo" target="_blank" class="btn btn-sm btn-glass">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                             Maps
                         </a>
@@ -45,14 +45,14 @@
 
             </div>
             
-            <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <p style="margin: 0; color: var(--gray-500);">
-                    <span style="color: var(--primary); font-weight: 600;">E-BHM Connect</span> &copy; 2025. All Rights Reserved.
+            <div class="footer-bottom">
+                <p class="footer-copyright-text">
+                    <span class="footer-brand">E-BHM Connect</span> &copy; 2025. All Rights Reserved.
                 </p>
                 <div class="footer-legal-links">
-                    <a href="<?php echo BASE_URL; ?>?page=about" style="color: #0d6efd; text-decoration: none; margin-left: 1rem; font-weight: 500;">About</a>
-                    <a href="<?php echo BASE_URL; ?>?page=privacy" style="color: #0d6efd; text-decoration: none; margin-left: 1rem; font-weight: 500;">Privacy</a>
-                    <a href="<?php echo BASE_URL; ?>?page=help" style="color: #0d6efd; text-decoration: none; margin-left: 1rem; font-weight: 500;">Help</a>
+                    <a href="<?php echo BASE_URL; ?>?page=about">About</a>
+                    <a href="<?php echo BASE_URL; ?>?page=privacy">Privacy</a>
+                    <a href="<?php echo BASE_URL; ?>?page=help">Help</a>
                 </div>
             </div>
         </div>
@@ -81,6 +81,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <!-- Chatbot Styles and Scripts -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/shared-components.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/chatbot.css">
     <script src="<?php echo BASE_URL; ?>assets/js/chatbot.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/resizable.js"></script>
@@ -93,7 +94,7 @@
         <div id="chat-resize-handle"></div>
         <div id="chat-header">
             <div class="chat-title">
-                <img src="<?php echo BASE_URL; ?>assets/images/gabby_avatar.png" alt="Gabby" style="width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,0.12);" />
+                <img src="<?php echo BASE_URL; ?>assets/images/gabby-head.png" alt="Gabby" class="chat-header-avatar" />
                 <div>Gabby — E-BHM Connect</div>
             </div>
             <span id="chat-close">✕</span>
@@ -118,105 +119,6 @@
     <button id="tour-restart-btn" onclick="startGlobalTour()" aria-label="Restart Tour" title="Restart Site Tour">
         <i class="fas fa-question"></i>
     </button>
-
-    <style>
-    /* Floating Tour Button */
-    #tour-restart-btn {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: rgba(32, 201, 151, 0.2);
-        border: 1px solid rgba(32, 201, 151, 0.5);
-        color: var(--primary);
-        font-size: 1.2rem;
-        cursor: pointer;
-        z-index: 1000;
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-
-    #tour-restart-btn:hover {
-        background: var(--primary);
-        color: white;
-        transform: scale(1.1) rotate(10deg);
-        box-shadow: 0 0 20px rgba(32, 201, 151, 0.6);
-    }
-
-    /* Driver.js Glassmorphism Theme */
-    .driver-popover.driverjs-theme {
-        background: rgba(15, 23, 42, 0.95);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(20px);
-        border-radius: 16px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        padding: 20px;
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-title {
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--primary);
-        margin-bottom: 10px;
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-description {
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.95rem;
-        color: rgba(255, 255, 255, 0.8);
-        line-height: 1.6;
-        margin-bottom: 20px;
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-footer button {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
-        padding: 8px 16px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.85rem;
-        transition: all 0.2s;
-        text-shadow: none;
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-footer button:hover {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-arrow-side-left.driver-popover-arrow {
-        border-left-color: rgba(15, 23, 42, 0.95);
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-arrow-side-right.driver-popover-arrow {
-        border-right-color: rgba(15, 23, 42, 0.95);
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-arrow-side-top.driver-popover-arrow {
-        border-top-color: rgba(15, 23, 42, 0.95);
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-arrow-side-bottom.driver-popover-arrow {
-        border-bottom-color: rgba(15, 23, 42, 0.95);
-    }
-    
-    /* Highlight Path styling */
-    .driver-overlay {
-        path {
-            fill: rgba(0, 0, 0, 0.85) !important;
-        }
-    }
-    </style>
 
     <script>
     // Global Tour Logic

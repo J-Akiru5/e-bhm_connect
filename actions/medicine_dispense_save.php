@@ -77,8 +77,8 @@ try {
     $upd->execute([':qty' => $quantity, ':id' => $medicine_id]);
 
     // Step C: Log Dispense
-    // Use patient_id column to match schema, include dispensed_at
-    $ins = $pdo->prepare('INSERT INTO medicine_dispensing_log (patient_id, item_id, quantity, bhw_id, dispensed_at, notes) VALUES (:pid, :mid, :qty, :bid, NOW(), :notes)');
+    // Use resident_id column to match actual database schema
+    $ins = $pdo->prepare('INSERT INTO medicine_dispensing_log (resident_id, item_id, quantity, bhw_id, dispensed_at, notes) VALUES (:pid, :mid, :qty, :bid, NOW(), :notes)');
     $ins->execute([
         ':pid' => $patient_id,
         ':mid' => $medicine_id,
@@ -99,8 +99,10 @@ try {
     if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) {
         $pdo->rollBack();
     }
-    error_log('Dispense Error: ' . $e->getMessage());
-    $_SESSION['form_error'] = 'System Error: Could not dispense.';
+    // Log detailed error for debugging
+    error_log('Dispense Error [medicine_dispense_save.php]: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ' | Line: ' . $e->getLine());
+    // Show more detailed error during debugging (remove in production)
+    $_SESSION['form_error'] = 'System Error: Could not dispense. Details: ' . $e->getMessage();
     header('Location: ' . $redirect_url);
     exit();
 }

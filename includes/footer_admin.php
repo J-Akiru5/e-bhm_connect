@@ -3,7 +3,7 @@
         <!-- Footer -->
         <footer id="admin-footer">
             <div class="footer-copyright">
-                <span style="color:var(--primary); font-weight:600;">E-BHM Connect</span> &copy; <?php echo date('Y'); ?>.
+                <span class="footer-brand">E-BHM Connect</span> &copy; <?php echo date('Y'); ?>.
                 <?php echo __('footer.all_rights_reserved'); ?>
             </div>
             <div class="footer-links">
@@ -97,40 +97,129 @@
     // Sidebar Scroll Position Persistence
     (function(){
         const sidebar = document.getElementById('admin-sidebar');
-        const sidebarNav = sidebar ? sidebar.querySelector('.sidebar-nav') : null;
         const STORAGE_KEY = 'ebhm_sidebar_scroll';
         
-        if(sidebarNav){
-            // Restore scroll position after layout is ready (use requestAnimationFrame)
-            requestAnimationFrame(function(){
-                const savedScroll = localStorage.getItem(STORAGE_KEY);
-                if(savedScroll){
-                    sidebarNav.scrollTop = parseInt(savedScroll, 10);
-                }
-            });
+        if(sidebar){
+            // Restore scroll position IMMEDIATELY on script load
+            const savedScroll = localStorage.getItem(STORAGE_KEY);
+            if(savedScroll){
+                sidebar.scrollTop = parseInt(savedScroll, 10);
+            }
             
             // Debounced scroll save (reduce writes)
             let scrollTimeout;
-            sidebarNav.addEventListener('scroll', function(){
+            sidebar.addEventListener('scroll', function(){
                 clearTimeout(scrollTimeout);
                 scrollTimeout = setTimeout(function(){
-                    localStorage.setItem(STORAGE_KEY, sidebarNav.scrollTop);
+                    localStorage.setItem(STORAGE_KEY, sidebar.scrollTop);
                 }, 100);
             });
             
             // Save immediately before page unload
             window.addEventListener('beforeunload', function(){
-                localStorage.setItem(STORAGE_KEY, sidebarNav.scrollTop);
+                localStorage.setItem(STORAGE_KEY, sidebar.scrollTop);
             });
             
-            // Also save when clicking any link (before fade-out transition)
+            // Also save when clicking any link (before navigation)
             document.addEventListener('click', function(e){
                 const link = e.target.closest('a');
                 if(link && link.href && link.hostname === window.location.hostname){
-                    localStorage.setItem(STORAGE_KEY, sidebarNav.scrollTop);
+                    localStorage.setItem(STORAGE_KEY, sidebar.scrollTop);
                 }
             }, true); // Capture phase to run before navigation
         }
+    })();
+    </script>
+
+    <script>
+    // Collapsible Sidebar Sections
+    (function(){
+        const COLLAPSED_KEY = 'ebhm_sidebar_collapsed';
+        const sections = document.querySelectorAll('.sidebar-nav-section');
+        
+        // Load saved collapsed state
+        let collapsedSections = [];
+        try {
+            collapsedSections = JSON.parse(localStorage.getItem(COLLAPSED_KEY)) || [];
+        } catch(e) {}
+        
+        sections.forEach(function(section, idx) {
+            const title = section.querySelector('.sidebar-nav-title');
+            if (!title) return;
+            
+            // Restore collapsed state
+            if (collapsedSections.includes(idx)) {
+                section.classList.add('collapsed');
+            }
+            
+            // Toggle on click
+            title.addEventListener('click', function() {
+                section.classList.toggle('collapsed');
+                
+                // Save collapsed state
+                const collapsed = [];
+                document.querySelectorAll('.sidebar-nav-section').forEach(function(s, i) {
+                    if (s.classList.contains('collapsed')) {
+                        collapsed.push(i);
+                    }
+                });
+                localStorage.setItem(COLLAPSED_KEY, JSON.stringify(collapsed));
+            });
+        });
+    })();
+    </script>
+
+    <script>
+    // Resizable Sidebar
+    (function(){
+        const sidebar = document.getElementById('admin-sidebar');
+        const handle = document.getElementById('sidebar-resize-handle');
+        const mainContent = document.getElementById('main-content-wrapper');
+        const bgOrbs = document.querySelector('.admin-bg-orbs');
+        const WIDTH_KEY = 'ebhm_sidebar_width';
+        const MIN_WIDTH = 200;
+        const MAX_WIDTH = 400;
+        
+        if (!sidebar || !handle) return;
+        
+        // Restore saved width
+        const savedWidth = localStorage.getItem(WIDTH_KEY);
+        if (savedWidth) {
+            const width = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, parseInt(savedWidth, 10)));
+            setSidebarWidth(width);
+        }
+        
+        function setSidebarWidth(width) {
+            sidebar.style.width = width + 'px';
+            if (mainContent) mainContent.style.left = width + 'px';
+            if (bgOrbs) bgOrbs.style.left = width + 'px';
+            document.documentElement.style.setProperty('--sidebar-width', width + 'px');
+        }
+        
+        let isResizing = false;
+        
+        handle.addEventListener('mousedown', function(e) {
+            isResizing = true;
+            handle.classList.add('active');
+            document.body.classList.add('sidebar-resizing');
+            e.preventDefault();
+        });
+        
+        document.addEventListener('mousemove', function(e) {
+            if (!isResizing) return;
+            let newWidth = e.clientX;
+            newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, newWidth));
+            setSidebarWidth(newWidth);
+        });
+        
+        document.addEventListener('mouseup', function() {
+            if (!isResizing) return;
+            isResizing = false;
+            handle.classList.remove('active');
+            document.body.classList.remove('sidebar-resizing');
+            // Save width
+            localStorage.setItem(WIDTH_KEY, sidebar.style.width.replace('px', ''));
+        });
     })();
     </script>
 
@@ -158,13 +247,13 @@
     </script>
 
     <!-- Chat Widget -->
-    <div id="chat-bubble">💬</div>
+    <div id="chat-bubble" role="button" aria-label="Chat with Gabby" title="Chat with Gabby"></div>
 
     <div id="chat-window">
         <div id="chat-resize-handle"></div>
         <div id="chat-header">
             <div class="chat-title">
-                <img src="<?php echo BASE_URL; ?>assets/images/gabby_avatar.png" alt="Gabby" style="width:32px;height:32px;border-radius:8px;border:2px solid rgba(255,255,255,0.12);" />
+                <img src="<?php echo BASE_URL; ?>assets/images/gabby-head.png" alt="Gabby" class="chat-header-avatar chat-header-avatar--lg" />
                 <div>Gabby — E-BHM Connect</div>
             </div>
             <span id="chat-close">✕</span>
@@ -226,96 +315,9 @@
     </script>
 
     <!-- Tour Restart Button -->
-    <button id="tour-restart-btn" onclick="startAdminTour()" aria-label="Restart Tour" title="Restart Admin Tour">
+    <button id="tour-restart-btn" class="admin-tour-btn" onclick="startAdminTour()" aria-label="Restart Tour" title="Restart Admin Tour">
         <i class="fas fa-question"></i>
     </button>
-
-    <style>
-    /* Floating Tour Button */
-    #tour-restart-btn {
-        position: fixed;
-        bottom: 20px;
-        right: 100px; /* Moved beside Gabby */
-        left: auto;   /* Remove left positioning */
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: rgba(32, 201, 151, 0.2);
-        border: 1px solid rgba(32, 201, 151, 0.5);
-        color: var(--primary);
-        font-size: 1.2rem;
-        cursor: pointer;
-        z-index: 1000;
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-
-    #tour-restart-btn:hover {
-        background: var(--primary);
-        color: white;
-        transform: scale(1.1) rotate(10deg);
-        box-shadow: 0 0 20px rgba(32, 201, 151, 0.6);
-    }
-
-    /* Driver.js Glassmorphism Theme */
-    .driver-popover.driverjs-theme {
-        background: rgba(15, 23, 42, 0.95);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(20px);
-        border-radius: 16px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        padding: 20px;
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-title {
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--primary);
-        margin-bottom: 10px;
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-description {
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.95rem;
-        color: rgba(255, 255, 255, 0.8);
-        line-height: 1.6;
-        margin-bottom: 20px;
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-footer button {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
-        padding: 8px 16px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.85rem;
-        transition: all 0.2s;
-        text-shadow: none;
-    }
-
-    .driver-popover.driverjs-theme .driver-popover-footer button:hover {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-    }
-    
-    .driver-popover.driverjs-theme .driver-popover-arrow-side-left.driver-popover-arrow { border-left-color: rgba(15, 23, 42, 0.95); }
-    .driver-popover.driverjs-theme .driver-popover-arrow-side-right.driver-popover-arrow { border-right-color: rgba(15, 23, 42, 0.95); }
-    .driver-popover.driverjs-theme .driver-popover-arrow-side-top.driver-popover-arrow { border-top-color: rgba(15, 23, 42, 0.95); }
-    .driver-popover.driverjs-theme .driver-popover-arrow-side-bottom.driver-popover-arrow { border-bottom-color: rgba(15, 23, 42, 0.95); }
-    
-    /* Highlight Path styling */
-    .driver-overlay path {
-        fill: rgba(0, 0, 0, 0.85) !important;
-    }
-    </style>
 
     <script>
     function startAdminTour() {

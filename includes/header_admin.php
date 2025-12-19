@@ -6,6 +6,7 @@
 
 // Include helpers
 require_once __DIR__ . '/auth_helpers.php';
+require_once __DIR__ . '/security_helper.php';
 require_once __DIR__ . '/translation_helper.php';
 
 // Initialize user session preferences if not already done
@@ -87,6 +88,7 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/admin.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/glass-components.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/shared-components.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/chatbot.css" media="print" onload="this.media='all'">
     
     <!-- Driver.js CSS -->
@@ -128,6 +130,8 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
 
     <!-- Sidebar Navigation -->
     <aside id="admin-sidebar">
+        <!-- Resize Handle -->
+        <div class="sidebar-resize-handle" id="sidebar-resize-handle"></div>
         <!-- Brand -->
         <a href="<?php echo BASE_URL; ?>admin-dashboard" class="sidebar-brand">
             <div class="sidebar-brand-icon">
@@ -256,6 +260,14 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                         </a>
                     </li>
                     <?php endif; ?>
+                    <li>
+                        <a href="<?php echo BASE_URL; ?>admin-dispensation-history" class="sidebar-nav-link <?php echo ($page === 'admin-dispensation-history') ? 'active' : ''; ?>">
+                            <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                            </svg>
+                            Dispensation Log
+                        </a>
+                    </li>
                 </ul>
             </div>
 

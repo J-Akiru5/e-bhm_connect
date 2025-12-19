@@ -376,7 +376,8 @@
     display: flex;
 }
 
-.modal-content {
+/* Custom glass modal content - scoped to .modal-overlay only (not Bootstrap modals) */
+.modal-overlay .modal-content {
     background: var(--card-bg);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);

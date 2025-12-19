@@ -6,7 +6,7 @@
     width: 64px;
         height: 64px;
         /* Brand color fallback behind avatar */
-        background-color: #537EA9;
+        background-color: #20c997;
     color: white;
     border-radius: 50%;
     display: flex;
@@ -16,7 +16,7 @@
     cursor: pointer;
     box-shadow: 0 6px 18px rgba(83, 126, 169, 0.18);
     z-index: 1000;
-    background-image: url('../images/gabby_avatar.png');
+    background-image: url('../images/gabby-head.png');
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
@@ -32,7 +32,7 @@
         width: 12px;
         height: 12px;
         border-radius: 50%;
-        background: #537EA9;
+        background: #20c997;
         /* presence color matches chat */
         box-shadow: 0 0 0 0 rgba(83, 126, 169, 0.5);
         animation: gabby-pulse 2s infinite;
@@ -125,11 +125,10 @@
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 .chat-message.bot {
-    background-color: #537EA9;
-        /* preserve Gabby color */
-    color: white;
+    background-color: #20c997;
+        color: #ffffff !important;
     align-self: flex-start;
-    box-shadow: 0 6px 18px rgba(83, 126, 169, 0.18);
+    box-shadow: 0 6px 18px rgba(32, 201, 151, 0.25);
 }
 .chat-message.loading {
     background-color: #f8f9fa;
@@ -148,7 +147,7 @@ body.light-mode #chat-window {
 
 html[data-theme="light"] #chat-header,
 body.light-mode #chat-header {
-    background: #537EA9 !important;
+    background: #20c997 !important;
     color: white !important;
 }
 
@@ -198,7 +197,7 @@ body.light-mode #chat-input::placeholder {
 }
 #chat-send-btn {
     border: none;
-    background: #537EA9;
+    background: #20c997;
     color: white;
     padding: 8px 12px;
     cursor: pointer;

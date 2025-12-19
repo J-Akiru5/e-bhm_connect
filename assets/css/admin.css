@@ -476,7 +476,106 @@ body {
   border-top: 1px solid var(--sidebar-border);
     margin-top: auto;
   }
-  
+
+/* ============================================
+   COLLAPSIBLE SIDEBAR SECTIONS
+   ============================================ */
+.sidebar-nav-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--sidebar-text-muted);
+  padding: 8px 12px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.sidebar-nav-title:hover {
+  background: var(--sidebar-hover);
+  color: var(--white);
+}
+
+.sidebar-nav-title::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: transform var(--transition-fast);
+}
+
+.sidebar-nav-section.collapsed .sidebar-nav-title::after {
+  transform: rotate(-90deg);
+}
+
+.sidebar-nav-section .sidebar-nav-item {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  opacity: 1;
+}
+
+.sidebar-nav-section.collapsed .sidebar-nav-item {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   RESIZABLE SIDEBAR
+   ============================================ */
+.sidebar-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  width: 8px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 1200;
+  background: transparent;
+  transition: background var(--transition-fast);
+}
+
+.sidebar-resize-handle:hover,
+.sidebar-resize-handle.active {
+  background: var(--primary);
+}
+
+.sidebar-resize-handle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.sidebar-resize-handle:hover::before,
+.sidebar-resize-handle.active::before {
+  opacity: 1;
+}
+
+body.sidebar-resizing {
+  cursor: ew-resize !important;
+  user-select: none;
+}
+
+body.sidebar-resizing * {
+  cursor: ew-resize !important;
+}
   /* ============================================
      TOP NAVIGATION BAR
      ============================================ */
@@ -886,6 +985,36 @@ body {
   background-color: rgba(var(--primary-rgb), 0.03);
 }
 
+/* Dark mode table fixes */
+[data-theme="dark"] .table,
+[data-theme="dark"] .table th,
+[data-theme="dark"] .table td,
+[data-theme="dark"] .table-striped tbody tr {
+  color: var(--text-primary);
+  background-color: transparent;
+}
+
+[data-theme="dark"] .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .table-striped tbody tr:nth-of-type(even) {
+  background-color: transparent;
+}
+
+[data-theme="dark"] .card .table {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .card .table thead th {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .card .table tbody td {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
 /* ============================================
    BUTTONS
    ============================================ */
