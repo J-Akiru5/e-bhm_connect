@@ -28,9 +28,9 @@ try {
     error_log("Error fetching BHWs: " . $e->getMessage());
 }
 
-// Fetch record for editing
+// Fetch record for editing or viewing
 $record = null;
-if ($editId && $action === 'edit') {
+if ($editId && ($action === 'edit' || $action === 'view')) {
     try {
         $stmt = $pdo->prepare("SELECT * FROM pregnancy_tracking WHERE pregnancy_id = ?");
         $stmt->execute([$editId]);
