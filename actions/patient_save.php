@@ -81,7 +81,7 @@ try {
         ]);
 
         // Check if health record exists
-        $stmt = $pdo->prepare('SELECT id FROM patient_health_records WHERE patient_id = :patient_id LIMIT 1');
+        $stmt = $pdo->prepare('SELECT record_id FROM patient_health_records WHERE patient_id = :patient_id LIMIT 1');
         $stmt->execute([':patient_id' => $patient_id]);
         $exists = $stmt->fetch(PDO::FETCH_ASSOC);
 

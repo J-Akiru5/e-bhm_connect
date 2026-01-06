@@ -10,6 +10,11 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 
+// Simple SMS Gateway configuration
+if (!defined('GATEWAY_URL')) {
+    define('GATEWAY_URL', 'http://192.168.68.200:8080/send-sms');
+}
+
 
 if (!isset($_GET['action'])) {
     die('Missing action.');
@@ -144,6 +149,64 @@ try {
 
             $result = process_batch_sms($pdo);
             $_SESSION['sms_success'] = "Resend requested. Sent: {$result['sent']}, Failed: {$result['failed']}";
+            header('Location: ' . BASE_URL . 'admin-messages');
+            exit();
+            break;
+
+        case 'send-individual':
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                $_SESSION['sms_error'] = 'Invalid request method.';
+                header('Location: ' . BASE_URL . 'admin-messages');
+                exit();
+            }
+
+            // Check if gateway is configured
+            if (!defined('GATEWAY_URL') || GATEWAY_URL === '') {
+                $_SESSION['sms_error'] = 'SMS Gateway is not configured.';
+                header('Location: ' . BASE_URL . 'admin-messages');
+                exit();
+            }
+
+            $patient_id = isset($_POST['patient_id']) ? intval($_POST['patient_id']) : 0;
+            $message = isset($_POST['message']) ? trim($_POST['message']) : '';
+
+            if ($patient_id <= 0) {
+                $_SESSION['sms_error'] = 'Please select a patient.';
+                header('Location: ' . BASE_URL . 'admin-messages');
+                exit();
+            }
+
+            if ($message === '') {
+                $_SESSION['sms_error'] = 'Message body cannot be empty.';
+                header('Location: ' . BASE_URL . 'admin-messages');
+                exit();
+            }
+
+            // Get patient contact
+            $pStmt = $pdo->prepare("SELECT contact, full_name FROM patients WHERE patient_id = :id");
+            $pStmt->execute([':id' => $patient_id]);
+            $patient = $pStmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$patient || empty($patient['contact'])) {
+                $_SESSION['sms_error'] = 'Patient not found or has no contact number.';
+                header('Location: ' . BASE_URL . 'admin-messages');
+                exit();
+            }
+
+            // Insert into queue
+            $ins = $pdo->prepare("INSERT INTO sms_queue (phone_number, message, status, created_at) VALUES (:phone, :message, 'pending', NOW())");
+            $ins->execute([':phone' => $patient['contact'], ':message' => $message]);
+
+            // Process immediately
+            $result = process_batch_sms($pdo);
+
+            $patientName = trim($patient['full_name']);
+            if ($result['sent'] > 0) {
+                $_SESSION['sms_success'] = "Message sent to {$patientName} successfully.";
+            } else {
+                $_SESSION['sms_error'] = "Failed to send message to {$patientName}. Please check your gateway.";
+            }
+
             header('Location: ' . BASE_URL . 'admin-messages');
             exit();
             break;

@@ -38,6 +38,16 @@ try {
 } catch (Throwable $e) {
     error_log('SMS fetch error: ' . $e->getMessage());
 }
+
+// Fetch patients for individual SMS dropdown
+$patients = [];
+try {
+    $pStmt = $pdo->prepare("SELECT patient_id as id, full_name as name, contact FROM patients WHERE contact IS NOT NULL AND contact != '' ORDER BY full_name");
+    $pStmt->execute();
+    $patients = $pStmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Throwable $e) {
+    error_log('Patient fetch error: ' . $e->getMessage());
+}
 ?>
 
 <div class="container">
@@ -48,10 +58,16 @@ try {
             <p class="page-subtitle">Send broadcast messages and view SMS status</p>
         </div>
         <?php if (has_permission('use_messages')): ?>
-        <button class="btn-primary-glass" onclick="openModal()">
-            <i class="fas fa-sms"></i>
-            Send Broadcast
-        </button>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-primary-glass" onclick="openIndividualModal()">
+                <i class="fas fa-user"></i>
+                Send to Patient
+            </button>
+            <button class="btn-secondary-glass" onclick="openModal()">
+                <i class="fas fa-bullhorn"></i>
+                Send Broadcast
+            </button>
+        </div>
         <?php endif; ?>
     </div>
 
@@ -176,7 +192,50 @@ try {
     </div>
 </div>
 
+<!-- Send to Individual Modal -->
+<div class="modal-overlay" id="sendIndividualModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-user me-2" style="color: #20c997;"></i>
+                Send SMS to Patient
+            </h3>
+            <button class="modal-close" onclick="closeIndividualModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form method="post" action="?action=send-individual">
+            <?php echo csrf_input(); ?>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Select Patient *</label>
+                    <select name="patient_id" id="patient_select" class="glass-input" required style="width: 100%; padding: 12px;">
+                        <option value="">-- Search or select a patient --</option>
+                        <?php foreach ($patients as $p): ?>
+                            <option value="<?php echo $p['id']; ?>" data-contact="<?php echo htmlspecialchars($p['contact']); ?>">
+                                <?php echo htmlspecialchars($p['name']); ?> (<?php echo htmlspecialchars($p['contact']); ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message Body *</label>
+                    <textarea id="individual_message" name="message" class="glass-input" rows="4" required placeholder="Enter your message here..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary-glass" onclick="closeIndividualModal()">Cancel</button>
+                <button type="submit" class="btn-primary-glass">
+                    <i class="fas fa-paper-plane"></i>
+                    Send Message
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
+// Broadcast Modal
 function openModal() {
     document.getElementById('sendBroadcastModal').classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -191,8 +250,26 @@ document.getElementById('sendBroadcastModal').addEventListener('click', function
     if (e.target === this) closeModal();
 });
 
+// Individual SMS Modal
+function openIndividualModal() {
+    document.getElementById('sendIndividualModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeIndividualModal() {
+    document.getElementById('sendIndividualModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('sendIndividualModal').addEventListener('click', function(e) {
+    if (e.target === this) closeIndividualModal();
+});
+
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape') {
+        closeModal();
+        closeIndividualModal();
+    }
 });
 </script>
 

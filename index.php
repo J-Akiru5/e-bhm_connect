@@ -61,6 +61,7 @@ $allowedActions = [
     // SMS Actions (manual triggers)
     'send-broadcast' => $actionPath . 'sms_actions.php',
     'resend-sms' => $actionPath . 'sms_actions.php',
+    'send-individual' => $actionPath . 'sms_actions.php',
 
     // Reports
     // Reports
