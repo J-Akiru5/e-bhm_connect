@@ -424,6 +424,13 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                     </button>
                 </div>
 
+                <!-- Help / Admin Tour -->
+                <button type="button" onclick="startAdminTour()" class="topnav-action" title="<?php echo __('nav.admin_tour') ?: 'Admin Tour'; ?>" style="background:none;border:none;cursor:pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                </button>
+
                 <!-- View Public Site -->
                 <a href="<?php echo BASE_URL; ?>" target="_blank" class="topnav-action" title="<?php echo __('nav.view_public_site'); ?>">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

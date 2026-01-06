@@ -167,8 +167,7 @@
                         side: "bottom", 
                         align: 'end' 
                     } 
-                },
-                <?php if ($chatbotEnabled): ?>
+                }<?php if ($chatbotEnabled): ?>,
                 { 
                     element: '#chat-bubble', 
                     popover: { 
@@ -177,8 +176,7 @@
                         side: "top", 
                         align: 'end' 
                     } 
-                },
-                <?php endif; ?>
+                }<?php endif; ?>,
                 { 
                     element: '#tour-restart-btn', 
                     popover: { 

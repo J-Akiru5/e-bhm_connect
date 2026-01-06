@@ -66,9 +66,19 @@ $allowedActions = [
     'verify-bhw-email' => $actionPath . 'verify_bhw_email.php',
 
     // Reports
+    // Reports
     'report-patient-list' => $actionPath . 'report_patient_list.php',
     'report-inventory-stock' => $actionPath . 'report_inventory.php',
     'report-chronic-disease' => $actionPath . 'report_chronic.php',
+    
+    // New Reports
+    'report-medicine-dispensing' => $actionPath . 'report_medicine_dispensing.php',
+    'report-pregnancy' => $actionPath . 'report_pregnancy.php',
+    'report-child-care' => $actionPath . 'report_child_care.php',
+    'report-natality' => $actionPath . 'report_natality.php',
+    'report-wra' => $actionPath . 'report_wra.php',
+
+    // Existing (Legacy/Other) Reports
     'report-my-record' => $actionPath . 'report_my_record.php',
     'report-bhw-record' => $actionPath . 'report_bhw_record.php',
     'report-health-records' => $actionPath . 'report_health_records.php',

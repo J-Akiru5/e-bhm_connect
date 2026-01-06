@@ -11,10 +11,15 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth_helpers.php';
+require_once __DIR__ . '/../includes/security_helper.php';
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . BASE_URL . 'admin-announcements');
     exit();
 }
+
+// Validate CSRF token
+require_csrf();
 
 $announcement_id = isset($_POST['announcement_id']) ? (int) $_POST['announcement_id'] : 0;
 $title = isset($_POST['title']) ? trim($_POST['title']) : '';

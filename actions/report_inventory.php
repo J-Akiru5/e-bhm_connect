@@ -12,6 +12,11 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../lib/fpdf/fpdf.php';
 
+// Allow access if logged in
+if (!isset($_SESSION['bhw_id'])) {
+    die('Unauthorized access.');
+}
+
 class PDF extends FPDF {
     // Page header
     function Header() {
@@ -28,12 +33,29 @@ class PDF extends FPDF {
 }
 
 // --- Main Logic ---
+$startDate = isset($_GET['start_date']) && $_GET['start_date'] !== '' ? $_GET['start_date'] : null;
+$endDate = isset($_GET['end_date']) && $_GET['end_date'] !== '' ? $_GET['end_date'] : null;
+
 $pdf = new PDF();
 $pdf->AddPage('P', 'A4'); // Portrait
 $pdf->SetFont('Arial', 'B', 10);
 
 // Database Query
-$stmt = $pdo->query("SELECT * FROM medication_inventory ORDER BY item_name ASC");
+$sql = "SELECT * FROM medication_inventory WHERE 1=1";
+$params = [];
+
+if ($startDate) {
+    $sql .= " AND last_restock >= ?";
+    $params[] = $startDate;
+}
+if ($endDate) {
+    $sql .= " AND last_restock <= ?";
+    $params[] = $endDate;
+}
+
+$sql .= " ORDER BY item_name ASC";
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
 $inventory_items = $stmt->fetchAll();
 
 // Table Header
@@ -47,15 +69,16 @@ $pdf->Ln(); // New line
 // Table Body
 $pdf->SetFont('Arial', '', 9);
 foreach ($inventory_items as $item) {
-    $pdf->Cell(40, 6, $item['item_name'], 1);
-    $pdf->Cell(80, 6, $item['description'], 1);
-    $pdf->Cell(20, 6, $item['quantity_in_stock'], 1, 0, 'C');
+    $pdf->Cell(40, 6, substr($item['item_name'] ?? '', 0, 25), 1);
+    $pdf->Cell(80, 6, substr($item['description'] ?? '', 0, 50), 1);
+    $pdf->Cell(20, 6, $item['quantity_in_stock'], 1);
     $pdf->Cell(20, 6, $item['unit'], 1);
     $pdf->Cell(30, 6, $item['last_restock'], 1);
     $pdf->Ln();
 }
 
 // Output
+if (ob_get_length()) ob_clean();
 $pdf->Output('D', 'inventory_stock.pdf');
 exit;
 ?>

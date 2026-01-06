@@ -7,9 +7,8 @@
                 <?php echo __('footer.all_rights_reserved'); ?>
             </div>
             <div class="footer-links">
-                <a href="<?php echo BASE_URL; ?>?page=about"><?php echo __('footer.about'); ?></a>
-                <a href="<?php echo BASE_URL; ?>?page=privacy"><?php echo __('footer.privacy'); ?></a>
-                <a href="<?php echo BASE_URL; ?>?page=help"><?php echo __('footer.help'); ?></a>
+                <a href="<?php echo BASE_URL; ?>about"><?php echo __('footer.about'); ?></a>
+                <a href="<?php echo BASE_URL; ?>privacy"><?php echo __('footer.privacy'); ?></a>
             </div>
         </footer>
 
@@ -19,6 +18,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/chatbot.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/resizable.js"></script>
 
@@ -335,10 +337,7 @@
     })();
     </script>
 
-    <!-- Tour Restart Button -->
-    <button id="tour-restart-btn" class="admin-tour-btn" onclick="startAdminTour()" aria-label="Restart Tour" title="Restart Admin Tour">
-        <i class="fas fa-question"></i>
-    </button>
+    <!-- Tour functionality moved to Help in top bar -->
 
     <script>
     function startAdminTour() {
@@ -427,6 +426,61 @@
             setTimeout(() => {
                 startAdminTour();
             }, 1000);
+        }
+    });
+    </script>
+
+    <!-- GSAP Chatbot Footer Avoidance Animation -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Only run if GSAP and ScrollTrigger are loaded
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            const chatBubble = document.getElementById('chat-bubble');
+            const chatWindow = document.getElementById('chat-window');
+            const footer = document.getElementById('admin-footer');
+            const mainContent = document.getElementById('main-content-wrapper');
+            
+            if (chatBubble && footer && mainContent) {
+                // Create ScrollTrigger that watches when footer enters viewport
+                ScrollTrigger.create({
+                    trigger: footer,
+                    scroller: mainContent, // Use the scrolling container
+                    start: 'top bottom', // When top of footer hits bottom of viewport
+                    end: 'bottom bottom',
+                    onEnter: () => {
+                        // Footer is entering viewport - move chatbot up
+                        gsap.to(chatBubble, {
+                            bottom: 70,
+                            duration: 0.3,
+                            ease: 'power2.out'
+                        });
+                        if (chatWindow) {
+                            gsap.to(chatWindow, {
+                                bottom: 140,
+                                duration: 0.3,
+                                ease: 'power2.out'
+                            });
+                        }
+                    },
+                    onLeaveBack: () => {
+                        // Footer is leaving viewport (scrolling up) - move chatbot down
+                        gsap.to(chatBubble, {
+                            bottom: 20,
+                            duration: 0.3,
+                            ease: 'power2.out'
+                        });
+                        if (chatWindow) {
+                            gsap.to(chatWindow, {
+                                bottom: 90,
+                                duration: 0.3,
+                                ease: 'power2.out'
+                            });
+                        }
+                    }
+                });
+            }
         }
     });
     </script>

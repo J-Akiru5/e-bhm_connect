@@ -126,5 +126,13 @@ try {
     $_SESSION['form_error'] = $e->getMessage();
 }
 
-header('Location: ' . BASE_URL . 'admin-profile');
+// Redirect back to the referring page, or default to account-settings
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (strpos($referer, 'admin-profile') !== false) {
+    header('Location: ' . BASE_URL . 'admin-profile');
+} elseif (strpos($referer, 'admin-account-settings') !== false) {
+    header('Location: ' . BASE_URL . 'admin-account-settings');
+} else {
+    header('Location: ' . BASE_URL . 'admin-account-settings');
+}
 exit();

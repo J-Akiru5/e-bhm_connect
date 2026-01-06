@@ -155,10 +155,38 @@ $current_lang = $preferences['language'] ?? $_SESSION['language'] ?? 'en';
         <div class="col-12 col-lg-4">
             <div class="glass-card">
                 <div class="glass-card-body text-center py-4">
-                    <!-- Avatar -->
-                    <div class="avatar-xl mx-auto mb-3" style="width:96px;height:96px;border-radius:20px;background:linear-gradient(135deg, var(--primary), var(--secondary));display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;font-weight:700;">
-                        <?php echo strtoupper(substr($user['full_name'] ?? 'U', 0, 2)); ?>
-                    </div>
+                    <!-- Profile Photo -->
+                    <?php 
+                    $profilePhoto = $user['profile_photo'] ?? null;
+                    $hasPhoto = $profilePhoto && file_exists(__DIR__ . '/../../uploads/profiles/' . $profilePhoto);
+                    ?>
+                    <form id="photoUploadForm" action="<?php echo BASE_URL; ?>?action=bhw-profile-save&type=photo" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="bhw_id" value="<?php echo $user_id; ?>">
+                        <input type="file" name="profile_photo" id="photoInput" accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;">
+                        
+                        <div class="profile-photo-container mx-auto mb-3" style="position:relative;width:96px;height:96px;">
+                            <?php if ($hasPhoto): ?>
+                                <img src="<?php echo BASE_URL; ?>uploads/profiles/<?php echo htmlspecialchars($profilePhoto); ?>" 
+                                     alt="Profile Photo" 
+                                     id="profilePhotoPreview"
+                                     style="width:96px;height:96px;border-radius:20px;object-fit:cover;border:3px solid var(--primary);">
+                            <?php else: ?>
+                                <div id="avatarInitials" style="width:96px;height:96px;border-radius:20px;background:linear-gradient(135deg, var(--primary), var(--secondary));display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;font-weight:700;">
+                                    <?php echo strtoupper(substr($user['full_name'] ?? 'U', 0, 2)); ?>
+                                </div>
+                                <img src="" alt="Profile Photo" id="profilePhotoPreview" style="display:none;width:96px;height:96px;border-radius:20px;object-fit:cover;border:3px solid var(--primary);">
+                            <?php endif; ?>
+                            
+                            <!-- Upload Button Overlay -->
+                            <button type="button" onclick="document.getElementById('photoInput').click()" 
+                                    class="btn btn-sm" 
+                                    style="position:absolute;bottom:-5px;right:-5px;width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;border:2px solid var(--card-bg);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;"
+                                    title="<?php echo __('settings.change_photo') ?: 'Change Photo'; ?>">
+                                <i class="fas fa-camera" style="font-size:12px;"></i>
+                            </button>
+                        </div>
+                    </form>
+                    
                     <h5 class="mb-1"><?php echo htmlspecialchars($user['full_name'] ?? 'User'); ?></h5>
                     <p class="text-secondary mb-3"><?php echo htmlspecialchars($user['email'] ?? ''); ?></p>
                     
@@ -380,6 +408,58 @@ document.querySelector('select[name="language"]').addEventListener('change', fun
 window.addEventListener('DOMContentLoaded', function() {
     const savedTheme = localStorage.getItem('userTheme') || '<?php echo $current_theme; ?>';
     document.documentElement.setAttribute('data-theme', savedTheme);
+});
+
+// Profile photo upload handling
+document.getElementById('photoInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        // Validate file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+            Swal.fire({
+                icon: 'error',
+                title: 'File Too Large',
+                text: 'Maximum file size is 5MB.',
+                background: 'rgba(30, 41, 59, 0.95)',
+                color: '#ffffff'
+            });
+            return;
+        }
+        
+        // Preview the image
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const preview = document.getElementById('profilePhotoPreview');
+            const initials = document.getElementById('avatarInitials');
+            
+            preview.src = ev.target.result;
+            preview.style.display = 'block';
+            
+            if (initials) {
+                initials.style.display = 'none';
+            }
+        };
+        reader.readAsDataURL(file);
+        
+        // Show loading and auto-submit
+        Swal.fire({
+            title: 'Uploading Photo...',
+            text: 'Please wait',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            background: 'rgba(30, 41, 59, 0.95)',
+            color: '#ffffff',
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        
+        // Submit after brief delay for preview
+        setTimeout(() => {
+            document.getElementById('photoUploadForm').submit();
+        }, 500);
+    }
 });
 </script>
 

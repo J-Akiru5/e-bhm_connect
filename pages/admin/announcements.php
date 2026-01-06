@@ -105,10 +105,10 @@ try {
                                         <a href="<?php echo BASE_URL; ?>admin-announcement-edit?id=<?php echo $a['announcement_id']; ?>" class="btn-secondary-glass btn-sm-glass">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="<?php echo BASE_URL; ?>?action=delete-announcement" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
+                                        <form action="<?php echo BASE_URL; ?>?action=delete-announcement" method="POST" class="d-inline delete-form" id="delete-form-<?php echo $a['announcement_id']; ?>">
                                             <?php echo csrf_input(); ?>
                                             <input type="hidden" name="announcement_id" value="<?php echo htmlspecialchars($a['announcement_id'] ?? ''); ?>">
-                                            <button type="submit" class="btn-danger-glass btn-sm-glass">
+                                            <button type="button" class="btn-danger-glass btn-sm-glass delete-btn" data-form-id="delete-form-<?php echo $a['announcement_id']; ?>" data-title="<?php echo htmlspecialchars($a['title'] ?? 'this announcement'); ?>">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -187,26 +187,56 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
 });
 
-function confirmDelete(event) {
-    event.preventDefault();
-    Swal.fire({
-        title: 'Delete Announcement?',
-        text: 'This action cannot be undone.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ef4444',
-        cancelButtonColor: '#64748b',
-        confirmButtonText: 'Yes, delete it',
-        cancelButtonText: 'Cancel',
-        background: 'rgba(30, 41, 59, 0.95)',
-        color: '#ffffff'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            event.target.submit();
-        }
+// Delete confirmation - using click handler on delete buttons
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.delete-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const formId = this.getAttribute('data-form-id');
+            const title = this.getAttribute('data-title');
+            const form = document.getElementById(formId);
+            
+            if (!form) {
+                console.error('Form not found:', formId);
+                return;
+            }
+            
+            Swal.fire({
+                title: 'Delete Announcement?',
+                text: 'Are you sure you want to delete "' + title + '"? This action cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'Cancel',
+                background: 'rgba(30, 41, 59, 0.95)',
+                color: '#ffffff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading state
+                    Swal.fire({
+                        title: 'Deleting...',
+                        text: 'Please wait',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        background: 'rgba(30, 41, 59, 0.95)',
+                        color: '#ffffff',
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    // Submit the form
+                    form.submit();
+                }
+            });
+        });
     });
-    return false;
-}
+});
 </script>
 
 <?php

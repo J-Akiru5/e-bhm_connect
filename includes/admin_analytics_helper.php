@@ -209,15 +209,15 @@ if (!function_exists('get_recent_visits')) {
                     hv.visit_id,
                     hv.visit_date,
                     hv.visit_type,
-                    hv.notes,
-                    hv.created_at,
+                    hv.remarks as notes,
+                    hv.visit_date as created_at,
                     p.full_name as patient_name,
                     p.patient_id,
                     b.full_name as bhw_name
                 FROM health_visits hv
                 LEFT JOIN patients p ON hv.patient_id = p.patient_id
                 LEFT JOIN bhw_users b ON hv.bhw_id = b.bhw_id
-                ORDER BY hv.created_at DESC
+                ORDER BY hv.visit_date DESC
                 LIMIT ?
             ");
             $stmt->execute([$limit]);
