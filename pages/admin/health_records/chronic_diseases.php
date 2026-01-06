@@ -253,6 +253,9 @@ try {
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-chronic?action=view&id=<?php echo $rec['chronic_id']; ?>" class="btn btn-sm btn-glass">View</a>
                                     <?php if (has_permission('manage_patients')): ?>
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-chronic?action=edit&id=<?php echo $rec['chronic_id']; ?>" class="btn btn-sm btn-glass">Edit</a>
+                                    <button type="button" class="btn btn-sm btn-glass text-danger" onclick="confirmDelete(<?php echo $rec['chronic_id']; ?>)" title="Delete">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                    </button>
                                     <?php endif; ?>
                                 </div>
                             </td>
@@ -273,6 +276,7 @@ try {
         </div>
         <div class="glass-card-body">
             <form method="POST" action="<?php echo BASE_URL; ?>?action=save-chronic-disease">
+                <?php echo csrf_input(); ?>
                 <input type="hidden" name="chronic_id" value="<?php echo $record['chronic_id'] ?? ''; ?>">
                 
                 <div class="row g-3">
@@ -482,6 +486,26 @@ try {
     </div>
     <?php endif; ?>
 </div>
+
+<script>
+function confirmDelete(id) {
+    Swal.fire({
+        title: 'Delete Record?',
+        text: 'This action cannot be undone.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Yes, delete it',
+        background: 'rgba(30, 41, 59, 0.95)',
+        color: '#ffffff'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '<?php echo BASE_URL; ?>?action=delete-chronic-disease&id=' + id;
+        }
+    });
+}
+</script>
 
 <style>
 .form-section-title { font-weight: 600; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }

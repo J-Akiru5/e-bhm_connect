@@ -285,6 +285,7 @@ $total_pages = ceil($total_records / $per_page);
         </div>
         <div class="glass-card-body">
             <form method="POST" action="<?php echo BASE_URL; ?>?action=save-pregnancy-tracking" id="pregnancyForm">
+                <?php echo csrf_input(); ?>
                 <input type="hidden" name="pregnancy_id" value="<?php echo $record['pregnancy_id'] ?? ''; ?>">
                 
                 <!-- Personal Information -->

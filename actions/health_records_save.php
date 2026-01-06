@@ -54,17 +54,22 @@ function savePregnancyTracking($pdo) {
     $id = isset($_POST['pregnancy_id']) && $_POST['pregnancy_id'] !== '' ? (int)$_POST['pregnancy_id'] : null;
     
     $data = [
-        'mother_name' => trim($_POST['mother_name'] ?? ''),
-        'date_of_birth' => $_POST['date_of_birth'] ?: null,
-        'address' => trim($_POST['address'] ?? ''),
+        'pregnant_woman_name' => trim($_POST['pregnant_woman_name'] ?? ''),
+        'age' => $_POST['age'] ?: null,
+        'birth_date' => $_POST['birth_date'] ?: null,
+        'husband_name' => trim($_POST['husband_name'] ?? ''),
+        'phone_number' => trim($_POST['phone_number'] ?? ''),
+        'date_of_identification' => $_POST['date_of_identification'] ?: date('Y-m-d'),
         'lmp' => $_POST['lmp'] ?: null,
         'edc' => $_POST['edc'] ?: null,
-        'gravida' => $_POST['gravida'] ?: null,
-        'para' => $_POST['para'] ?: null,
-        'is_nhts' => isset($_POST['is_nhts']) ? 1 : 0,
-        'philhealth_number' => trim($_POST['philhealth_number'] ?? ''),
-        'delivery_date' => $_POST['delivery_date'] ?: null,
-        'delivery_outcome' => trim($_POST['delivery_outcome'] ?? ''),
+        'tt_status' => trim($_POST['tt_status'] ?? ''),
+        'nhts_status' => $_POST['nhts_status'] ?? 'Non-NHTS',
+        'gravida_para' => trim($_POST['gravida_para'] ?? ''),
+        'outcome_date_of_delivery' => $_POST['outcome_date_of_delivery'] ?: null,
+        'outcome_place_of_delivery' => trim($_POST['outcome_place_of_delivery'] ?? ''),
+        'outcome_type_of_delivery' => trim($_POST['outcome_type_of_delivery'] ?? ''),
+        'outcome_of_birth' => trim($_POST['outcome_of_birth'] ?? ''),
+        'remarks' => trim($_POST['remarks'] ?? ''),
         'patient_id' => $_POST['patient_id'] ?: null,
         'bhw_id' => $_POST['bhw_id'] ?: $_SESSION['bhw_id']
     ];
@@ -72,31 +77,35 @@ function savePregnancyTracking($pdo) {
     try {
         if ($id) {
             $sql = "UPDATE pregnancy_tracking SET 
-                    mother_name = ?, date_of_birth = ?, address = ?, lmp = ?, edc = ?,
-                    gravida = ?, para = ?, is_nhts = ?, philhealth_number = ?,
-                    delivery_date = ?, delivery_outcome = ?, patient_id = ?, bhw_id = ?, updated_at = NOW()
+                    pregnant_woman_name = ?, age = ?, birth_date = ?, husband_name = ?, phone_number = ?,
+                    date_of_identification = ?, lmp = ?, edc = ?, tt_status = ?, nhts_status = ?, gravida_para = ?,
+                    outcome_date_of_delivery = ?, outcome_place_of_delivery = ?, outcome_type_of_delivery = ?,
+                    outcome_of_birth = ?, remarks = ?, patient_id = ?, bhw_id = ?, updated_at = NOW()
                     WHERE pregnancy_id = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $data['mother_name'], $data['date_of_birth'], $data['address'], $data['lmp'], $data['edc'],
-                $data['gravida'], $data['para'], $data['is_nhts'], $data['philhealth_number'],
-                $data['delivery_date'], $data['delivery_outcome'], $data['patient_id'], $data['bhw_id'], $id
+                $data['pregnant_woman_name'], $data['age'], $data['birth_date'], $data['husband_name'], $data['phone_number'],
+                $data['date_of_identification'], $data['lmp'], $data['edc'], $data['tt_status'], $data['nhts_status'], $data['gravida_para'],
+                $data['outcome_date_of_delivery'], $data['outcome_place_of_delivery'], $data['outcome_type_of_delivery'],
+                $data['outcome_of_birth'], $data['remarks'], $data['patient_id'], $data['bhw_id'], $id
             ]);
-            log_audit('update_health_record', 'pregnancy', $id, ['type' => 'pregnancy', 'name' => $data['mother_name']]);
+            log_audit('update_health_record', 'pregnancy', $id, ['type' => 'pregnancy', 'name' => $data['pregnant_woman_name']]);
             $_SESSION['success'] = 'Pregnancy record updated successfully.';
         } else {
             $sql = "INSERT INTO pregnancy_tracking 
-                    (mother_name, date_of_birth, address, lmp, edc, gravida, para, is_nhts, philhealth_number,
-                     delivery_date, delivery_outcome, patient_id, bhw_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    (pregnant_woman_name, age, birth_date, husband_name, phone_number, date_of_identification,
+                     lmp, edc, tt_status, nhts_status, gravida_para, outcome_date_of_delivery, outcome_place_of_delivery,
+                     outcome_type_of_delivery, outcome_of_birth, remarks, patient_id, bhw_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $data['mother_name'], $data['date_of_birth'], $data['address'], $data['lmp'], $data['edc'],
-                $data['gravida'], $data['para'], $data['is_nhts'], $data['philhealth_number'],
-                $data['delivery_date'], $data['delivery_outcome'], $data['patient_id'], $data['bhw_id']
+                $data['pregnant_woman_name'], $data['age'], $data['birth_date'], $data['husband_name'], $data['phone_number'],
+                $data['date_of_identification'], $data['lmp'], $data['edc'], $data['tt_status'], $data['nhts_status'], $data['gravida_para'],
+                $data['outcome_date_of_delivery'], $data['outcome_place_of_delivery'], $data['outcome_type_of_delivery'],
+                $data['outcome_of_birth'], $data['remarks'], $data['patient_id'], $data['bhw_id']
             ]);
             $newId = $pdo->lastInsertId();
-            log_audit('create_health_record', 'pregnancy', (int)$newId, ['type' => 'pregnancy', 'name' => $data['mother_name']]);
+            log_audit('create_health_record', 'pregnancy', (int)$newId, ['type' => 'pregnancy', 'name' => $data['pregnant_woman_name']]);
             $_SESSION['success'] = 'Pregnancy record added successfully.';
         }
     } catch (PDOException $e) {
@@ -277,23 +286,29 @@ function saveMortalityRecord($pdo) {
 function saveChronicDisease($pdo) {
     $id = isset($_POST['chronic_id']) && $_POST['chronic_id'] !== '' ? (int)$_POST['chronic_id'] : null;
     
-    // Handle medications as JSON array
-    $medications = [];
-    if (isset($_POST['medications']) && is_array($_POST['medications'])) {
-        $medications = $_POST['medications'];
-    }
-    
     $data = [
-        'patient_name' => trim($_POST['patient_name'] ?? ''),
-        'date_of_birth' => $_POST['date_of_birth'] ?: null,
+        'nhts_member' => isset($_POST['nhts_member']) ? (int)$_POST['nhts_member'] : 0,
+        'date_of_enrollment' => $_POST['date_of_enrollment'] ?: date('Y-m-d'),
+        'last_name' => trim($_POST['last_name'] ?? ''),
+        'first_name' => trim($_POST['first_name'] ?? ''),
+        'middle_name' => trim($_POST['middle_name'] ?? ''),
         'sex' => $_POST['sex'] ?: null,
-        'address' => trim($_POST['address'] ?? ''),
+        'age' => $_POST['age'] ?: null,
+        'date_of_birth' => $_POST['date_of_birth'] ?: null,
+        'philhealth_no' => trim($_POST['philhealth_no'] ?? ''),
         'is_hypertensive' => isset($_POST['is_hypertensive']) ? 1 : 0,
         'is_diabetic' => isset($_POST['is_diabetic']) ? 1 : 0,
-        'medications' => json_encode($medications),
+        'test_type' => trim($_POST['test_type'] ?? ''),
         'blood_sugar_level' => $_POST['blood_sugar_level'] ?: null,
-        'blood_sugar_test_type' => trim($_POST['blood_sugar_test_type'] ?? ''),
-        'last_checkup_date' => $_POST['last_checkup_date'] ?: null,
+        'med_amlo5' => isset($_POST['med_amlo5']) ? 1 : 0,
+        'med_amlo10' => isset($_POST['med_amlo10']) ? 1 : 0,
+        'med_losartan50' => isset($_POST['med_losartan50']) ? 1 : 0,
+        'med_losartan100' => isset($_POST['med_losartan100']) ? 1 : 0,
+        'med_metoprolol' => isset($_POST['med_metoprolol']) ? 1 : 0,
+        'med_simvastatin' => isset($_POST['med_simvastatin']) ? 1 : 0,
+        'med_metformin' => isset($_POST['med_metformin']) ? 1 : 0,
+        'med_gliclazide' => isset($_POST['med_gliclazide']) ? 1 : 0,
+        'med_insulin' => isset($_POST['med_insulin']) ? 1 : 0,
         'remarks' => trim($_POST['remarks'] ?? ''),
         'patient_id' => $_POST['patient_id'] ?: null,
         'bhw_id' => $_POST['bhw_id'] ?: $_SESSION['bhw_id']
@@ -302,27 +317,38 @@ function saveChronicDisease($pdo) {
     try {
         if ($id) {
             $sql = "UPDATE chronic_disease_masterlist SET 
-                    patient_name = ?, date_of_birth = ?, sex = ?, address = ?,
-                    is_hypertensive = ?, is_diabetic = ?, medications = ?, blood_sugar_level = ?,
-                    blood_sugar_test_type = ?, last_checkup_date = ?, remarks = ?, patient_id = ?, bhw_id = ?, updated_at = NOW()
+                    nhts_member = ?, date_of_enrollment = ?, last_name = ?, first_name = ?, middle_name = ?,
+                    sex = ?, age = ?, date_of_birth = ?, philhealth_no = ?,
+                    is_hypertensive = ?, is_diabetic = ?, test_type = ?, blood_sugar_level = ?,
+                    med_amlo5 = ?, med_amlo10 = ?, med_losartan50 = ?, med_losartan100 = ?,
+                    med_metoprolol = ?, med_simvastatin = ?, med_metformin = ?, med_gliclazide = ?, med_insulin = ?,
+                    remarks = ?, patient_id = ?, bhw_id = ?, updated_at = NOW()
                     WHERE chronic_id = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $data['patient_name'], $data['date_of_birth'], $data['sex'], $data['address'],
-                $data['is_hypertensive'], $data['is_diabetic'], $data['medications'], $data['blood_sugar_level'],
-                $data['blood_sugar_test_type'], $data['last_checkup_date'], $data['remarks'], $data['patient_id'], $data['bhw_id'], $id
+                $data['nhts_member'], $data['date_of_enrollment'], $data['last_name'], $data['first_name'], $data['middle_name'],
+                $data['sex'], $data['age'], $data['date_of_birth'], $data['philhealth_no'],
+                $data['is_hypertensive'], $data['is_diabetic'], $data['test_type'], $data['blood_sugar_level'],
+                $data['med_amlo5'], $data['med_amlo10'], $data['med_losartan50'], $data['med_losartan100'],
+                $data['med_metoprolol'], $data['med_simvastatin'], $data['med_metformin'], $data['med_gliclazide'], $data['med_insulin'],
+                $data['remarks'], $data['patient_id'], $data['bhw_id'], $id
             ]);
             $_SESSION['success'] = 'Chronic disease record updated successfully.';
         } else {
             $sql = "INSERT INTO chronic_disease_masterlist 
-                    (patient_name, date_of_birth, sex, address, is_hypertensive, is_diabetic, medications,
-                     blood_sugar_level, blood_sugar_test_type, last_checkup_date, remarks, patient_id, bhw_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    (nhts_member, date_of_enrollment, last_name, first_name, middle_name, sex, age, date_of_birth, philhealth_no,
+                     is_hypertensive, is_diabetic, test_type, blood_sugar_level,
+                     med_amlo5, med_amlo10, med_losartan50, med_losartan100, med_metoprolol, med_simvastatin,
+                     med_metformin, med_gliclazide, med_insulin, remarks, patient_id, bhw_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $data['patient_name'], $data['date_of_birth'], $data['sex'], $data['address'],
-                $data['is_hypertensive'], $data['is_diabetic'], $data['medications'], $data['blood_sugar_level'],
-                $data['blood_sugar_test_type'], $data['last_checkup_date'], $data['remarks'], $data['patient_id'], $data['bhw_id']
+                $data['nhts_member'], $data['date_of_enrollment'], $data['last_name'], $data['first_name'], $data['middle_name'],
+                $data['sex'], $data['age'], $data['date_of_birth'], $data['philhealth_no'],
+                $data['is_hypertensive'], $data['is_diabetic'], $data['test_type'], $data['blood_sugar_level'],
+                $data['med_amlo5'], $data['med_amlo10'], $data['med_losartan50'], $data['med_losartan100'],
+                $data['med_metoprolol'], $data['med_simvastatin'], $data['med_metformin'], $data['med_gliclazide'], $data['med_insulin'],
+                $data['remarks'], $data['patient_id'], $data['bhw_id']
             ]);
             $_SESSION['success'] = 'Chronic disease record added successfully.';
         }
