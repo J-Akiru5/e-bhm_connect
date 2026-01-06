@@ -62,9 +62,6 @@ $allowedActions = [
     'send-broadcast' => $actionPath . 'sms_actions.php',
     'resend-sms' => $actionPath . 'sms_actions.php',
 
-    // Email verification
-    'verify-bhw-email' => $actionPath . 'verify_bhw_email.php',
-
     // Reports
     // Reports
     'report-patient-list' => $actionPath . 'report_patient_list.php',
@@ -89,7 +86,6 @@ $allowedActions = [
     // Patient portal auth/actions
     'register-patient' => $actionPath . 'register_patient_action.php',
     'login-patient' => $actionPath . 'login_patient_action.php',
-    'verify-patient-email' => $actionPath . 'verify_patient_email.php',
     'logout-patient' => $actionPath . 'logout_patient.php',
 
     // Admin profile & BHW management

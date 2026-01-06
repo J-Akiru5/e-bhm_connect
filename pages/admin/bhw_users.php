@@ -18,15 +18,9 @@ $pending_bhws = 0;
 
 try {
     // Get stats
-    $statsStmt = $pdo->query("SELECT 
-        COUNT(*) as total,
-        SUM(CASE WHEN email_verified = 1 THEN 1 ELSE 0 END) as verified,
-        SUM(CASE WHEN email_verified = 0 THEN 1 ELSE 0 END) as pending
-        FROM bhw_users");
+    $statsStmt = $pdo->query("SELECT COUNT(*) as total FROM bhw_users");
     $stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
     $total_bhws = (int) $stats['total'];
-    $verified_bhws = (int) $stats['verified'];
-    $pending_bhws = (int) $stats['pending'];
 
     // Count total records
     $count_sql = 'SELECT COUNT(*) FROM bhw_users';
@@ -47,7 +41,7 @@ try {
     $pagination = paginate($total_records, $per_page, $current_page);
 
     // Base SQL - include account_status for approval workflow
-    $sql = 'SELECT bhw_id, full_name, username, bhw_unique_id, assigned_area, email_verified, account_status FROM bhw_users';
+    $sql = 'SELECT bhw_id, full_name, username, bhw_unique_id, assigned_area, account_status FROM bhw_users';
     $params = [];
 
     if (!empty($_GET['search'])) {

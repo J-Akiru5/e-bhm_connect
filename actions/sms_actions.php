@@ -42,7 +42,7 @@ function process_batch_sms(PDO $pdo)
             $phone = $row['phone_number'];
             $message = $row['message'];
 
-            $payload = json_encode(['to' => $phone, 'message' => $message]);
+            $payload = json_encode(['phone' => $phone, 'message' => $message]);
 
             $ch = curl_init(GATEWAY_URL);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

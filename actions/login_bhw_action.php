@@ -78,27 +78,8 @@ if (!isset($user['password_hash']) || !password_verify($password, $user['passwor
 	exit();
 }
 
-// Check email verification status
-if (isset($user['email_verified']) && !$user['email_verified']) {
-	$_SESSION['login_error'] = 'Please verify your email address first. Check your inbox for the verification link.';
-	header('Location: ' . BASE_URL . 'login-bhw');
-	exit();
-}
-
 // Check account status - only 'approved' users can login
-$accountStatus = $user['account_status'] ?? 'pending';
-
-if ($accountStatus === 'pending') {
-	$_SESSION['login_error'] = 'Your account is pending email verification. Please check your inbox for the verification link.';
-	header('Location: ' . BASE_URL . 'login-bhw');
-	exit();
-}
-
-if ($accountStatus === 'verified') {
-	$_SESSION['login_error'] = 'Your account is pending approval by the Healthcare Center Head. You will receive an email once your account is approved.';
-	header('Location: ' . BASE_URL . 'login-bhw');
-	exit();
-}
+$accountStatus = $user['account_status'] ?? 'approved';
 
 if ($accountStatus !== 'approved') {
 	$_SESSION['login_error'] = 'Your account is not active. Please contact the administrator.';

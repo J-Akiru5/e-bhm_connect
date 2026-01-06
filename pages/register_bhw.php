@@ -635,9 +635,8 @@ if (isset($_SESSION['register_form_data'])) {
                     Approval Workflow
                 </h4>
                 <p><strong>Step 1:</strong> Register and provide credentials.<br>
-                <strong>Step 2:</strong> Verify your email address via the link sent to you.<br>
-                <strong>Step 3:</strong> Wait for the Super Admin (Health Head) to validate your employment status.<br>
-                <strong>Step 4:</strong> Access granted only upon 'Approved' status.</p>
+                <strong>Step 2:</strong> Account is automatically approved for immediate access.<br>
+                <strong>Step 3:</strong> Start managing health records and patient data.</p>
             </div>
         </div>
         
@@ -693,11 +692,8 @@ if (isset($_SESSION['register_form_data'])) {
             </div>
             <div class="step">
                 <span class="step-number">2</span>
-                <span class="step-text">Verify Email Address</span>
+                <span class="step-text">Start Using the System</span>
             </div>
-            <div class="step">
-                <span class="step-number">3</span>
-                <span class="step-text">Await Admin Approval</span>
             </div>
         </div>
 

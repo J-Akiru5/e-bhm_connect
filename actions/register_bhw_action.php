@@ -84,14 +84,10 @@ try {
         exit();
     }
 
-    // Generate verification token
-    $verification_token = generateVerificationToken();
-    $token_expires = date('Y-m-d H:i:s', strtotime('+24 hours'));
-
     // Hash the password
     $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
-    // Insert new user with pending status
+    // Insert new user with auto-approved status (no email verification required)
     $insert = $pdo->prepare('
         INSERT INTO bhw_users (
             full_name, 
@@ -100,8 +96,6 @@ try {
             password_hash, 
             bhw_unique_id,
             email_verified,
-            verification_token,
-            verification_token_expires,
             account_status,
             role,
             created_at
@@ -111,10 +105,8 @@ try {
             :email,
             :password_hash, 
             :bhw_unique_id,
-            0,
-            :verification_token,
-            :verification_token_expires,
-            \'pending\',
+            1,
+            \'approved\',
             \'bhw\',
             NOW()
         )
@@ -125,21 +117,10 @@ try {
         ':username' => $username,
         ':email' => $email,
         ':password_hash' => $password_hash,
-        ':bhw_unique_id' => $bhw_unique_id,
-        ':verification_token' => $verification_token,
-        ':verification_token_expires' => $token_expires
+        ':bhw_unique_id' => $bhw_unique_id
     ]);
 
-    // Send verification email
-    $emailSent = sendBhwVerificationEmail($email, $full_name, $verification_token);
-
-    if ($emailSent) {
-        $_SESSION['register_success'] = 'Registration successful! Please check your email to verify your account. The verification link expires in 24 hours.';
-    } else {
-        // Registration succeeded but email failed - still allow them to proceed
-        $_SESSION['register_success'] = 'Registration successful! If you don\'t receive a verification email, please contact the administrator.';
-        error_log("Failed to send verification email to: $email");
-    }
+    $_SESSION['register_success'] = 'Registration successful! You can now log in to your account.';
     
     // Clear form data on successful registration
     unset($_SESSION['register_form_data']);

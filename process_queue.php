@@ -16,11 +16,7 @@ if (file_exists(__DIR__ . '/includes/sms_helper.php')) {
 
 // --- Configuration: update these values for your local Android Gateway ---
 if (!defined('GATEWAY_URL')) {
-    define('GATEWAY_URL', 'http://192.168.1.xxx:8082'); // replace with your gateway URL
-}
-
-if (!defined('GATEWAY_TOKEN')) {
-    define('GATEWAY_TOKEN', 'REPLACE_WITH_TOKEN'); // replace with your gateway token
+    define('GATEWAY_URL', 'http://192.168.68.200:8080/send-sms'); // Simple SMS Gateway endpoint
 }
 
 $LIMIT = 5;
@@ -60,14 +56,13 @@ foreach ($messages as $msg) {
     $message = $msg['message'];
 
     // Prepare payload
-    $payload = json_encode(['to' => $phone, 'message' => $message]);
+    $payload = json_encode(['phone' => $phone, 'message' => $message]);
 
     // Setup cURL
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, GATEWAY_URL);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: ' . GATEWAY_TOKEN,
         'Content-Type: application/json'
     ]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

@@ -422,8 +422,7 @@ include_once __DIR__ . '/../../includes/header_public.php';
             </div>
             <div class="faq-answer">
                 To register as a BHW, click on "BHW Login" from the homepage, then select "Register New Account". 
-                Fill in your personal information and verify your email address. Your account will be pending approval 
-                by a system administrator before you can access the full system.
+                Fill in your personal information. Your account will be automatically activated and you can start using the system immediately.
             </div>
         </div>
 

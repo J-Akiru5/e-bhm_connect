@@ -121,23 +121,17 @@ try {
         $patient_id = (int) $pdo->lastInsertId();
     }
 
-    // Generate verification token
-    $verificationToken = bin2hex(random_bytes(32));
-    $verificationExpires = date('Y-m-d H:i:s', strtotime('+24 hours'));
-
-    // Create patient_users login with pending status
+    // Create patient_users login with active status (no email verification required)
     $password_hash = password_hash($password, PASSWORD_BCRYPT);
     $insertUser = $pdo->prepare('
-        INSERT INTO patient_users (patient_id, email, password_hash, status, email_verified, verification_token, verification_expires_at) 
-        VALUES (:patient_id, :email, :password_hash, :status, 0, :token, :expires)
+        INSERT INTO patient_users (patient_id, email, password_hash, status, email_verified) 
+        VALUES (:patient_id, :email, :password_hash, :status, 1)
     ');
     $insertUser->execute([
         ':patient_id' => $patient_id,
         ':email' => $email,
         ':password_hash' => $password_hash,
-        ':status' => 'pending',
-        ':token' => $verificationToken,
-        ':expires' => $verificationExpires
+        ':status' => 'active'
     ]);
 
     $pdo->commit();
@@ -145,14 +139,7 @@ try {
     // Log the registration
     log_audit('patient_registered', 'patient_users', $patient_id, ['email' => $email]);
 
-    // TODO: Send verification email (for now, show success with token in dev)
-    // In production, implement actual email sending
-    $verifyUrl = BASE_URL . "?action=verify-patient-email&token=" . $verificationToken;
-    
-    // For development: log the verification URL
-    error_log("Patient verification URL: " . $verifyUrl);
-
-    $_SESSION['register_success'] = 'Registration successful! Please check your email to verify your account before logging in.';
+    $_SESSION['register_success'] = 'Registration successful! You can now log in to your portal.';
     header('Location: ' . BASE_URL . 'login-patient');
     exit();
 

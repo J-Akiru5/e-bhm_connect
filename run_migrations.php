@@ -24,7 +24,8 @@ try {
         'migrations/2025-12-16_bhw_superadmin_seeder.sql',
         'migrations/2025-12-17_health_records_dashboard.sql',
         'migrations/2025-12-17_health_records_seeder.sql',
-        'migrations/2025-12-17_fix_missing_columns.sql'
+        'migrations/2025-12-17_fix_missing_columns.sql',
+        'migrations/2026-01-06_remove_email_verification.sql'
     ];
     
     foreach ($migrations as $migration) {

@@ -226,13 +226,6 @@ try {
                                     </span>
                                 </td>
                                 <td>
-                                    <?php if ($user['email_verified']): ?>
-                                    <span class="badge badge-success">Verified</span>
-                                    <?php else: ?>
-                                    <span class="badge badge-warning">Pending</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
                                     <?php if ($user['last_login']): ?>
                                     <span class="text-muted small"><?php echo date('M d, Y H:i', strtotime($user['last_login'])); ?></span>
                                     <?php else: ?>
