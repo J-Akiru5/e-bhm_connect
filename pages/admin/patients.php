@@ -199,7 +199,7 @@ try {
                                         <a href="<?php echo BASE_URL; ?>admin-patient-form?id=<?php echo urlencode($patient['patient_id'] ?? ''); ?>" class="btn-secondary-glass btn-sm-glass">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="?action=delete-patient" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
+                                        <form action="<?php echo BASE_URL; ?>?action=delete-patient" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
                                             <?= csrf_input() ?>
                                             <input type="hidden" name="patient_id" value="<?php echo htmlspecialchars($patient['patient_id'] ?? ''); ?>">
                                             <button type="submit" class="btn-danger-glass btn-sm-glass">

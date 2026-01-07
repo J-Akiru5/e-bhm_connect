@@ -70,11 +70,14 @@ function createBackup(): void
     }
     
     try {
-        // Get database credentials from environment
-        $host = $_ENV['DB_HOST'] ?? 'localhost';
-        $dbname = $_ENV['DB_NAME'] ?? 'ebhm_connect';
-        $user = $_ENV['DB_USER'] ?? 'root';
-        $pass = $_ENV['DB_PASS'] ?? '';
+        // Get database credentials from config (set in database.php)
+        global $DB_HOST, $DB_NAME, $DB_USER, $DB_PASS;
+        
+        // Fallback to environment variables if config not available
+        $host = $DB_HOST ?? $_ENV['DB_HOST'] ?? 'localhost';
+        $dbname = $DB_NAME ?? $_ENV['DB_NAME'] ?? 'e-bhw_connect';
+        $user = $DB_USER ?? $_ENV['DB_USER'] ?? 'root';
+        $pass = $DB_PASS ?? $_ENV['DB_PASS'] ?? '';
         
         // Generate backup filename
         $timestamp = date('Y-m-d_H-i-s');

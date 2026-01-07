@@ -18,6 +18,9 @@ $error = '';
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validate CSRF token
+    require_csrf();
+    
     $action = $_POST['action'] ?? '';
     
     if ($action === 'save_general') {
@@ -174,6 +177,7 @@ foreach ($defaults as $key => $default) {
                 </div>
                 <div class="glass-card-body">
                     <form method="POST" action="">
+                        <?php echo csrf_input(); ?>
                         <input type="hidden" name="action" value="save_general">
                         
                         <div class="mb-3">
@@ -232,6 +236,7 @@ foreach ($defaults as $key => $default) {
                 </div>
                 <div class="glass-card-body">
                     <form method="POST" action="">
+                        <?php echo csrf_input(); ?>
                         <input type="hidden" name="action" value="save_features">
                         
                         <div class="feature-toggle-list">
@@ -326,6 +331,7 @@ foreach ($defaults as $key => $default) {
                 </div>
                 <div class="glass-card-body">
                     <form method="POST" action="">
+                        <?php echo csrf_input(); ?>
                         <input type="hidden" name="action" value="save_maintenance">
                         
                         <div class="alert <?php echo $settings['maintenance_mode'] === '1' ? 'alert-warning' : 'alert-info'; ?> mb-3">

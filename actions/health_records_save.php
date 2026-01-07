@@ -433,21 +433,22 @@ function saveNtpClient($pdo) {
 function saveWraTracking($pdo) {
     $id = isset($_POST['wra_id']) && $_POST['wra_id'] !== '' ? (int)$_POST['wra_id'] : null;
     
-    // Handle monthly status as JSON
-    $monthlyStatus = [];
+    // Collect monthly status values (individual columns, not JSON)
     $months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+    $monthlyData = [];
     foreach ($months as $m) {
-        $monthlyStatus[$m] = trim($_POST["status_$m"] ?? '');
+        $monthlyData["status_$m"] = trim($_POST["status_$m"] ?? '');
     }
     
     $data = [
-        'woman_name' => trim($_POST['woman_name'] ?? ''),
-        'date_of_birth' => $_POST['date_of_birth'] ?: null,
-        'address' => trim($_POST['address'] ?? ''),
+        'name' => trim($_POST['name'] ?? ''),
+        'birthdate' => $_POST['birthdate'] ?: null,
+        'age' => $_POST['age'] ?: null,
+        'complete_address' => trim($_POST['complete_address'] ?? ''),
+        'contact_number' => trim($_POST['contact_number'] ?? ''),
         'tracking_year' => $_POST['tracking_year'] ?: date('Y'),
-        'monthly_status' => json_encode($monthlyStatus),
-        'fp_method' => trim($_POST['fp_method'] ?? ''),
-        'is_nhts' => isset($_POST['is_nhts']) ? 1 : 0,
+        'family_planning_method' => trim($_POST['family_planning_method'] ?? ''),
+        'is_nhts' => (int)($_POST['is_nhts'] ?? 0),
         'remarks' => trim($_POST['remarks'] ?? ''),
         'patient_id' => $_POST['patient_id'] ?: null,
         'bhw_id' => $_POST['bhw_id'] ?: $_SESSION['bhw_id']
@@ -456,25 +457,38 @@ function saveWraTracking($pdo) {
     try {
         if ($id) {
             $sql = "UPDATE wra_tracking SET 
-                    woman_name = ?, date_of_birth = ?, address = ?, tracking_year = ?,
-                    monthly_status = ?, fp_method = ?, is_nhts = ?, remarks = ?,
+                    name = ?, birthdate = ?, age = ?, complete_address = ?, contact_number = ?,
+                    tracking_year = ?, family_planning_method = ?, is_nhts = ?, remarks = ?,
+                    status_jan = ?, status_feb = ?, status_mar = ?, status_apr = ?,
+                    status_may = ?, status_jun = ?, status_jul = ?, status_aug = ?,
+                    status_sep = ?, status_oct = ?, status_nov = ?, status_dec = ?,
                     patient_id = ?, bhw_id = ?, updated_at = NOW()
                     WHERE wra_id = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $data['woman_name'], $data['date_of_birth'], $data['address'], $data['tracking_year'],
-                $data['monthly_status'], $data['fp_method'], $data['is_nhts'], $data['remarks'],
+                $data['name'], $data['birthdate'], $data['age'], $data['complete_address'], $data['contact_number'],
+                $data['tracking_year'], $data['family_planning_method'], $data['is_nhts'], $data['remarks'],
+                $monthlyData['status_jan'], $monthlyData['status_feb'], $monthlyData['status_mar'], $monthlyData['status_apr'],
+                $monthlyData['status_may'], $monthlyData['status_jun'], $monthlyData['status_jul'], $monthlyData['status_aug'],
+                $monthlyData['status_sep'], $monthlyData['status_oct'], $monthlyData['status_nov'], $monthlyData['status_dec'],
                 $data['patient_id'], $data['bhw_id'], $id
             ]);
             $_SESSION['success'] = 'WRA tracking record updated successfully.';
         } else {
             $sql = "INSERT INTO wra_tracking 
-                    (woman_name, date_of_birth, address, tracking_year, monthly_status, fp_method, is_nhts, remarks, patient_id, bhw_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    (name, birthdate, age, complete_address, contact_number, tracking_year,
+                     family_planning_method, is_nhts, remarks,
+                     status_jan, status_feb, status_mar, status_apr, status_may, status_jun,
+                     status_jul, status_aug, status_sep, status_oct, status_nov, status_dec,
+                     patient_id, bhw_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $data['woman_name'], $data['date_of_birth'], $data['address'], $data['tracking_year'],
-                $data['monthly_status'], $data['fp_method'], $data['is_nhts'], $data['remarks'],
+                $data['name'], $data['birthdate'], $data['age'], $data['complete_address'], $data['contact_number'],
+                $data['tracking_year'], $data['family_planning_method'], $data['is_nhts'], $data['remarks'],
+                $monthlyData['status_jan'], $monthlyData['status_feb'], $monthlyData['status_mar'], $monthlyData['status_apr'],
+                $monthlyData['status_may'], $monthlyData['status_jun'], $monthlyData['status_jul'], $monthlyData['status_aug'],
+                $monthlyData['status_sep'], $monthlyData['status_oct'], $monthlyData['status_nov'], $monthlyData['status_dec'],
                 $data['patient_id'], $data['bhw_id']
             ]);
             $_SESSION['success'] = 'WRA tracking record added successfully.';
@@ -486,3 +500,4 @@ function saveWraTracking($pdo) {
     header('Location: ' . BASE_URL . 'admin-health-records-wra');
     exit;
 }
+

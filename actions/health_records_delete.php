@@ -4,10 +4,22 @@
  * E-BHM Connect
  * 
  * Handles all health record deletion operations.
+ * Requires POST method and CSRF token for security.
  */
 
 require_once __DIR__ . '/../includes/auth_bhw.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/security_helper.php';
+
+// Enforce POST method for delete operations
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    $_SESSION['error'] = 'Invalid request method.';
+    header('Location: ' . BASE_URL . 'admin-health-records');
+    exit;
+}
+
+// Validate CSRF token
+require_csrf();
 
 // Get the action type from the URL
 $action = $_GET['action'] ?? '';
@@ -65,7 +77,7 @@ if (!array_key_exists($action, $actionMap)) {
 }
 
 $config = $actionMap[$action];
-$id = isset($_POST['id']) ? (int)$_POST['id'] : (isset($_GET['id']) ? (int)$_GET['id'] : null);
+$id = isset($_POST['id']) ? (int)$_POST['id'] : null;
 
 if (!$id) {
     $_SESSION['error'] = 'Invalid record ID.';

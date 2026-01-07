@@ -284,6 +284,7 @@ $months = ['jan' => 'Jan', 'feb' => 'Feb', 'mar' => 'Mar', 'apr' => 'Apr', 'may'
         <div class="glass-card-body">
             <form method="POST" action="<?php echo BASE_URL; ?>?action=save-wra-tracking">
                 <input type="hidden" name="wra_id" value="<?php echo $record['wra_id'] ?? ''; ?>">
+                <?php echo csrf_input(); ?>
                 
                 <div class="row g-3">
                     <!-- Personal Info -->
