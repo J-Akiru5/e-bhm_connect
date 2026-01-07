@@ -9,6 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/security_helper.php';
 require_once __DIR__ . '/../includes/auth_helpers.php';
 
 // Only allow POST
@@ -16,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . (defined('BASE_URL') ? BASE_URL : '/e-bhm_connect/') . 'admin-patients');
     exit();
 }
+
+// Validate CSRF token
+require_csrf();
 
 // Input sanitization
 $patient_id = isset($_POST['patient_id']) ? (int) $_POST['patient_id'] : 0;

@@ -22,7 +22,8 @@ try {
             <div class="card mb-3">
                 <div class="card-header">Add Category</div>
                 <div class="card-body">
-                    <form method="post" action="?action=save-inventory-category">
+                    <form method="post" action="<?php echo BASE_URL; ?>?action=save-inventory-category">
+                        <?php echo csrf_input(); ?>
                         <div class="mb-3">
                             <label class="form-label">Category Name</label>
                             <input type="text" name="category_name" class="form-control" required>
@@ -52,7 +53,8 @@ try {
                                             <td><?php echo htmlspecialchars($cat['category_name']); ?></td>
                                             <td><?php echo htmlspecialchars($cat['created_at'] ?? ''); ?></td>
                                             <td>
-                                                <form method="post" action="?action=delete-inventory-category" class="d-inline" onsubmit="return confirm('Delete category? Items will be uncategorized.');">
+                                                <form method="post" action="<?php echo BASE_URL; ?>?action=delete-inventory-category" class="d-inline" onsubmit="return confirm('Delete category? Items will be uncategorized.');">
+                                                    <?php echo csrf_input(); ?>
                                                     <input type="hidden" name="category_id" value="<?php echo (int)$cat['category_id']; ?>">
                                                     <button class="btn btn-danger btn-sm">Delete</button>
                                                 </form>

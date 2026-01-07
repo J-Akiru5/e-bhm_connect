@@ -151,6 +151,7 @@ try {
                 <div class="card-body">
                     <!-- Add Vital Sign Form -->
                     <form method="post" action="<?php echo BASE_URL; ?>?action=save-vital" class="mb-3">
+                        <?php echo csrf_input(); ?>
                         <input type="hidden" name="patient_id" value="<?php echo $patient_id; ?>">
                         <div class="row g-2">
                             <div class="col-md-4">
@@ -215,6 +216,7 @@ try {
                 <div class="card-body">
                     <!-- Add Health Visit Form -->
                     <form method="post" action="<?php echo BASE_URL; ?>?action=save-visit" class="mb-3">
+                        <?php echo csrf_input(); ?>
                         <input type="hidden" name="patient_id" value="<?php echo $patient_id; ?>">
                         <div class="row g-2">
                             <div class="col-md-3">
@@ -290,6 +292,7 @@ try {
             </div>
             <form method="post" action="<?php echo BASE_URL; ?>?action=medicine-dispense-save">
                 <div class="modal-body">
+                    <?php echo csrf_input(); ?>
                     <input type="hidden" name="patient_id" value="<?php echo $patient_id; ?>">
 
                     <div class="mb-3">

@@ -264,7 +264,7 @@ try {
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <form method="post" action="?action=save-inventory-item">
+        <form method="post" action="<?php echo BASE_URL; ?>?action=save-inventory-item">
             <div class="modal-body">
                 <?php echo csrf_input(); ?>
                 <div class="form-group">
