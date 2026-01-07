@@ -41,7 +41,9 @@ $allowedActions = [
 
     // Vitals & Visits
     'save-vital' => $actionPath . 'vital_save.php',
+    'vital-update' => $actionPath . 'vital_update.php',
     'save-visit' => $actionPath . 'visit_save.php',
+    'visit-update' => $actionPath . 'visit_update.php',
     // Medicine dispensing
     'medicine-dispense-save' => $actionPath . 'medicine_dispense_save.php',
 

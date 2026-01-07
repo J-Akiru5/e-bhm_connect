@@ -48,7 +48,6 @@ try {
     $stmtInv = $pdo->prepare('SELECT * FROM medication_inventory ORDER BY item_name ASC');
     $stmtInv->execute();
     $inventory = $stmtInv->fetchAll(PDO::FETCH_ASSOC);
-
 } catch (Throwable $e) {
     error_log('Patient view load error: ' . $e->getMessage());
     $_SESSION['form_error'] = 'An error occurred while loading patient data.';
@@ -188,16 +187,44 @@ try {
                                         <th>Heart Rate</th>
                                         <th>Temperature</th>
                                         <th>Notes</th>
+                                        <?php if (is_superadmin() || has_permission('manage_patients')): ?>
+                                            <th width="100">Actions</th>
+                                        <?php endif; ?>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($vitals as $v): ?>
-                                        <tr>
+                                        <tr id="vital-row-<?php echo $v['vital_id']; ?>" data-vital-id="<?php echo $v['vital_id']; ?>">
                                             <td><?php echo htmlspecialchars($v['recorded_at'] ?? ''); ?></td>
-                                            <td><?php echo htmlspecialchars($v['blood_pressure'] ?? ''); ?></td>
-                                            <td><?php echo htmlspecialchars($v['heart_rate'] ?? ''); ?></td>
-                                            <td><?php echo htmlspecialchars($v['temperature'] ?? ''); ?></td>
-                                            <td><?php echo htmlspecialchars($v['notes'] ?? ''); ?></td>
+                                            <td class="vital-bp-cell">
+                                                <span class="view-mode"><?php echo htmlspecialchars($v['blood_pressure'] ?? ''); ?></span>
+                                                <input type="text" class="form-control form-control-sm edit-mode" value="<?php echo htmlspecialchars($v['blood_pressure'] ?? ''); ?>" placeholder="120/80" style="display:none;">
+                                            </td>
+                                            <td class="vital-hr-cell">
+                                                <span class="view-mode"><?php echo htmlspecialchars($v['heart_rate'] ?? ''); ?></span>
+                                                <input type="number" class="form-control form-control-sm edit-mode" value="<?php echo htmlspecialchars($v['heart_rate'] ?? ''); ?>" min="0" style="display:none;">
+                                            </td>
+                                            <td class="vital-temp-cell">
+                                                <span class="view-mode"><?php echo htmlspecialchars($v['temperature'] ?? ''); ?></span>
+                                                <input type="number" class="form-control form-control-sm edit-mode" value="<?php echo htmlspecialchars($v['temperature'] ?? ''); ?>" step="0.1" style="display:none;">
+                                            </td>
+                                            <td class="vital-notes-cell">
+                                                <span class="view-mode"><?php echo htmlspecialchars($v['notes'] ?? ''); ?></span>
+                                                <input type="text" class="form-control form-control-sm edit-mode" value="<?php echo htmlspecialchars($v['notes'] ?? ''); ?>" style="display:none;">
+                                            </td>
+                                            <?php if (is_superadmin() || has_permission('manage_patients')): ?>
+                                                <td class="actions-cell">
+                                                    <button class="btn btn-sm btn-primary edit-vital-btn" onclick="editVital(<?php echo $v['vital_id']; ?>)">
+                                                        <i class="fas fa-edit"></i> Edit
+                                                    </button>
+                                                    <button class="btn btn-sm btn-success save-vital-btn" onclick="saveVital(<?php echo $v['vital_id']; ?>)" style="display:none;">
+                                                        <i class="fas fa-check"></i> Save
+                                                    </button>
+                                                    <button class="btn btn-sm btn-secondary cancel-vital-btn" onclick="cancelEditVital(<?php echo $v['vital_id']; ?>)" style="display:none;">
+                                                        <i class="fas fa-times"></i> Cancel
+                                                    </button>
+                                                </td>
+                                            <?php endif; ?>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -224,8 +251,15 @@ try {
                                 <input type="date" name="visit_date" class="form-control">
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Visit Type</label>
-                                <input type="text" name="visit_type" class="form-control" placeholder="e.g., Home visit">
+                                <label class="form-label">Visit Type <span class="text-danger">*</span></label>
+                                <select name="visit_type" class="form-control" required>
+                                    <option value="">-- Select Visit Type --</option>
+                                    <option value="Home Visit">Home Visit</option>
+                                    <option value="Healthcare Visit">Healthcare Visit</option>
+                                    <option value="Follow-up Visit">Follow-up Visit</option>
+                                    <option value="Emergency Visit">Emergency Visit</option>
+                                    <option value="Prenatal Care">Prenatal Care</option>
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Remarks</label>
@@ -247,14 +281,45 @@ try {
                                         <th>Visit Date</th>
                                         <th>Type</th>
                                         <th>Remarks</th>
+                                        <?php if (is_superadmin() || has_permission('manage_patients')): ?>
+                                            <th width="100">Actions</th>
+                                        <?php endif; ?>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($visits as $visit): ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($visit['visit_date'] ?? ''); ?></td>
-                                            <td><?php echo htmlspecialchars($visit['visit_type'] ?? ''); ?></td>
-                                            <td><?php echo nl2br(htmlspecialchars($visit['remarks'] ?? '')); ?></td>
+                                        <tr id="visit-row-<?php echo $visit['visit_id']; ?>" data-visit-id="<?php echo $visit['visit_id']; ?>">
+                                            <td class="visit-date-cell">
+                                                <span class="view-mode"><?php echo htmlspecialchars($visit['visit_date'] ?? ''); ?></span>
+                                                <input type="date" class="form-control form-control-sm edit-mode" value="<?php echo htmlspecialchars($visit['visit_date'] ?? ''); ?>" style="display:none;">
+                                            </td>
+                                            <td class="visit-type-cell">
+                                                <span class="view-mode"><?php echo htmlspecialchars($visit['visit_type'] ?? ''); ?></span>
+                                                <select class="form-control form-control-sm edit-mode" style="display:none;">
+                                                    <option value="Home Visit" <?php echo ($visit['visit_type'] === 'Home Visit') ? 'selected' : ''; ?>>Home Visit</option>
+                                                    <option value="Healthcare Visit" <?php echo ($visit['visit_type'] === 'Healthcare Visit') ? 'selected' : ''; ?>>Healthcare Visit</option>
+                                                    <option value="Follow-up Visit" <?php echo ($visit['visit_type'] === 'Follow-up Visit') ? 'selected' : ''; ?>>Follow-up Visit</option>
+                                                    <option value="Emergency Visit" <?php echo ($visit['visit_type'] === 'Emergency Visit') ? 'selected' : ''; ?>>Emergency Visit</option>
+                                                    <option value="Prenatal Care" <?php echo ($visit['visit_type'] === 'Prenatal Care') ? 'selected' : ''; ?>>Prenatal Care</option>
+                                                </select>
+                                            </td>
+                                            <td class="visit-remarks-cell">
+                                                <span class="view-mode"><?php echo nl2br(htmlspecialchars($visit['remarks'] ?? '')); ?></span>
+                                                <input type="text" class="form-control form-control-sm edit-mode" value="<?php echo htmlspecialchars($visit['remarks'] ?? ''); ?>" style="display:none;">
+                                            </td>
+                                            <?php if (is_superadmin() || has_permission('manage_patients')): ?>
+                                                <td class="actions-cell">
+                                                    <button class="btn btn-sm btn-primary edit-visit-btn" onclick="editVisit(<?php echo $visit['visit_id']; ?>)">
+                                                        <i class="fas fa-edit"></i> Edit
+                                                    </button>
+                                                    <button class="btn btn-sm btn-success save-visit-btn" onclick="saveVisit(<?php echo $visit['visit_id']; ?>)" style="display:none;">
+                                                        <i class="fas fa-check"></i> Save
+                                                    </button>
+                                                    <button class="btn btn-sm btn-secondary cancel-visit-btn" onclick="cancelEditVisit(<?php echo $visit['visit_id']; ?>)" style="display:none;">
+                                                        <i class="fas fa-times"></i> Cancel
+                                                    </button>
+                                                </td>
+                                            <?php endif; ?>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -299,21 +364,21 @@ try {
                         <label for="medicine_id" class="form-label">Medicine</label>
                         <select id="medicine_id" name="medicine_id" class="form-select" required>
                             <option value="">-- Select medicine --</option>
-                            <?php if (!empty($inventory)): 
+                            <?php if (!empty($inventory)):
                                 $hasStock = false;
-                                foreach ($inventory as $item): 
+                                foreach ($inventory as $item):
                                     $stock = (int)$item['quantity_in_stock'];
                                     $disabled = $stock <= 0 ? 'disabled' : '';
                                     if ($stock > 0) $hasStock = true;
                             ?>
-                                <option value="<?php echo (int)$item['item_id']; ?>" <?php echo $disabled; ?>>
-                                    <?php echo htmlspecialchars($item['item_name']); ?> 
-                                    (Stock: <?php echo $stock; ?>)<?php echo $stock <= 0 ? ' - OUT OF STOCK' : ''; ?>
-                                </option>
-                            <?php endforeach; 
+                                    <option value="<?php echo (int)$item['item_id']; ?>" <?php echo $disabled; ?>>
+                                        <?php echo htmlspecialchars($item['item_name']); ?>
+                                        (Stock: <?php echo $stock; ?>)<?php echo $stock <= 0 ? ' - OUT OF STOCK' : ''; ?>
+                                    </option>
+                                <?php endforeach;
                                 if (!$hasStock): ?>
-                                <option value="" disabled>⚠️ All medicines are out of stock</option>
-                            <?php endif; ?>
+                                    <option value="" disabled>⚠️ All medicines are out of stock</option>
+                                <?php endif; ?>
                             <?php else: ?>
                                 <option value="" disabled>No medicines in inventory</option>
                             <?php endif; ?>
@@ -343,27 +408,242 @@ try {
 </div>
 
 <script>
-// Fix Bootstrap modal stacking context issue in admin layout
-// Move modal to body when opened, return when closed
-document.addEventListener('DOMContentLoaded', function() {
-    const dispenseModal = document.getElementById('dispenseModal');
-    if (dispenseModal) {
-        // Store original parent
-        const originalParent = dispenseModal.parentNode;
-        
-        // Move to body when showing
-        dispenseModal.addEventListener('show.bs.modal', function() {
-            document.body.appendChild(dispenseModal);
-        });
-        
-        // Move back when hidden (to maintain form data)
-        dispenseModal.addEventListener('hidden.bs.modal', function() {
-            if (originalParent) {
-                originalParent.appendChild(dispenseModal);
+    // Fix Bootstrap modal stacking context issue in admin layout
+    // Move modal to body when opened, return when closed
+    document.addEventListener('DOMContentLoaded', function() {
+        const dispenseModal = document.getElementById('dispenseModal');
+        if (dispenseModal) {
+            // Store original parent
+            const originalParent = dispenseModal.parentNode;
+
+            // Move to body when showing
+            dispenseModal.addEventListener('show.bs.modal', function() {
+                document.body.appendChild(dispenseModal);
+            });
+
+            // Move back when hidden (to maintain form data)
+            dispenseModal.addEventListener('hidden.bs.modal', function() {
+                if (originalParent) {
+                    originalParent.appendChild(dispenseModal);
+                }
+            });
+        }
+    });
+
+    // Inline Edit Functions for Health Visits
+    function editVisit(visitId) {
+        const row = document.getElementById('visit-row-' + visitId);
+        if (!row) return;
+
+        // Hide view mode, show edit mode
+        row.querySelectorAll('.view-mode').forEach(el => el.style.display = 'none');
+        row.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'block');
+
+        // Toggle buttons
+        row.querySelector('.edit-visit-btn').style.display = 'none';
+        row.querySelector('.save-visit-btn').style.display = 'inline-block';
+        row.querySelector('.cancel-visit-btn').style.display = 'inline-block';
+    }
+
+    function cancelEditVisit(visitId) {
+        const row = document.getElementById('visit-row-' + visitId);
+        if (!row) return;
+
+        // Show view mode, hide edit mode
+        row.querySelectorAll('.view-mode').forEach(el => el.style.display = 'block');
+        row.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'none');
+
+        // Toggle buttons
+        row.querySelector('.edit-visit-btn').style.display = 'inline-block';
+        row.querySelector('.save-visit-btn').style.display = 'none';
+        row.querySelector('.cancel-visit-btn').style.display = 'none';
+    }
+
+    function saveVisit(visitId) {
+        const row = document.getElementById('visit-row-' + visitId);
+        if (!row) return;
+
+        const visitDate = row.querySelector('.visit-date-cell .edit-mode').value;
+        const visitType = row.querySelector('.visit-type-cell .edit-mode').value;
+        const remarks = row.querySelector('.visit-remarks-cell .edit-mode').value;
+
+        if (!visitType) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: 'Visit type is required',
+                confirmButtonColor: '#20c997'
+            });
+            return;
+        }
+
+        // Show loading
+        Swal.fire({
+            title: 'Saving...',
+            text: 'Updating visit record',
+            icon: 'info',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
             }
         });
+
+        // Send AJAX request
+        fetch('<?php echo BASE_URL; ?>?action=visit-update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    csrf_token: '<?php echo $_SESSION['csrf_token'] ?? ''; ?>',
+                    visit_id: visitId,
+                    visit_date: visitDate,
+                    visit_type: visitType,
+                    remarks: remarks
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update view mode with new values
+                    row.querySelector('.visit-date-cell .view-mode').textContent = visitDate;
+                    row.querySelector('.visit-type-cell .view-mode').textContent = visitType;
+                    row.querySelector('.visit-remarks-cell .view-mode').textContent = remarks;
+
+                    // Exit edit mode
+                    cancelEditVisit(visitId);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated!',
+                        text: 'Visit record has been updated',
+                        confirmButtonColor: '#20c997',
+                        timer: 2000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || 'Failed to update visit',
+                        confirmButtonColor: '#20c997'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while updating the visit',
+                    confirmButtonColor: '#20c997'
+                });
+            });
     }
-});
+
+    // Inline Edit Functions for Vitals
+    function editVital(vitalId) {
+        const row = document.getElementById('vital-row-' + vitalId);
+        if (!row) return;
+
+        // Hide view mode, show edit mode
+        row.querySelectorAll('.view-mode').forEach(el => el.style.display = 'none');
+        row.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'block');
+
+        // Toggle buttons
+        row.querySelector('.edit-vital-btn').style.display = 'none';
+        row.querySelector('.save-vital-btn').style.display = 'inline-block';
+        row.querySelector('.cancel-vital-btn').style.display = 'inline-block';
+    }
+
+    function cancelEditVital(vitalId) {
+        const row = document.getElementById('vital-row-' + vitalId);
+        if (!row) return;
+
+        // Show view mode, hide edit mode
+        row.querySelectorAll('.view-mode').forEach(el => el.style.display = 'block');
+        row.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'none');
+
+        // Toggle buttons
+        row.querySelector('.edit-vital-btn').style.display = 'inline-block';
+        row.querySelector('.save-vital-btn').style.display = 'none';
+        row.querySelector('.cancel-vital-btn').style.display = 'none';
+    }
+
+    function saveVital(vitalId) {
+        const row = document.getElementById('vital-row-' + vitalId);
+        if (!row) return;
+
+        const bloodPressure = row.querySelector('.vital-bp-cell .edit-mode').value;
+        const heartRate = row.querySelector('.vital-hr-cell .edit-mode').value;
+        const temperature = row.querySelector('.vital-temp-cell .edit-mode').value;
+        const notes = row.querySelector('.vital-notes-cell .edit-mode').value;
+
+        // Show loading
+        Swal.fire({
+            title: 'Saving...',
+            text: 'Updating vital signs',
+            icon: 'info',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Send AJAX request
+        fetch('<?php echo BASE_URL; ?>?action=vital-update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    csrf_token: '<?php echo $_SESSION['csrf_token'] ?? ''; ?>',
+                    vital_id: vitalId,
+                    blood_pressure: bloodPressure,
+                    heart_rate: heartRate,
+                    temperature: temperature,
+                    notes: notes
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update view mode with new values
+                    row.querySelector('.vital-bp-cell .view-mode').textContent = bloodPressure;
+                    row.querySelector('.vital-hr-cell .view-mode').textContent = heartRate;
+                    row.querySelector('.vital-temp-cell .view-mode').textContent = temperature;
+                    row.querySelector('.vital-notes-cell .view-mode').textContent = notes;
+
+                    // Exit edit mode
+                    cancelEditVital(vitalId);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated!',
+                        text: 'Vital signs have been updated',
+                        confirmButtonColor: '#20c997',
+                        timer: 2000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || 'Failed to update vital signs',
+                        confirmButtonColor: '#20c997'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while updating vital signs',
+                    confirmButtonColor: '#20c997'
+                });
+            });
+    }
 </script>
 
 <?php include_once __DIR__ . '/../../includes/footer_admin.php'; ?>

@@ -42,6 +42,8 @@ function process_batch_sms(PDO $pdo)
         $sel->execute();
         $rows = $sel->fetchAll(PDO::FETCH_ASSOC);
 
+        error_log("process_batch_sms: Found " . count($rows) . " pending messages");
+
         foreach ($rows as $row) {
             $id = $row['id'];
             $phone = $row['phone_number'];
@@ -54,20 +56,24 @@ function process_batch_sms(PDO $pdo)
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
             $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $curlErr = curl_error($ch);
             curl_close($ch);
 
-            if ($httpCode === 200) {
-                $u = $pdo->prepare("UPDATE sms_queue SET status = 'sent', updated_at = NOW() WHERE id = :id");
+            error_log("SMS ID {$id}: HTTP {$httpCode}, cURL error: " . ($curlErr ?: 'none') . ", Response: " . substr($response, 0, 100));
+
+            // Accept 200, 201, 202 as success
+            if ($httpCode >= 200 && $httpCode < 300) {
+                $u = $pdo->prepare("UPDATE sms_queue SET status = 'sent', sent_at = NOW(), updated_at = NOW() WHERE id = :id");
                 $u->execute([':id' => $id]);
                 $sent++;
             } else {
                 $u = $pdo->prepare("UPDATE sms_queue SET status = 'failed', updated_at = NOW(), last_response = :resp WHERE id = :id");
-                $u->execute([':id' => $id, ':resp' => ($curlErr ?: $response)]);
+                $u->execute([':id' => $id, ':resp' => ($curlErr ?: "HTTP {$httpCode}: " . $response)]);
                 $failed++;
             }
         }
@@ -76,6 +82,7 @@ function process_batch_sms(PDO $pdo)
         return ['sent' => $sent, 'failed' => $failed, 'error' => $e->getMessage()];
     }
 
+    error_log("process_batch_sms: Sent {$sent}, Failed {$failed}");
     return ['sent' => $sent, 'failed' => $failed];
 }
 
