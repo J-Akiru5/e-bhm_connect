@@ -96,6 +96,7 @@ $allowedActions = [
     'change-password' => $actionPath . 'change_password.php',
     'update-bhw' => $actionPath . 'bhw_update.php',
     'approve-bhw' => $actionPath . 'bhw_approve.php',
+    'user-role-update' => $actionPath . 'user_role_update.php',
 
     // Dashboard/chart data
     'get-chart-data' => $actionPath . 'chart_data.php',

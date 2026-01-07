@@ -26,10 +26,9 @@ $flash_success = $_SESSION['flash_success'] ?? null;
 $flash_error = $_SESSION['flash_error'] ?? null;
 unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 
-// Define available roles
+// Define available roles (only bhw and superadmin)
 $available_roles = [
     'bhw' => ['label' => 'Health Worker', 'color' => 'info', 'description' => 'Can manage patients, view inventory, create visits'],
-    'admin' => ['label' => 'Administrator', 'color' => 'warning', 'description' => 'Can manage inventory, announcements, programs, and view reports'],
     'superadmin' => ['label' => 'Super Admin', 'color' => 'danger', 'description' => 'Full system access including user management and settings']
 ];
 
@@ -76,7 +75,7 @@ $pagination = paginate($total_records, $per_page, $current_page);
 // Get users
 $users = [];
 try {
-    $sql = "SELECT bhw_id, full_name, username, email, role, email_verified, created_at, last_login 
+    $sql = "SELECT bhw_id, full_name, username, email, role, account_status, email_verified, created_at, last_login 
             FROM bhw_users 
             WHERE $where_clause 
             ORDER BY role DESC, full_name ASC 
@@ -233,6 +232,20 @@ try {
                                     <span class="badge badge-<?php echo $role_info['color']; ?>">
                                         <?php echo $role_info['label']; ?>
                                     </span>
+                                </td>
+                                <td>
+                                    <?php 
+                                    $status = $user['account_status'] ?? 'approved';
+                                    $status_badges = [
+                                        'approved' => ['label' => 'Active', 'color' => 'success'],
+                                        'active' => ['label' => 'Active', 'color' => 'success'],
+                                        'pending' => ['label' => 'Pending', 'color' => 'warning'],
+                                        'disabled' => ['label' => 'Disabled', 'color' => 'danger'],
+                                        'suspended' => ['label' => 'Suspended', 'color' => 'danger']
+                                    ];
+                                    $status_info = $status_badges[$status] ?? ['label' => ucfirst($status), 'color' => 'secondary'];
+                                    ?>
+                                    <span class="badge badge-<?php echo $status_info['color']; ?>"><?php echo $status_info['label']; ?></span>
                                 </td>
                                 <td>
                                     <?php if ($user['last_login']): ?>

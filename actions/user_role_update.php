@@ -7,6 +7,7 @@
  */
 
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth_helpers.php';
 require_once __DIR__ . '/../includes/security_helper.php';
 
@@ -41,8 +42,8 @@ if ($user_id <= 0) {
     exit;
 }
 
-// Validate role
-$valid_roles = ['bhw', 'admin', 'superadmin'];
+// Validate role (only bhw and superadmin allowed)
+$valid_roles = ['bhw', 'superadmin'];
 if (!in_array($new_role, $valid_roles)) {
     $_SESSION['flash_error'] = 'Invalid role selected.';
     header('Location: ' . BASE_URL . 'admin-user-roles');
@@ -90,7 +91,6 @@ try {
     // Create notification for the affected user
     $role_labels = [
         'bhw' => 'Health Worker',
-        'admin' => 'Administrator',
         'superadmin' => 'Super Admin'
     ];
     

@@ -146,6 +146,7 @@ try {
             </button>
         </div>
         <form method="POST" action="<?php echo BASE_URL; ?>?action=save-announcement">
+            <?php echo csrf_input(); ?>
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label">Title *</label>
