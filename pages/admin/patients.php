@@ -199,13 +199,6 @@ try {
                                         <a href="<?php echo BASE_URL; ?>admin-patient-form?id=<?php echo urlencode($patient['patient_id'] ?? ''); ?>" class="btn-secondary-glass btn-sm-glass">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="<?php echo BASE_URL; ?>?action=delete-patient" method="POST" class="d-inline" onsubmit="return confirmDelete(event);">
-                                            <?= csrf_input() ?>
-                                            <input type="hidden" name="patient_id" value="<?php echo htmlspecialchars($patient['patient_id'] ?? ''); ?>">
-                                            <button type="submit" class="btn-danger-glass btn-sm-glass">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
                                         <?php endif; ?>
                                     </div>
                                 </td>
@@ -225,28 +218,7 @@ try {
     </div>
 </div>
 
-<script>
-function confirmDelete(event) {
-    event.preventDefault();
-    Swal.fire({
-        title: 'Delete Patient?',
-        text: 'This action cannot be undone.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ef4444',
-        cancelButtonColor: '#64748b',
-        confirmButtonText: 'Yes, delete it',
-        cancelButtonText: 'Cancel',
-        background: 'rgba(30, 41, 59, 0.95)',
-        color: '#ffffff'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            event.target.submit();
-        }
-    });
-    return false;
-}
-</script>
+
 
 <?php
 // Flash messages

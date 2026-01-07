@@ -66,24 +66,6 @@ try {
             $_SESSION['success'] = "Password reset successfully!<br><strong>New Password:</strong> <code>$newPassword</code><br>Please provide this to the resident securely.";
             break;
 
-        case 'delete':
-            // Get email before deleting for audit log
-            $stmt = $pdo->prepare("SELECT email, patient_id FROM patient_users WHERE user_id = ?");
-            $stmt->execute([$userId]);
-            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            // Delete the portal account
-            $stmt = $pdo->prepare("DELETE FROM patient_users WHERE user_id = ?");
-            $stmt->execute([$userId]);
-            
-            log_audit('delete_resident_account', 'patient_users', $userId, [
-                'email' => $userData['email'] ?? 'unknown',
-                'patient_id' => $userData['patient_id'] ?? null
-            ]);
-            
-            $_SESSION['success'] = 'Portal account has been deleted. The linked patient record was NOT deleted.';
-            break;
-
         default:
             $_SESSION['error'] = 'Invalid action type.';
     }

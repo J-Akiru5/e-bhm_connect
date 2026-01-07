@@ -122,7 +122,9 @@ try {
                 </p>
             </div>
             <div class="d-flex gap-2">
-                <a href="#quick-actions-panel" class="btn btn-primary"><?php echo __('dashboard.quick_actions'); ?></a>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('quick-actions-panel').scrollIntoView({behavior: 'smooth', block: 'start'});">
+                    <?php echo __('dashboard.quick_actions'); ?>
+                </button>
             </div>
         </div>
     </div>
