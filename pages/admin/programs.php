@@ -299,6 +299,7 @@ document.addEventListener('keydown', function(e) {
 // Delete confirmation
 function confirmDelete(event) {
     event.preventDefault();
+    const form = event.target.closest('form') || event.target;
     Swal.fire({
         title: 'Delete Program?',
         text: 'This action cannot be undone.',
@@ -312,7 +313,7 @@ function confirmDelete(event) {
         color: '#ffffff'
     }).then((result) => {
         if (result.isConfirmed) {
-            event.target.submit();
+            form.submit();
         }
     });
     return false;
