@@ -138,9 +138,9 @@ try {
     <div class="glass-card filter-bar">
         <!-- ... form ... -->
         <form method="GET" action="">
-            <div class="filter-row">
-                <input type="text" name="search" class="glass-input" style="flex: 1;" placeholder="Search items by name..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
-                <select name="category" class="glass-select">
+            <div class="filter-row" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                <input type="text" name="search" class="glass-input" style="flex: 2; min-width: 200px;" placeholder="Search items by name..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
+                <select name="category" class="glass-select" style="flex: 1; min-width: 150px; max-width: 250px;">
                     <option value="">All Categories</option>
                     <?php foreach ($categories as $c): ?>
                         <option value="<?php echo $c['category_id']; ?>" <?php echo (isset($_GET['category']) && $_GET['category'] == $c['category_id']) ? 'selected' : ''; ?>>
@@ -148,14 +148,16 @@ try {
                         </option>
                     <?php endforeach; ?>
                 </select>
-                <button type="submit" class="btn-primary-glass">
-                    <i class="fas fa-search"></i>
-                    Search
-                </button>
-                <a href="<?php echo BASE_URL; ?>admin-inventory" class="btn-secondary-glass">
-                    <i class="fas fa-times"></i>
-                    Clear
-                </a>
+                <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
+                    <button type="submit" class="btn-primary-glass">
+                        <i class="fas fa-search"></i>
+                        Search
+                    </button>
+                    <a href="<?php echo BASE_URL; ?>admin-inventory" class="btn-secondary-glass">
+                        <i class="fas fa-times"></i>
+                        Clear
+                    </a>
+                </div>
             </div>
         </form>
     </div>
