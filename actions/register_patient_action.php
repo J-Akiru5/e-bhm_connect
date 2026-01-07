@@ -56,8 +56,8 @@ try {
         exit();
     }
 
-    // Get registration mode from app settings
-    $registrationMode = get_app_setting('portal_registration_mode', 'linked_only');
+    // Get registration mode from app settings (default: open for easy onboarding)
+    $registrationMode = get_app_setting('portal_registration_mode', 'open');
 
     // Look for existing resident by full_name + birthdate
     $stmt = $pdo->prepare('SELECT * FROM patients WHERE full_name = :full_name AND birthdate = :birthdate LIMIT 1');

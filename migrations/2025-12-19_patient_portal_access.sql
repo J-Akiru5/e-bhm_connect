@@ -19,7 +19,7 @@ ADD COLUMN IF NOT EXISTS `verification_expires_at` DATETIME NULL AFTER `verifica
 -- Update existing users to be active and verified (grandfather in existing accounts)
 UPDATE `patient_users` SET `status` = 'active', `email_verified` = 1 WHERE `status` = 'pending' OR `status` IS NULL;
 
--- Add portal registration mode to app_settings if not exists
+-- Add portal registration mode to app_settings if not exists (default: open for easy onboarding)
 INSERT INTO `app_settings` (`setting_key`, `setting_value`, `setting_type`, `description`) 
-VALUES ('portal_registration_mode', 'linked_only', 'string', 'Controls patient portal registration: open, linked_only, or approval_required')
+VALUES ('portal_registration_mode', 'open', 'string', 'Controls patient portal registration: open, linked_only, or approval_required')
 ON DUPLICATE KEY UPDATE `setting_key` = `setting_key`;
