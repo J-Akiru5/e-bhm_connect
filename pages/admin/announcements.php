@@ -187,6 +187,15 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
 });
 
+// Auto-open modal if URL has #new (from dashboard Quick Action)
+window.addEventListener('load', function() {
+    if (window.location.hash === '#new') {
+        openModal();
+        // Remove hash from URL without reloading
+        history.replaceState(null, null, ' ');
+    }
+});
+
 // Delete confirmation - using click handler on delete buttons
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.delete-btn').forEach(function(btn) {

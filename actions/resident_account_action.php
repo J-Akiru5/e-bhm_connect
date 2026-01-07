@@ -3,8 +3,8 @@
  * Resident Account Actions (Superadmin Only)
  * Handles: enable, disable, reset-password, delete
  */
-require_once __DIR__ . '/../includes/config.php';
-require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth_helpers.php';
 
 // Security: Only superadmin can access
