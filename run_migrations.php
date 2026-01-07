@@ -40,6 +40,7 @@ try {
         'migrations/2025-12-19_patient_portal_access.sql',
         'migrations/2026-01-06_remove_email_verification.sql',
         'migrations/2026-01-06_fix_sms_queue_columns.sql',
+        'migrations/2026-01-07_add_last_login_column.sql',
         
         // Phase 2: Seeders (insert sample data)
         'migrations/2025-12-16_bhw_superadmin_seeder.sql',

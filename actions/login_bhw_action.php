@@ -100,6 +100,15 @@ $_SESSION['bhw_logged_in'] = true;
 // Log successful login
 log_audit('login_success', 'bhw', $user['bhw_id'], ['username' => $username]);
 
+// Update last_login timestamp
+try {
+	$updateLogin = $pdo->prepare('UPDATE bhw_users SET last_login = NOW() WHERE bhw_id = :bhw_id');
+	$updateLogin->execute([':bhw_id' => $user['bhw_id']]);
+} catch (Throwable $e) {
+	// Non-critical error, just log it
+	error_log('Failed to update last_login: ' . $e->getMessage());
+}
+
 header('Location: ' . BASE_URL . 'admin-dashboard');
 exit();
 
