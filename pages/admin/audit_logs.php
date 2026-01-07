@@ -93,7 +93,7 @@ try {
 // Get BHW users for filter dropdown
 $bhwUsers = [];
 try {
-    $stmt = $pdo->query("SELECT id, full_name FROM bhw_users ORDER BY full_name");
+    $stmt = $pdo->query("SELECT bhw_id, full_name FROM bhw_users ORDER BY full_name");
     $bhwUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $e) {
     // Handle error

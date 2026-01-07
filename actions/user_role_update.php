@@ -104,6 +104,7 @@ try {
     );
     
     $_SESSION['flash_success'] = "Role for {$user['full_name']} changed from {$role_labels[$old_role]} to {$role_labels[$new_role]}.";
+    $_SESSION['show_success_modal'] = true; // Trigger SweetAlert
     
 } catch (Throwable $e) {
     error_log('Role update error: ' . $e->getMessage());

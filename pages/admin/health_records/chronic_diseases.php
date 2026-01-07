@@ -214,12 +214,15 @@ try {
                             <th>Blood Sugar</th>
                             <th>PhilHealth</th>
                             <th>Enrolled</th>
+                            <?php if (is_superadmin()): ?>
+                            <th>BHW</th>
+                            <?php endif; ?>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($records)): ?>
-                        <tr><td colspan="7" class="text-center py-5 text-muted">No records found</td></tr>
+                        <tr><td colspan="<?php echo is_superadmin() ? '8' : '7'; ?>" class="text-center py-5 text-muted">No records found</td></tr>
                         <?php else: ?>
                         <?php foreach ($records as $rec): ?>
                         <tr>
@@ -248,6 +251,9 @@ try {
                             </td>
                             <td><?php echo htmlspecialchars($rec['philhealth_no'] ?? '-'); ?></td>
                             <td><?php echo $rec['date_of_enrollment'] ? date('M j, Y', strtotime($rec['date_of_enrollment'])) : '-'; ?></td>
+                            <?php if (is_superadmin()): ?>
+                            <td><span class="text-muted small"><?php echo htmlspecialchars($rec['bhw_name'] ?? 'Unknown'); ?></span></td>
+                            <?php endif; ?>
                             <td>
                                 <div class="d-flex gap-1">
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-chronic?action=view&id=<?php echo $rec['chronic_id']; ?>" class="btn btn-sm btn-glass">View</a>

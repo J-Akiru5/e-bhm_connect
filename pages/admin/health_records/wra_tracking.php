@@ -208,12 +208,15 @@ $months = ['jan' => 'Jan', 'feb' => 'Feb', 'mar' => 'Mar', 'apr' => 'Apr', 'may'
                             <?php foreach ($months as $k => $label): ?>
                             <th class="text-center" style="min-width:45px;"><?php echo $label; ?></th>
                             <?php endforeach; ?>
+                            <?php if (is_superadmin()): ?>
+                            <th>BHW</th>
+                            <?php endif; ?>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($records)): ?>
-                        <tr><td colspan="17" class="text-center py-5 text-muted">No records found</td></tr>
+                        <tr><td colspan="<?php echo is_superadmin() ? '18' : '17'; ?>" class="text-center py-5 text-muted">No records found</td></tr>
                         <?php else: ?>
                         <?php foreach ($records as $rec): ?>
                         <tr>
@@ -255,6 +258,9 @@ $months = ['jan' => 'Jan', 'feb' => 'Feb', 'mar' => 'Mar', 'apr' => 'Apr', 'may'
                                 <?php endif; ?>
                             </td>
                             <?php endforeach; ?>
+                            <?php if (is_superadmin()): ?>
+                            <td><span class="text-muted small"><?php echo htmlspecialchars($rec['bhw_name'] ?? 'Unknown'); ?></span></td>
+                            <?php endif; ?>
                             <td>
                                 <div class="d-flex gap-1">
                                     <?php if (has_permission('manage_patients')): ?>

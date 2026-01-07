@@ -119,6 +119,15 @@ try {
     <div class="alert alert-success mb-4">
         <?php echo htmlspecialchars($flash_success); ?>
     </div>
+    <script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Role Updated!',
+        text: '<?php echo addslashes($flash_success); ?>',
+        confirmButtonColor: '#20c997',
+        timer: 3000
+    });
+    </script>
     <?php endif; ?>
 
     <?php if ($flash_error): ?>
@@ -234,10 +243,10 @@ try {
                                 </td>
                                 <td class="text-end">
                                     <?php if ((int)$user['bhw_id'] !== (int)$_SESSION['bhw_id']): ?>
-                                    <form method="POST" action="<?php echo BASE_URL; ?>actions/user_role_update.php" class="d-inline" onsubmit="return confirmRoleChange(this)">
-                                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?? ''; ?>">
+                                    <form method="POST" action="<?php echo BASE_URL; ?>?action=user-role-update" class="d-inline role-change-form" data-username="<?php echo htmlspecialchars($user['full_name']); ?>">
+                                        <?php echo csrf_input(); ?>
                                         <input type="hidden" name="user_id" value="<?php echo $user['bhw_id']; ?>">
-                                        <select name="new_role" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                        <select name="new_role" class="form-select form-select-sm d-inline-block role-select" style="width: auto;" data-current-role="<?php echo $user['role'] ?? 'bhw'; ?>">
                                             <?php foreach ($available_roles as $role_key => $role_info): ?>
                                             <option value="<?php echo $role_key; ?>" <?php echo ($user['role'] ?? 'bhw') === $role_key ? 'selected' : ''; ?>>
                                                 <?php echo $role_info['label']; ?>
@@ -285,11 +294,52 @@ try {
 </div>
 
 <script>
-function confirmRoleChange(form) {
-    const select = form.querySelector('select[name="new_role"]');
-    const newRole = select.options[select.selectedIndex].text;
-    return confirm(`Are you sure you want to change this user's role to ${newRole}?`);
-}
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle role change with SweetAlert confirmation
+    document.querySelectorAll('.role-select').forEach(select => {
+        select.addEventListener('change', function(e) {
+            const form = this.closest('.role-change-form');
+            const username = form.dataset.username;
+            const currentRole = this.dataset.currentRole;
+            const newRoleValue = this.value;
+            const newRoleText = this.options[this.selectedIndex].text;
+            
+            // Revert to current role temporarily
+            this.value = currentRole;
+            
+            // Show confirmation dialog
+            Swal.fire({
+                title: 'Change User Role?',
+                html: `Are you sure you want to change <strong>${username}'s</strong> role to <strong>${newRoleText}</strong>?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#20c997',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, change role',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Update select to new value and submit
+                    this.value = newRoleValue;
+                    
+                    // Show loading
+                    Swal.fire({
+                        title: 'Updating...',
+                        text: 'Changing user role',
+                        icon: 'info',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    form.submit();
+                }
+            });
+        });
+    });
+});
 </script>
 
 <?php include_once __DIR__ . '/../../includes/footer_admin.php'; ?>

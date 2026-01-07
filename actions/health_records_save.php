@@ -145,6 +145,7 @@ function saveChildCareRecord($pdo) {
                 $data['vitamin_a_date'], $data['albendazole_date'], $data['patient_id'], $data['bhw_id'], $id
             ]);
             $_SESSION['success'] = 'Child care record updated successfully.';
+            log_audit('update_health_record', 'childcare', $id, ['type' => 'child_care', 'name' => $data['child_name']]);;
         } else {
             $sql = "INSERT INTO child_care_records 
                     (child_name, date_of_birth, age_months, sex, vitamin_a_date, albendazole_date, patient_id, bhw_id)
@@ -155,6 +156,8 @@ function saveChildCareRecord($pdo) {
                 $data['vitamin_a_date'], $data['albendazole_date'], $data['patient_id'], $data['bhw_id']
             ]);
             $_SESSION['success'] = 'Child care record added successfully.';
+            $newId = (int)$pdo->lastInsertId();
+            log_audit('create_health_record', 'childcare', $newId, ['type' => 'child_care', 'name' => $data['child_name']]);;
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = 'Database error: ' . $e->getMessage();
@@ -203,6 +206,7 @@ function saveNatalityRecord($pdo) {
                 $data['attendant'], $data['patient_id'], $data['bhw_id'], $id
             ]);
             $_SESSION['success'] = 'Birth record updated successfully.';
+            log_audit('update_health_record', 'natality', $id, ['type' => 'natality', 'name' => $data['baby_name']]);;
         } else {
             $sql = "INSERT INTO natality_records 
                     (baby_name, date_of_birth, time_of_birth, sex, birth_weight_kg, birth_length_cm,
@@ -216,6 +220,8 @@ function saveNatalityRecord($pdo) {
                 $data['attendant'], $data['patient_id'], $data['bhw_id']
             ]);
             $_SESSION['success'] = 'Birth record added successfully.';
+            $newId = (int)$pdo->lastInsertId();
+            log_audit('create_health_record', 'natality', $newId, ['type' => 'natality', 'name' => $data['baby_name']]);;
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = 'Database error: ' . $e->getMessage();
@@ -259,6 +265,7 @@ function saveMortalityRecord($pdo) {
                 $data['remarks'], $data['patient_id'], $data['bhw_id'], $id
             ]);
             $_SESSION['success'] = 'Mortality record updated successfully.';
+            log_audit('update_health_record', 'mortality', $id, ['type' => 'mortality', 'name' => $data['deceased_name']]);;
         } else {
             $sql = "INSERT INTO mortality_records 
                     (deceased_name, date_of_birth, date_of_death, age_at_death, sex, cause_of_death,
@@ -271,6 +278,8 @@ function saveMortalityRecord($pdo) {
                 $data['remarks'], $data['patient_id'], $data['bhw_id']
             ]);
             $_SESSION['success'] = 'Mortality record added successfully.';
+            $newId = (int)$pdo->lastInsertId();
+            log_audit('create_health_record', 'mortality', $newId, ['type' => 'mortality', 'name' => $data['deceased_name']]);;
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = 'Database error: ' . $e->getMessage();
@@ -334,6 +343,7 @@ function saveChronicDisease($pdo) {
                 $data['remarks'], $data['patient_id'], $data['bhw_id'], $id
             ]);
             $_SESSION['success'] = 'Chronic disease record updated successfully.';
+            log_audit('update_health_record', 'chronic_disease', $id, ['type' => 'chronic_disease', 'name' => $data['first_name'] . ' ' . $data['last_name']]);;
         } else {
             $sql = "INSERT INTO chronic_disease_masterlist 
                     (nhts_member, date_of_enrollment, last_name, first_name, middle_name, sex, age, date_of_birth, philhealth_no,
@@ -351,6 +361,8 @@ function saveChronicDisease($pdo) {
                 $data['remarks'], $data['patient_id'], $data['bhw_id']
             ]);
             $_SESSION['success'] = 'Chronic disease record added successfully.';
+            $newId = (int)$pdo->lastInsertId();
+            log_audit('create_health_record', 'chronic_disease', $newId, ['type' => 'chronic_disease', 'name' => $data['first_name'] . ' ' . $data['last_name']]);;
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = 'Database error: ' . $e->getMessage();
@@ -405,6 +417,7 @@ function saveNtpClient($pdo) {
                 $data['remarks'], $data['patient_id'], $data['bhw_id'], $id
             ]);
             $_SESSION['success'] = 'NTP client record updated successfully.';
+            log_audit('update_health_record', 'ntp_client', $id, ['type' => 'ntp_monitoring', 'name' => $data['client_name']]);;
         } else {
             $sql = "INSERT INTO ntp_client_monitoring 
                     (client_name, date_of_birth, sex, address, registration_date, registration_type,
@@ -418,6 +431,8 @@ function saveNtpClient($pdo) {
                 $data['remarks'], $data['patient_id'], $data['bhw_id']
             ]);
             $_SESSION['success'] = 'NTP client record added successfully.';
+            $newId = (int)$pdo->lastInsertId();
+            log_audit('create_health_record', 'ntp_client', $newId, ['type' => 'ntp_monitoring', 'name' => $data['client_name']]);;
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = 'Database error: ' . $e->getMessage();
@@ -474,6 +489,7 @@ function saveWraTracking($pdo) {
                 $data['patient_id'], $data['bhw_id'], $id
             ]);
             $_SESSION['success'] = 'WRA tracking record updated successfully.';
+            log_audit('update_health_record', 'wra_tracking', $id, ['type' => 'wra_tracking', 'name' => $data['name']]);;
         } else {
             $sql = "INSERT INTO wra_tracking 
                     (name, birthdate, age, complete_address, contact_number, tracking_year,
@@ -492,6 +508,8 @@ function saveWraTracking($pdo) {
                 $data['patient_id'], $data['bhw_id']
             ]);
             $_SESSION['success'] = 'WRA tracking record added successfully.';
+            $newId = (int)$pdo->lastInsertId();
+            log_audit('create_health_record', 'wra_tracking', $newId, ['type' => 'wra_tracking', 'name' => $data['name']]);;
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = 'Database error: ' . $e->getMessage();

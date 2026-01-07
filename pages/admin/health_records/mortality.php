@@ -221,12 +221,15 @@ try {
                             <th>Cause</th>
                             <th>Place</th>
                             <th>Flags</th>
+                            <?php if (is_superadmin()): ?>
+                            <th>BHW</th>
+                            <?php endif; ?>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($records)): ?>
-                        <tr><td colspan="8" class="text-center py-5 text-muted">No records found</td></tr>
+                        <tr><td colspan="<?php echo is_superadmin() ? '9' : '8'; ?>" class="text-center py-5 text-muted">No records found</td></tr>
                         <?php else: ?>
                         <?php foreach ($records as $rec): ?>
                         <tr>
@@ -248,6 +251,9 @@ try {
                                 <span class="badge badge-warning">Infant</span>
                                 <?php endif; ?>
                             </td>
+                            <?php if (is_superadmin()): ?>
+                            <td><span class="text-muted small"><?php echo htmlspecialchars($rec['bhw_name'] ?? 'Unknown'); ?></span></td>
+                            <?php endif; ?>
                             <td>
                                 <div class="d-flex gap-1">
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-mortality?action=view&id=<?php echo $rec['mortality_id']; ?>" class="btn btn-sm btn-glass">View</a>

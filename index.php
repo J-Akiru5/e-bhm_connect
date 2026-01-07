@@ -120,6 +120,9 @@ $allowedActions = [
 
     // Patient Portal Actions
     'patient-profile-save' => $actionPath . 'patient_profile_save.php',
+
+    // Superadmin: Registered Residents Management
+    'resident-account-action' => $actionPath . 'resident_account_action.php',
 ];
 
 // Process action if it's in the whitelist (regardless of whether page param exists)
@@ -184,6 +187,8 @@ $allowedPages = [
     'admin-audit-logs' => ['file' => $basePath . 'admin/audit_logs.php', 'secure' => 'superadmin'],
     'admin-db-backup' => ['file' => $basePath . 'admin/db_backup.php', 'secure' => 'superadmin'],
     'admin-user-roles' => ['file' => $basePath . 'admin/user_roles.php', 'secure' => 'superadmin'],
+    'admin-registered-residents' => ['file' => $basePath . 'admin/registered_residents.php', 'secure' => 'superadmin'],
+    'admin-record-history' => ['file' => $basePath . 'admin/record_history_view.php', 'secure' => 'superadmin'],
     'admin-dispensation-history' => ['file' => $basePath . 'admin/dispensation_history.php', 'secure' => true],
 
     // Health Records Module

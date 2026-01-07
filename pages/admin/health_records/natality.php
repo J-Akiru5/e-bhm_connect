@@ -182,14 +182,16 @@ try {
                             <th>Weight</th>
                             <th>Delivery</th>
                             <th>Mother</th>
+                            <?php if (is_superadmin()): ?>
                             <th>BHW</th>
+                            <?php endif; ?>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($records)): ?>
                         <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">No birth records found</td>
+                            <td colspan="<?php echo is_superadmin() ? '8' : '7'; ?>" class="text-center py-5 text-muted">No birth records found</td>
                         </tr>
                         <?php else: ?>
                         <?php foreach ($records as $rec): ?>
@@ -215,7 +217,9 @@ try {
                                 </span>
                             </td>
                             <td><?php echo htmlspecialchars($rec['mother_complete_name'] ?? '-'); ?></td>
-                            <td><?php echo htmlspecialchars($rec['bhw_name'] ?? '-'); ?></td>
+                            <?php if (is_superadmin()): ?>
+                            <td><span class="text-muted small"><?php echo htmlspecialchars($rec['bhw_name'] ?? 'Unknown'); ?></span></td>
+                            <?php endif; ?>
                             <td>
                                 <div class="d-flex gap-1">
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-natality?action=view&id=<?php echo $rec['natality_id']; ?>" class="btn btn-sm btn-glass" title="View">

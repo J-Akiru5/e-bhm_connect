@@ -172,13 +172,16 @@ $total_pages = ceil($total_records / $per_page);
                             <th>NHTS</th>
                             <th>G-P</th>
                             <th>Status</th>
+                            <?php if (is_superadmin()): ?>
+                            <th>BHW</th>
+                            <?php endif; ?>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($records)): ?>
                         <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">
+                            <td colspan="<?php echo is_superadmin() ? '9' : '8'; ?>" class="text-center py-5 text-muted">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-3 opacity-50">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/>
                                 </svg>
@@ -227,6 +230,11 @@ $total_pages = ceil($total_records / $per_page);
                                 <span class="badge badge-primary">Active</span>
                                 <?php endif; ?>
                             </td>
+                            <?php if (is_superadmin()): ?>
+                            <td>
+                                <span class="text-muted small"><?php echo htmlspecialchars($rec['bhw_name'] ?? 'Unknown'); ?></span>
+                            </td>
+                            <?php endif; ?>
                             <td>
                                 <div class="d-flex gap-1">
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-pregnancy?action=view&id=<?php echo $rec['pregnancy_id']; ?>" class="btn btn-sm btn-glass" title="View">

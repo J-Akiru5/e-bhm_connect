@@ -363,6 +363,22 @@ $pageTitle = $pageTitles[$page] ?? __('nav.dashboard');
                             <?php echo __('nav.user_roles') ?: 'User Roles'; ?>
                         </a>
                     </li>
+                    <li>
+                        <a href="<?php echo BASE_URL; ?>admin-registered-residents" class="sidebar-nav-link <?php echo ($page === 'admin-registered-residents') ? 'active' : ''; ?>">
+                            <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            Registered Residents
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo BASE_URL; ?>admin-record-history" class="sidebar-nav-link <?php echo ($page === 'admin-record-history') ? 'active' : ''; ?>">
+                            <svg class="sidebar-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Record History
+                        </a>
+                    </li>
                     <?php endif; ?>
                 </ul>
             </div>
