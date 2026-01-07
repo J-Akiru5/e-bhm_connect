@@ -225,9 +225,13 @@ try {
                                     <a href="<?php echo BASE_URL; ?>admin-health-records-natality?action=edit&id=<?php echo $rec['natality_id']; ?>" class="btn btn-sm btn-glass" title="Edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                     </a>
-                                    <button type="button" class="btn btn-sm btn-glass text-danger" onclick="confirmDelete(<?php echo $rec['natality_id']; ?>)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                                    </button>
+                                    <form method="POST" action="<?php echo BASE_URL; ?>?action=delete-natality-record" class="d-inline delete-form">
+                                        <?php echo csrf_input(); ?>
+                                        <input type="hidden" name="id" value="<?php echo $rec['natality_id']; ?>">
+                                        <button type="button" class="btn btn-sm btn-glass text-danger delete-btn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                        </button>
+                                    </form>
                                     <?php endif; ?>
                                 </div>
                             </td>
@@ -262,6 +266,7 @@ try {
         </div>
         <div class="glass-card-body">
             <form method="POST" action="<?php echo BASE_URL; ?>?action=save-natality-record">
+                <?php echo csrf_input(); ?>
                 <input type="hidden" name="natality_id" value="<?php echo $record['natality_id'] ?? ''; ?>">
                 
                 <div class="row g-3">
@@ -405,20 +410,27 @@ try {
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-function confirmDelete(id) {
-    Swal.fire({
-        title: 'Delete Record?',
-        text: 'This action cannot be undone.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ef4444',
-        confirmButtonText: 'Yes, delete'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = '<?php echo BASE_URL; ?>?action=delete-natality-record&id=' + id;
-        }
+// Delete confirmation - using POST form for security
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.delete-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('.delete-form');
+            Swal.fire({
+                title: 'Delete Record?',
+                text: 'This action cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'Yes, delete'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
     });
-}
+});
 </script>
 
 <style>

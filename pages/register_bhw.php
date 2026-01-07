@@ -1,9 +1,10 @@
 <?php
-// Public BHW Registration Page - Glassmorphism Design with Legal Modal
+// Public BHW Registration Page - Glassmorphism Design with Horizontal Layout
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../includes/security_helper.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -82,18 +83,20 @@ require_once __DIR__ . '/../config/config.php';
             66% { transform: translate(-20px, 20px) scale(0.9); }
         }
         
-        /* Glass Card Container */
+        /* Glass Card Container - Horizontal Layout */
         .auth-glass-card {
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 580px;
+            max-width: 900px;
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 24px;
-            padding: 48px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            overflow: hidden;
             box-shadow: 0 24px 64px rgba(0, 0, 0, 0.20);
             animation: fadeInUp 0.6s ease-out;
             margin: 24px 0;
@@ -104,33 +107,41 @@ require_once __DIR__ . '/../config/config.php';
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Logo & Header */
-        .auth-glass-card .logo-container {
+        /* Left Side - Info Panel */
+        .info-panel {
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.2);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-panel .logo-container {
             text-align: center;
             margin-bottom: 24px;
         }
         
-        .auth-glass-card .logo {
-            width: 72px;
-            height: 72px;
+        .info-panel .logo {
+            width: 64px;
+            height: 64px;
             object-fit: contain;
             margin-bottom: 12px;
             filter: drop-shadow(0 4px 16px rgba(32, 201, 151, 0.35));
         }
         
-        .auth-glass-card h2 {
-            font-size: 1.75rem;
+        .info-panel h2 {
+            font-size: 1.5rem;
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 8px;
             text-align: center;
         }
         
-        .auth-glass-card .subtitle {
-            font-size: 0.9rem;
+        .info-panel .subtitle {
+            font-size: 0.85rem;
             color: rgba(255, 255, 255, 0.7);
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 0;
         }
         
         .badge-bhw {
@@ -142,140 +153,11 @@ require_once __DIR__ . '/../config/config.php';
             color: #20c997;
             padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 12px;
-        }
-        
-        /* Form Styling */
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-label {
-            display: block;
-            font-weight: 500;
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 8px;
-        }
-        
-        .glass-input {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 1rem;
-            font-family: 'Poppins', sans-serif;
-            transition: all 250ms ease;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        
-        .glass-input:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.25);
-        }
-        
-        .glass-input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(32, 201, 151, 0.8);
-            box-shadow: 0 0 0 4px rgba(32, 201, 151, 0.15);
-            padding: 11px 15px;
-        }
-        
-        .glass-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        
-        @media (max-width: 576px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Primary Button */
-        .btn-glass-primary {
-            width: 100%;
-            padding: 14px 24px;
-            background: linear-gradient(135deg, #20c997, #0f5132);
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-            cursor: pointer;
-            transition: all 250ms ease;
-            box-shadow: 0 4px 16px rgba(32, 201, 151, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .btn-glass-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(32, 201, 151, 0.45);
-        }
-        
-        .btn-glass-primary:active {
-            transform: translateY(0);
-        }
-        
-        .btn-glass-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        /* Footer Links */
-        .auth-footer {
-            margin-top: 24px;
-            text-align: center;
-        }
-        
-        .auth-footer p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.875rem;
-            margin-bottom: 16px;
-        }
-        
-        .auth-footer a {
-            color: #20c997;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 250ms ease;
-        }
-        
-        .auth-footer a:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-        
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: all 250ms ease;
-        }
-        
-        .back-link:hover {
-            color: #ffffff;
         }
         
         /* Workflow Steps */
@@ -284,11 +166,11 @@ require_once __DIR__ . '/../config/config.php';
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 16px;
-            margin-bottom: 24px;
+            margin-top: auto;
         }
         
         .workflow-steps h4 {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: rgba(255, 255, 255, 0.5);
@@ -317,6 +199,7 @@ require_once __DIR__ . '/../config/config.php';
             font-size: 0.75rem;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.6);
+            flex-shrink: 0;
         }
         
         .step.active .step-number {
@@ -325,7 +208,7 @@ require_once __DIR__ . '/../config/config.php';
         }
         
         .step-text {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.7);
         }
         
@@ -334,15 +217,174 @@ require_once __DIR__ . '/../config/config.php';
             font-weight: 500;
         }
         
+        /* Right Side - Form Panel */
+        .form-panel {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-panel-header {
+            margin-bottom: 24px;
+        }
+        
+        .form-panel-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        
+        .form-panel-header p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0;
+        }
+        
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 6px;
+        }
+        
+        .glass-input {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 250ms ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .glass-input:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+        
+        .glass-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(32, 201, 151, 0.8);
+            box-shadow: 0 0 0 3px rgba(32, 201, 151, 0.15);
+            padding: 9px 13px;
+        }
+        
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        /* Primary Button */
+        .btn-glass-primary {
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #20c997, #0f5132);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 250ms ease;
+            box-shadow: 0 4px 16px rgba(32, 201, 151, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .btn-glass-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(32, 201, 151, 0.45);
+        }
+        
+        .btn-glass-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-glass-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Footer Links */
+        .auth-footer {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .auth-footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+        
+        .auth-footer a {
+            color: #20c997;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 250ms ease;
+        }
+        
+        .auth-footer a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 250ms ease;
+        }
+        
+        .back-link:hover {
+            color: #ffffff;
+        }
+        
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .auth-glass-card {
-                padding: 32px 24px;
-                border-radius: 16px;
+                grid-template-columns: 1fr;
+                max-width: 480px;
             }
             
-            .auth-glass-card h2 {
-                font-size: 1.5rem;
+            .info-panel {
+                padding: 24px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .form-panel {
+                padding: 24px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
             }
             
             .orb-1, .orb-2, .orb-3 {
@@ -355,12 +397,12 @@ require_once __DIR__ . '/../config/config.php';
                 padding: 16px;
             }
             
-            .auth-glass-card {
-                padding: 24px 20px;
+            .info-panel, .form-panel {
+                padding: 20px;
             }
             
-            .auth-glass-card h2 {
-                font-size: 1.35rem;
+            .info-panel h2 {
+                font-size: 1.25rem;
             }
         }
         
@@ -663,146 +705,157 @@ if (isset($_SESSION['register_form_data'])) {
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
     
-    <!-- Glass Card Container -->
+    <!-- Glass Card Container - Horizontal Layout -->
     <div class="auth-glass-card">
-        <!-- Logo & Header -->
-        <div class="logo-container">
-            <a href="<?php echo BASE_URL; ?>?page=home">
-                <img src="<?php echo BASE_URL; ?>assets/images/e-logo.png" alt="E-BHM Connect" class="logo">
-            </a>
-            <span class="badge-bhw">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="8.5" cy="7" r="4"></circle>
-                    <path d="M20 8v6"></path>
-                    <path d="M23 11h-6"></path>
-                </svg>
-                Health Worker Registration
-            </span>
-            <h2>BHW Registration</h2>
-            <p class="subtitle">Create your account to access the health management system</p>
-        </div>
-
-        <!-- Workflow Steps -->
-        <div class="workflow-steps">
-            <h4>Registration Process</h4>
-            <div class="step active">
-                <span class="step-number">1</span>
-                <span class="step-text">Complete Registration Form</span>
+        <!-- Left Side - Info Panel -->
+        <div class="info-panel">
+            <div class="logo-container">
+                <a href="<?php echo BASE_URL; ?>?page=home">
+                    <img src="<?php echo BASE_URL; ?>assets/images/e-logo.png" alt="E-BHM Connect" class="logo">
+                </a>
+                <span class="badge-bhw">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <path d="M20 8v6"></path>
+                        <path d="M23 11h-6"></path>
+                    </svg>
+                    Health Worker Registration
+                </span>
+                <h2>BHW Registration</h2>
+                <p class="subtitle">Create your account to access the health management system</p>
             </div>
-            <div class="step">
-                <span class="step-number">2</span>
-                <span class="step-text">Start Using the System</span>
-            </div>
-            </div>
-        </div>
-
-        <!-- Registration Form (Hidden until legal accepted) -->
-        <div class="registration-form" id="registrationForm">
-            <form action="<?php echo BASE_URL; ?>?action=register-bhw" method="POST">
-                <div class="form-group">
-                    <label for="full_name" class="form-label">Full Name</label>
-                    <input 
-                        type="text" 
-                        class="glass-input" 
-                        id="full_name" 
-                        name="full_name" 
-                        value="<?php echo $full_name; ?>"
-                        placeholder="Enter your full name"
-                        required
-                    >
+            
+            <!-- Workflow Steps -->
+            <div class="workflow-steps">
+                <h4>Registration Process</h4>
+                <div class="step active">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Complete Registration Form</span>
                 </div>
-
-                <div class="form-row">
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Start Using the System</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side - Form Panel -->
+        <div class="form-panel">
+            <div class="form-panel-header">
+                <h3>Account Details</h3>
+                <p>Fill in your information to create your BHW account</p>
+            </div>
+            
+            <!-- Registration Form (Hidden until legal accepted) -->
+            <div class="registration-form" id="registrationForm">
+                <form action="<?php echo BASE_URL; ?>?action=register-bhw" method="POST">
+                    <?= csrf_input() ?>
+                    
                     <div class="form-group">
-                        <label for="username" class="form-label">Username</label>
+                        <label for="full_name" class="form-label">Full Name</label>
                         <input 
                             type="text" 
                             class="glass-input" 
-                            id="username" 
-                            name="username" 
-                            value="<?php echo $username; ?>"
-                            placeholder="Choose a username"
+                            id="full_name" 
+                            name="full_name" 
+                            value="<?php echo $full_name; ?>"
+                            placeholder="Enter your full name"
                             required
                         >
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input 
-                            type="email" 
-                            class="glass-input" 
-                            id="email" 
-                            name="email" 
-                            value="<?php echo $email; ?>"
-                            placeholder="your.email@example.com"
-                            required
-                        >
-                    </div>
-                </div>
 
-                <div class="form-row">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="username" class="form-label">Username</label>
+                            <input 
+                                type="text" 
+                                class="glass-input" 
+                                id="username" 
+                                name="username" 
+                                value="<?php echo $username; ?>"
+                                placeholder="Choose a username"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input 
+                                type="email" 
+                                class="glass-input" 
+                                id="email" 
+                                name="email" 
+                                value="<?php echo $email; ?>"
+                                placeholder="your.email@example.com"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <input 
+                                type="password" 
+                                class="glass-input" 
+                                id="password" 
+                                name="password" 
+                                placeholder="Create a password"
+                                required
+                                minlength="8"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password_confirm" class="form-label">Confirm Password</label>
+                            <input 
+                                type="password" 
+                                class="glass-input" 
+                                id="password_confirm" 
+                                name="password_confirm" 
+                                placeholder="Confirm your password"
+                                required
+                            >
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="bhw_unique_id" class="form-label">BHW ID Number</label>
                         <input 
-                            type="password" 
+                            type="text" 
                             class="glass-input" 
-                            id="password" 
-                            name="password" 
-                            placeholder="Create a password"
+                            id="bhw_unique_id" 
+                            name="bhw_unique_id" 
+                            value="<?php echo $bhw_unique_id; ?>"
+                            placeholder="Enter your official BHW ID"
                             required
-                            minlength="8"
                         >
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="password_confirm" class="form-label">Confirm Password</label>
-                        <input 
-                            type="password" 
-                            class="glass-input" 
-                            id="password_confirm" 
-                            name="password_confirm" 
-                            placeholder="Confirm your password"
-                            required
-                        >
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="bhw_unique_id" class="form-label">BHW ID Number</label>
-                    <input 
-                        type="text" 
-                        class="glass-input" 
-                        id="bhw_unique_id" 
-                        name="bhw_unique_id" 
-                        value="<?php echo $bhw_unique_id; ?>"
-                        placeholder="Enter your official BHW ID"
-                        required
-                    >
-                </div>
-
-                <button type="submit" class="btn-glass-primary">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="8.5" cy="7" r="4"></circle>
-                        <line x1="20" y1="8" x2="20" y2="14"></line>
-                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    <button type="submit" class="btn-glass-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <line x1="20" y1="8" x2="20" y2="14"></line>
+                            <line x1="23" y1="11" x2="17" y2="11"></line>
+                        </svg>
+                        Register Account
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Footer Links -->
+            <div class="auth-footer">
+                <p>Already have an account? <a href="<?php echo BASE_URL; ?>login-bhw">Login here</a></p>
+                <a href="<?php echo BASE_URL; ?>?page=home" class="back-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
                     </svg>
-                    Register Account
-                </button>
-            </form>
-        </div>
-
-        <!-- Footer Links -->
-        <div class="auth-footer">
-            <p>Already have an account? <a href="<?php echo BASE_URL; ?>login-bhw">Login here</a></p>
-            <a href="<?php echo BASE_URL; ?>?page=home" class="back-link">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-                Back to Home
-            </a>
+                    Back to Home
+                </a>
+            </div>
         </div>
     </div>
 </div>
