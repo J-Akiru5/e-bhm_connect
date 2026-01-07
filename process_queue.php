@@ -8,15 +8,11 @@
 
 // Include DB connection
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/config/sms_config.php';
 
 // Optional: include helper (not required for operation)
 if (file_exists(__DIR__ . '/includes/sms_helper.php')) {
     require_once __DIR__ . '/includes/sms_helper.php';
-}
-
-// --- Configuration: update these values for your local Android Gateway ---
-if (!defined('GATEWAY_URL')) {
-    define('GATEWAY_URL', 'http://192.168.68.200:8080/send-sms'); // Simple SMS Gateway endpoint
 }
 
 $LIMIT = 5;

@@ -9,11 +9,8 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include required configuration files
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/sms_config.php';
 
-// Simple SMS Gateway configuration
-if (!defined('GATEWAY_URL')) {
-    define('GATEWAY_URL', 'http://192.168.68.200:8080/send-sms');
-}
 
 
 if (!isset($_GET['action'])) {
