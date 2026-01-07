@@ -1,15 +1,16 @@
 -- Seeder: Create Super Admin Account for Healthcare Center Head
--- Date: 2025-12-16
+-- Date: 2025-12-16 (Updated 2026-01-07)
 -- Description: Seeds the initial super admin account for the healthcare center head
+-- SAFE TO RE-RUN: Uses INSERT IGNORE to prevent duplicate errors
 -- 
 -- IMPORTANT: Change the password hash before running in production!
 -- The default password is: SuperAdmin@2025
 -- Generate a new hash using: password_hash('YourSecurePassword', PASSWORD_BCRYPT)
 
 -- First, ensure the columns exist (run migration first if not)
--- Then insert the super admin account
+-- Then insert the super admin account (IGNORE duplicates)
 
-INSERT INTO bhw_users (
+INSERT IGNORE INTO bhw_users (
     full_name,
     username,
     email,

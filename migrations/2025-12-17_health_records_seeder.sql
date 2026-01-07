@@ -1,13 +1,14 @@
 -- Health Records Seeder Data
 -- E-BHM Connect - Sample data for all 7 health record types
 -- Run this after importing 2025-12-17_health_records_dashboard.sql
+-- SAFE TO RE-RUN: Uses INSERT IGNORE to prevent duplicate errors
 
 USE `e-bhw_connect`;
 
 -- =====================================================
 -- Pregnancy Tracking Records (10 samples)
 -- =====================================================
-INSERT INTO `pregnancy_tracking` (`pregnant_woman_name`, `age`, `birth_date`, `husband_name`, `phone_number`, `date_of_identification`, `lmp`, `edc`, `tt_status`, `nhts_status`, `gravida_para`, `outcome_date_of_delivery`, `outcome_place_of_delivery`, `outcome_type_of_delivery`, `outcome_of_birth`, `remarks`, `patient_id`, `bhw_id`, `created_at`) VALUES
+INSERT IGNORE INTO `pregnancy_tracking` (`pregnant_woman_name`, `age`, `birth_date`, `husband_name`, `phone_number`, `date_of_identification`, `lmp`, `edc`, `tt_status`, `nhts_status`, `gravida_para`, `outcome_date_of_delivery`, `outcome_place_of_delivery`, `outcome_type_of_delivery`, `outcome_of_birth`, `remarks`, `patient_id`, `bhw_id`, `created_at`) VALUES
 ('Maria Santos', 29, '1995-03-15', 'Juan Santos', '09171234567', '2024-10-01', '2024-10-01', '2025-07-08', 'TT2', 'NHTS', 'G2P1', NULL, NULL, NULL, NULL, 'Regular checkups', NULL, 1, NOW()),
 ('Ana Cruz', 26, '1998-07-22', 'Pedro Cruz', '09182345678', '2024-11-15', '2024-11-15', '2025-08-22', 'TT1', 'Non-NHTS', 'G1P0', NULL, NULL, NULL, NULL, 'First pregnancy', NULL, 1, NOW()),
 ('Lucia Reyes', 32, '1992-11-08', 'Miguel Reyes', '09193456789', '2024-09-10', '2024-09-10', '2025-06-17', 'TT3', 'NHTS', 'G3P2', NULL, NULL, NULL, NULL, NULL, NULL, 1, NOW()),
@@ -22,7 +23,7 @@ INSERT INTO `pregnancy_tracking` (`pregnant_woman_name`, `age`, `birth_date`, `h
 -- =====================================================
 -- Child Care Records (15 samples)
 -- =====================================================
-INSERT INTO `child_care_records` (`child_name`, `date_of_birth`, `age_months`, `sex`, `vitamin_a_date`, `albendazole_date`, `record_number`, `patient_id`, `bhw_id`, `created_at`) VALUES
+INSERT IGNORE INTO `child_care_records` (`child_name`, `date_of_birth`, `age_months`, `sex`, `vitamin_a_date`, `albendazole_date`, `record_number`, `patient_id`, `bhw_id`, `created_at`) VALUES
 ('Juan dela Cruz Jr.', '2022-01-15', 35, 'Male', '2024-12-01', '2024-12-01', 1, NULL, 1, NOW()),
 ('Maria Clara Santos', '2021-06-20', 42, 'Female', '2024-11-15', '2024-11-15', 2, NULL, 1, NOW()),
 ('Pedro Garcia', '2022-03-10', 33, 'Male', '2024-12-05', NULL, 3, NULL, 1, NOW()),
@@ -42,7 +43,7 @@ INSERT INTO `child_care_records` (`child_name`, `date_of_birth`, `age_months`, `
 -- =====================================================
 -- Natality (Birth) Records (12 samples)
 -- =====================================================
-INSERT INTO `natality_records` (`baby_complete_name`, `date_of_birth`, `time_of_birth`, `sex`, `weight_kg`, `place_of_delivery`, `delivery_type`, `mother_complete_name`, `mother_age`, `mother_patient_id`, `bhw_id`, `created_at`) VALUES
+INSERT IGNORE INTO `natality_records` (`baby_complete_name`, `date_of_birth`, `time_of_birth`, `sex`, `weight_kg`, `place_of_delivery`, `delivery_type`, `mother_complete_name`, `mother_age`, `mother_patient_id`, `bhw_id`, `created_at`) VALUES
 ('Baby Boy Santos', '2025-01-05', '08:30:00', 'M', 3.20, 'Rural Health Unit', 'Normal', 'Maria Santos', 28, NULL, 1, NOW()),
 ('Baby Girl Cruz', '2025-01-10', '14:20:00', 'F', 2.90, 'Provincial Hospital', 'CS', 'Ana Cruz', 26, NULL, 1, NOW()),
 ('Carlos Miguel Reyes', '2024-12-20', '06:15:00', 'M', 3.50, 'Home', 'Normal', 'Lucia Reyes', 32, NULL, 1, NOW()),
@@ -59,7 +60,7 @@ INSERT INTO `natality_records` (`baby_complete_name`, `date_of_birth`, `time_of_
 -- =====================================================
 -- Mortality (Death) Records (8 samples)
 -- =====================================================
-INSERT INTO `mortality_records` (`deceased_complete_name`, `date_of_death`, `age`, `sex`, `cause_of_death`, `place_of_death`, `record_number`, `patient_id`, `bhw_id`, `created_at`) VALUES
+INSERT IGNORE INTO `mortality_records` (`deceased_complete_name`, `date_of_death`, `age`, `sex`, `cause_of_death`, `place_of_death`, `record_number`, `patient_id`, `bhw_id`, `created_at`) VALUES
 ('Lolo Andres Cruz', '2024-12-01', 84, 'M', 'Cardiac Arrest', 'Home', 1, NULL, 1, NOW()),
 ('Lola Remedios Santos', '2024-11-15', 79, 'F', 'Pneumonia', 'Provincial Hospital', 2, NULL, 1, NOW()),
 ('Baby Boy Garcia', '2024-10-22', 0, 'M', 'Premature Birth Complications', 'Provincial Hospital', 3, NULL, 1, NOW()),
@@ -72,7 +73,7 @@ INSERT INTO `mortality_records` (`deceased_complete_name`, `date_of_death`, `age
 -- =====================================================
 -- Chronic Disease Masterlist (20 samples)
 -- =====================================================
-INSERT INTO `chronic_disease_masterlist` (`record_number`, `last_name`, `first_name`, `middle_name`, `sex`, `age`, `date_of_birth`, `philhealth_no`, `nhts_member`, `date_of_enrollment`, `is_hypertensive`, `is_diabetic`, `test_type`, `blood_sugar_level`, `med_amlo5`, `med_amlo10`, `med_losartan50`, `med_losartan100`, `med_metoprolol`, `med_simvastatin`, `med_metformin`, `med_gliclazide`, `med_insulin`, `remarks`, `patient_id`, `bhw_id`, `created_at`) VALUES
+INSERT IGNORE INTO `chronic_disease_masterlist` (`record_number`, `last_name`, `first_name`, `middle_name`, `sex`, `age`, `date_of_birth`, `philhealth_no`, `nhts_member`, `date_of_enrollment`, `is_hypertensive`, `is_diabetic`, `test_type`, `blood_sugar_level`, `med_amlo5`, `med_amlo10`, `med_losartan50`, `med_losartan100`, `med_metoprolol`, `med_simvastatin`, `med_metformin`, `med_gliclazide`, `med_insulin`, `remarks`, `patient_id`, `bhw_id`, `created_at`) VALUES
 (1, 'Santos', 'Roberto', 'M', 'M', 59, '1965-03-15', '1234567890', 1, '2024-01-15', 1, 0, NULL, NULL, 0, 0, 1, 0, 0, 0, 0, 0, 0, 'Controlled hypertension', NULL, 1, NOW()),
 (2, 'Cruz', 'Leonora', 'A', 'F', 66, '1958-07-20', '2345678901', 1, '2023-06-10', 1, 1, 'FBS', 130.00, 1, 0, 0, 0, 0, 0, 1, 0, 0, 'Both conditions stable', NULL, 1, NOW()),
 (3, 'Garcia', 'Fernando', 'B', 'M', 54, '1970-11-08', '3456789012', 0, '2024-03-20', 0, 1, 'RBS', 145.00, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'Needs diet adjustment', NULL, 1, NOW()),
@@ -97,7 +98,7 @@ INSERT INTO `chronic_disease_masterlist` (`record_number`, `last_name`, `first_n
 -- =====================================================
 -- NTP Client Monitoring (10 samples)
 -- =====================================================
-INSERT INTO `ntp_client_monitoring` (`patient_complete_name`, `age`, `sex`, `barangay_address`, `tb_case_no`, `date_tx_started`, `date_exam_before_tx`, `registration_type`, `initial_weight`, `weight_month_1`, `weight_month_2`, `weight_month_3`, `weight_month_4`, `weight_month_5`, `weight_month_6`, `disease_classification`, `end_of_treatment`, `outcome`, `patient_id`, `bhw_id`, `created_at`) VALUES
+INSERT IGNORE INTO `ntp_client_monitoring` (`patient_complete_name`, `age`, `sex`, `barangay_address`, `tb_case_no`, `date_tx_started`, `date_exam_before_tx`, `registration_type`, `initial_weight`, `weight_month_1`, `weight_month_2`, `weight_month_3`, `weight_month_4`, `weight_month_5`, `weight_month_6`, `disease_classification`, `end_of_treatment`, `outcome`, `patient_id`, `bhw_id`, `created_at`) VALUES
 ('Juan dela Cruz', 39, 'M', 'Barangay 1, Poblacion', 'TB2024-001', '2024-07-05', '2024-07-01', 'New', 58.5, 59.2, 60.1, 60.8, 61.5, 62.0, 62.8, 'Pulmonary TB', '2024-12-31', 'Cured', NULL, 1, NOW()),
 ('Maria Santos', 34, 'F', 'Barangay 2, San Jose', 'TB2024-002', '2024-08-15', '2024-08-10', 'New', 52.0, 52.8, 53.5, 54.2, NULL, NULL, NULL, 'Pulmonary TB', NULL, 'On Treatment', NULL, 1, NOW()),
 ('Pedro Garcia', 46, 'M', 'Barangay 3, Santa Cruz', 'TB2024-003', '2024-06-20', '2024-06-15', 'Relapsed', 61.0, 61.5, 62.3, 63.0, 63.8, 64.5, 65.2, 'Pulmonary TB', '2024-11-30', 'Cured', NULL, 1, NOW()),
@@ -112,7 +113,7 @@ INSERT INTO `ntp_client_monitoring` (`patient_complete_name`, `age`, `sex`, `bar
 -- =====================================================
 -- WRA Tracking (15 samples)
 -- =====================================================
-INSERT INTO `wra_tracking` (`name`, `age`, `birthdate`, `is_nhts`, `complete_address`, `contact_number`, `tracking_year`, `status_jan`, `status_feb`, `status_mar`, `status_apr`, `status_may`, `status_jun`, `status_jul`, `status_aug`, `status_sep`, `status_oct`, `status_nov`, `status_dec`, `family_planning_method`, `remarks`, `patient_id`, `bhw_id`, `created_at`) VALUES
+INSERT IGNORE INTO `wra_tracking` (`name`, `age`, `birthdate`, `is_nhts`, `complete_address`, `contact_number`, `tracking_year`, `status_jan`, `status_feb`, `status_mar`, `status_apr`, `status_may`, `status_jun`, `status_jul`, `status_aug`, `status_sep`, `status_oct`, `status_nov`, `status_dec`, `family_planning_method`, `remarks`, `patient_id`, `bhw_id`, `created_at`) VALUES
 ('Maria Clara Santos', 29, '1995-03-10', 1, 'Barangay 1, Poblacion', '09171234567', 2024, 'P', 'P', 'P', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'Pills', 'Pregnant Jan-Mar', NULL, 1, NOW()),
 ('Ana Rose Cruz', 32, '1992-07-15', 0, 'Barangay 2, San Jose', '09182345678', 2024, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'Injectable', NULL, NULL, 1, NOW()),
 ('Lucia Garcia', 26, '1998-11-20', 1, 'Barangay 3, Santa Cruz', '09193456789', 2024, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'P', 'P', 'P', 'P', 'P', 'None', 'Pregnant starting Aug', NULL, 1, NOW()),
@@ -129,5 +130,34 @@ INSERT INTO `wra_tracking` (`name`, `age`, `birthdate`, `is_nhts`, `complete_add
 ('Valentina Mendoza', 26, '1998-07-14', 0, 'Barangay 4, San Pedro', '09204567890', 2024, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'Implant', NULL, NULL, 1, NOW()),
 ('Gabriela Torres', 30, '1994-11-28', 1, 'Barangay 5, San Antonio', '09215678901', 2024, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'Pills', NULL, NULL, 1, NOW());
 
+-- =====================================================
+-- Inventory Categories (Sample categories)
+-- =====================================================
+INSERT IGNORE INTO `inventory_categories` (`category_name`, `created_at`) VALUES
+('Antibiotics', NOW()),
+('Pain Relievers', NOW()),
+('Vitamins & Supplements', NOW()),
+('First Aid Supplies', NOW()),
+('Maternal & Child Care', NOW()),
+('Chronic Disease Meds', NOW()),
+('Emergency Supplies', NOW());
+
+-- =====================================================
+-- Medication Inventory (Sample medicines)
+-- =====================================================
+INSERT IGNORE INTO `medication_inventory` (`item_name`, `description`, `quantity_in_stock`, `unit`, `stock_alert_limit`, `expiry_date`) VALUES
+('Paracetamol 500mg', 'For fever and mild pain', 500, 'tablets', 50, '2025-12-31'),
+('Amoxicillin 500mg', 'Antibiotic for bacterial infections', 200, 'capsules', 30, '2025-06-30'),
+('Mefenamic Acid 500mg', 'Pain reliever', 300, 'tablets', 40, '2025-09-30'),
+('Multivitamins', 'Daily vitamin supplement', 400, 'tablets', 50, '2026-03-31'),
+('Vitamin C 500mg', 'Immune system support', 500, 'tablets', 60, '2025-12-31'),
+('Ferrous Sulfate', 'Iron supplement for anemia', 250, 'tablets', 30, '2025-08-31'),
+('Losartan 50mg', 'For hypertension', 200, 'tablets', 30, '2025-07-31'),
+('Metformin 500mg', 'For type 2 diabetes', 300, 'tablets', 40, '2025-10-31'),
+('Amlodipine 5mg', 'For high blood pressure', 200, 'tablets', 25, '2025-11-30'),
+('ORS Sachets', 'Oral rehydration solution', 100, 'sachets', 20, '2026-01-31'),
+('Bandages (Assorted)', 'First aid wound dressing', 50, 'packs', 10, '2027-12-31'),
+('Alcohol 70%', 'Antiseptic disinfectant', 30, 'bottles', 10, '2026-06-30');
+
 -- Success message
-SELECT 'Health Records seeder data inserted successfully!' AS message;
+SELECT 'Health Records and Inventory seeder data inserted successfully! (Duplicates were ignored)' AS message;
